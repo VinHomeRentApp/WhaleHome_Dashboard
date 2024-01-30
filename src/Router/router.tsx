@@ -6,7 +6,7 @@ const ContentRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path='/' element={<DashBoard />} />
-      <Route path='/user' element={<User />} />
+      <Route path='/users' element={<User />} />
     </Routes>
   )
 }

@@ -4,17 +4,8 @@ import type { TableProps } from 'antd'
 import { http } from '../../utils/http'
 import { ResponseSuccessful } from '../../types/response.type'
 import { User } from '../../types/user.type'
-interface DataType {
-  id: number
-  fullName: string
-  email: string
-  password: string
-  dataOfBirth: string
-  address: string
-  verified: boolean
-}
 
-const columns: TableProps<DataType>['columns'] = [
+const columns: TableProps['columns'] = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -55,15 +46,18 @@ const columns: TableProps<DataType>['columns'] = [
 
 const User: React.FC = () => {
   const [dataSource, setDataSource] = useState<User[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
   async function getUsers() {
     try {
+      setLoading(true)
       const response = await http.get<ResponseSuccessful<User[]>>('/user', {
         headers: {
           Accept: 'application/json'
         }
       })
+
       setDataSource(response.data.data)
-      return response.data.data
+      setLoading(false)
     } catch (error) {
       console.log(error)
     }
@@ -73,18 +67,7 @@ const User: React.FC = () => {
     getUsers()
   }, [])
 
-  const dataFormat = dataSource.map((data: DataType) => {
-    return {
-      id: data.id,
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-      dataOfBirth: data.dataOfBirth,
-      address: data.address,
-      verified: data.verified
-    }
-  })
-  return <Table columns={columns} dataSource={dataFormat} scroll={{ y: 400 }} />
+  return <Table columns={columns} dataSource={dataSource} scroll={{ y: 400 }} loading={loading} />
 }
 
 export default User
