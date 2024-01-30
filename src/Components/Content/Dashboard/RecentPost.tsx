@@ -34,8 +34,8 @@ const RecentPost: React.FC = () => {
         }
       })
 
-      // setDataSource(response.data.data)
-      setDataSource(response.data) //tam thoi vay do api chua config chuan
+      setDataSource(response.data.data)
+      // setDataSource(response.data) tam thoi vay do api chua config chuan
 
       console.log(response.data)
 
