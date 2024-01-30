@@ -1,66 +1,57 @@
-// function RecentOrders() {
-//   const [dataSource, setDataSource] = useState([]);
-//   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     setLoading(true);
-//     getOrders().then((res) => {
-//       setDataSource(res.products.splice(0, 3));
-//       setLoading(false);
-//     });
-//   }, []);
-
-//   return (
-//     <>
-//       <Typography.Text>Recent Orders</Typography.Text>
-//       <Table
-//         columns={[
-//           {
-//             title: 'Title',
-//             dataIndex: 'title'
-//           },
-//           {
-//             title: 'Quantity',
-//             dataIndex: 'quantity'
-//           },
-//           {
-//             title: 'Price',
-//             dataIndex: 'discountedPrice'
-//           }
-//         ]}
-//         loading={loading}
-//         dataSource={dataSource}
-//         pagination={false}
-//       ></Table>
-//     </>
-//   );
-// }
-
-import React from 'react'
-import { Table, Typography } from 'antd'
+import { useState, useEffect } from 'react'
+import { Table, TableProps, Typography } from 'antd'
+import { Post } from '../../../types/post.type'
+import { http } from '../../../utils/http'
+import { ResponseSuccessful } from '../../../types/response.type'
 
 const RecentPost: React.FC = () => {
+  const colums: TableProps['columns'] = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'id'
+    },
+    {
+      title: 'createBy',
+      dataIndex: 'createBy',
+      key: 'id'
+    },
+    {
+      title: 'createDate',
+      dataIndex: 'createDate',
+      key: 'id'
+    }
+  ]
+
+  const [dataSource, setDataSource] = useState<Post[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  async function getPost() {
+    try {
+      setLoading(true)
+      const response = await http.get<ResponseSuccessful<Post[]>>('/post', {
+        headers: {
+          Accept: 'application/json'
+        }
+      })
+
+      // setDataSource(response.data.data)
+      setDataSource(response.data) //tam thoi vay do api chua config chuan
+
+      console.log(response.data)
+
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getPost()
+  }, [])
   return (
     <>
       <Typography.Text strong>Recent Post</Typography.Text>
-      <Table
-        columns={[
-          {
-            title: 'Title',
-            dataIndex: 'title'
-          },
-          {
-            title: 'createBy',
-            dataIndex: 'createBy'
-          },
-          {
-            title: 'createDate',
-            dataIndex: 'createDate'
-          }
-        ]}
-        loading={true}
-        pagination={false}
-      ></Table>
+      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 300 }}></Table>
     </>
   )
 }

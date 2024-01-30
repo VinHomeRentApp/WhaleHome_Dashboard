@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { Menu } from 'antd'
-import { FileTextOutlined, HomeOutlined, UserOutlined, HomeFilled, CalendarOutlined } from '@ant-design/icons'
+import {
+  FileTextOutlined,
+  BarChartOutlined,
+  UserOutlined,
+  HomeFilled,
+  CalendarOutlined,
+  ContactsOutlined
+} from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 
 const MenuNav: React.FC = () => {
@@ -19,28 +26,33 @@ const MenuNav: React.FC = () => {
       items={[
         {
           key: '',
-          icon: <HomeOutlined />,
+          icon: <BarChartOutlined />,
           label: 'DashBoard'
         },
         {
-          key: 'user',
+          key: 'users',
           icon: <UserOutlined />,
           label: 'User'
         },
         {
-          key: 'appartment',
+          key: 'appartments',
           icon: <HomeFilled />,
           label: 'Appartment'
         },
         {
-          key: 'appointment',
+          key: 'appointments',
           icon: <CalendarOutlined />,
           label: 'Appointment'
         },
         {
-          key: 'post',
+          key: 'posts',
           icon: <FileTextOutlined />,
           label: 'Post'
+        },
+        {
+          key: 'contracts',
+          icon: <ContactsOutlined />,
+          label: 'Contracts'
         }
       ]}
     />
