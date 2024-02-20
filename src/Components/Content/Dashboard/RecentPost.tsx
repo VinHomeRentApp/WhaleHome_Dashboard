@@ -51,7 +51,7 @@ const RecentPost: React.FC = () => {
   return (
     <>
       <Typography.Text strong>Recent Post</Typography.Text>
-      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 300 }}></Table>
+      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 200 }}></Table>
     </>
   )
 }

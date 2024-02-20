@@ -23,7 +23,7 @@ export interface User {
   password: string
   phone: string
   fullName: string
-  dataOfBirth: string
+  dateOfBirth: string
   image: null
   gender: string
   address: string
