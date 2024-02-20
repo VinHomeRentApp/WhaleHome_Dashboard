@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Table, TableProps, Typography } from 'antd'
-import { Post } from '../../../types/post.type'
-import { http } from '../../../utils/http'
-import { ResponseSuccessful } from '../../../types/response.type'
+import { Post } from '../types/post.type'
+import { http } from '../utils/http'
+import { ResponseSuccessful } from '../types/response.type'
 
 const RecentPost: React.FC = () => {
   const colums: TableProps['columns'] = [

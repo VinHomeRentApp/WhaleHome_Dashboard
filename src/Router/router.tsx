@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
-import DashBoard from '../Components/Content/Dashboard/Dashboard'
-import User from '../Components/Content/User'
+import DashBoard from '../Pages/Dashboard'
+import User from '../Pages/User'
 
 const ContentRoutes: React.FC = () => {
   return (

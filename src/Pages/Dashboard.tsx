@@ -1,9 +1,9 @@
 import React from 'react'
 import { Space } from 'antd'
-import DashboardCard from './DashboardCard'
+import DashboardCard from '../Components/DashboardCard'
 import { FileTextOutlined, UserOutlined, HomeFilled, SolutionOutlined } from '@ant-design/icons'
-import RecentPost from './RecentPost'
-import DashboardChart from './DashboardChar'
+import RecentPost from '../Components/RecentPost'
+import DashboardChart from '../Components/DashboardChar'
 const DashBoard: React.FC = () => {
   return (
     <Space size={20} direction='vertical' style={{ paddingLeft: '5%' }}>

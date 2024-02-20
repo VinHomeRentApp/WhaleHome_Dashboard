@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from 'antd'
 import type { TableProps } from 'antd'
-import { http } from '../../utils/http'
-import { ResponseSuccessful } from '../../types/response.type'
-import { User } from '../../types/user.type'
+import { http } from '../utils/http'
+import { ResponseSuccessful } from '../types/response.type'
+import { User } from '../types/user.type'
 
 const columns: TableProps['columns'] = [
   {
