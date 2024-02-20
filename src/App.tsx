@@ -1,4 +1,4 @@
-import Layout from './Components/Layout.tsx'
+import Layout from './Pages/Layout.tsx'
 
 export default function App() {
   return (

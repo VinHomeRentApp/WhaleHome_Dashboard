@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Layout, Button, theme, Avatar } from 'antd'
 
-import MenuNav from './Menu.tsx'
+import MenuNav from '../Components/Menu.tsx'
 import ContentRoutes from '../Router/router.tsx'
 
 const { Header, Sider, Content } = Layout
