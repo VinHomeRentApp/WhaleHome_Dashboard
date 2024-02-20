@@ -28,7 +28,7 @@ const columns: TableProps['columns'] = [
   },
   {
     title: 'Date of Birth',
-    dataIndex: 'dataOfBirth',
+    dataIndex: 'dateOfBirth',
     key: 'id'
   },
   {
