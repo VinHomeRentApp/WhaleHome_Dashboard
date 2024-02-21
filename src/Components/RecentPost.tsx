@@ -14,12 +14,12 @@ const RecentPost: React.FC = () => {
     {
       title: 'createBy',
       dataIndex: 'createBy',
-      key: 'id'
+      key: 'createBy'
     },
     {
       title: 'createDate',
       dataIndex: 'createDate',
-      key: 'id'
+      key: 'createDate'
     }
   ]
 
@@ -51,7 +51,7 @@ const RecentPost: React.FC = () => {
   return (
     <>
       <Typography.Text strong>Recent Post</Typography.Text>
-      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 200 }}></Table>
+      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 200 }} rowKey='id'></Table>
     </>
   )
 }

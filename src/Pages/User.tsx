@@ -4,12 +4,14 @@ import type { TableProps } from 'antd'
 import { http } from '../utils/http'
 import { ResponseSuccessful } from '../types/response.type'
 import { User } from '../types/user.type'
+import ButtonAction from '../Components/ButtonAction'
 
 const columns: TableProps['columns'] = [
   {
     title: 'ID',
     dataIndex: 'id',
-    key: 'id'
+    key: 'id',
+    width: '5%'
   },
   {
     title: 'Full Name',
@@ -40,7 +42,15 @@ const columns: TableProps['columns'] = [
     title: 'Verified',
     dataIndex: 'verified',
     key: 'id',
+    width: '7%',
     render: (text) => String(text)
+  },
+  {
+    title: 'More',
+    dataIndex: 'id',
+    key: 'id',
+    width: '7%',
+    render: (text, record) => <ButtonAction ID={record.id} />
   }
 ]
 
@@ -67,7 +77,7 @@ const User: React.FC = () => {
     getUsers()
   }, [])
 
-  return <Table columns={columns} dataSource={dataSource} scroll={{ y: 400 }} loading={loading} />
+  return <Table columns={columns} dataSource={dataSource} scroll={{ y: 450 }} loading={loading} rowKey='id' />
 }
 
 export default User
