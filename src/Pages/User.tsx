@@ -47,10 +47,10 @@ const columns: TableProps['columns'] = [
   },
   {
     title: 'More',
-    dataIndex: 'id',
+    dataIndex: 'user',
     key: 'id',
     width: '7%',
-    render: (text, record) => <ButtonAction ID={record.id} />
+    render: (text, record) => <ButtonAction ID={record.id} text={text} />
   }
 ]
 
