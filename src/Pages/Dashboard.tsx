@@ -6,7 +6,7 @@ import RecentPost from '../Components/RecentPost'
 import DashboardChart from '../Components/DashboardChar'
 const DashBoard: React.FC = () => {
   return (
-    <Space size={20} direction='vertical' style={{ paddingLeft: '5%' }}>
+    <Space size={20} direction='vertical' style={{ paddingLeft: '2%' }}>
       <Space direction='horizontal' size={[100, 50]}>
         <DashboardCard
           icon={
@@ -21,7 +21,7 @@ const DashBoard: React.FC = () => {
             />
           }
           title={'Post'}
-          value={'1234'}
+          URL='/post/count-all'
         ></DashboardCard>
         <DashboardCard
           icon={
@@ -36,7 +36,7 @@ const DashBoard: React.FC = () => {
             />
           }
           title={'Customer'}
-          value={'123'}
+          URL='/user/count-all'
         />
         <DashboardCard
           icon={
@@ -51,7 +51,7 @@ const DashBoard: React.FC = () => {
             />
           }
           title={'Appartment'}
-          value={'12'}
+          URL='/apartments/count-all'
         />
         <DashboardCard
           icon={
@@ -66,7 +66,7 @@ const DashBoard: React.FC = () => {
             />
           }
           title={'Contract'}
-          value={'12'}
+          URL='/contracts/count-all'
         />
       </Space>
       <Space size={[200, 20]}>
