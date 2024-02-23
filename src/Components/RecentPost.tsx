@@ -46,7 +46,17 @@ const RecentPost: React.FC = () => {
   return (
     <>
       <Typography.Text strong>Recent Post</Typography.Text>
-      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 200 }} rowKey='id'></Table>
+      <Table
+        columns={colums}
+        loading={loading}
+        dataSource={dataSource}
+        scroll={{ y: 200 }}
+        pagination={{
+          pageSize: 4,
+          hideOnSinglePage: true
+        }}
+        rowKey='id'
+      ></Table>
     </>
   )
 }

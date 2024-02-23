@@ -3,10 +3,10 @@ import type { TableProps } from 'antd'
 import { http } from '../utils/http'
 import { ResponseSuccessful } from '../types/response.type'
 import { User } from '../types/user.type'
-import ButtonAction from '../Components/ButtonAction'
+// import ButtonAction from '../Components/ButtonAction'
 import { Input, Table } from 'antd'
 
-const User: React.FC = () => {
+const UserPage: React.FC = () => {
   const [dataSource, setDataSource] = useState<User[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
@@ -73,14 +73,14 @@ const User: React.FC = () => {
       key: 'id',
       width: '7%',
       render: (text) => String(text)
-    },
-    {
-      title: 'More',
-      dataIndex: 'user',
-      key: 'id',
-      width: '7%',
-      render: (text, record) => <ButtonAction ID={record.id} text={text} />
     }
+    // {
+    //   title: 'More',
+    //   dataIndex: 'user',
+    //   key: 'id',
+    //   width: '7%',
+    //   render: (text, record) => <ButtonAction ID={record.id} text={text} />
+    // }
   ]
 
   return (
@@ -108,4 +108,4 @@ const User: React.FC = () => {
   )
 }
 
-export default User
+export default UserPage
