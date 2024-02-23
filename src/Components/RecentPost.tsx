@@ -33,12 +33,7 @@ const RecentPost: React.FC = () => {
           Accept: 'application/json'
         }
       })
-
       setDataSource(response.data.data)
-      // setDataSource(response.data) tam thoi vay do api chua config chuan
-
-      console.log(response.data)
-
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -51,7 +46,17 @@ const RecentPost: React.FC = () => {
   return (
     <>
       <Typography.Text strong>Recent Post</Typography.Text>
-      <Table columns={colums} loading={loading} dataSource={dataSource} scroll={{ y: 200 }} rowKey='id'></Table>
+      <Table
+        columns={colums}
+        loading={loading}
+        dataSource={dataSource}
+        scroll={{ y: 200 }}
+        pagination={{
+          pageSize: 4,
+          hideOnSinglePage: true
+        }}
+        rowKey='id'
+      ></Table>
     </>
   )
 }
