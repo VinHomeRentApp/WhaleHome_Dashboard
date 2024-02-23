@@ -9,15 +9,11 @@ const ContentRoutes: React.FC = () => {
 
   return (
     <Routes>
-      {isLogin ? (
-        <Navigate to='/login' />
-      ) : (
-        <>
-          <Route path='/' element={<DashBoard />} />
-          <Route path='/users' element={<UserPage />} />
-          <Route path='/login' element={<Login />} />
-        </>
-      )}
+      <>
+        <Route path='/' element={<DashBoard />} />
+        <Route path='/users' element={<UserPage />} />
+        <Route path='/login' element={<Login />} />
+      </>
     </Routes>
   )
 }
