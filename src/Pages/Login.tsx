@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Form, Input } from 'antd'
 import { useState } from 'react'
 import { loginApi } from '../redux/user.slice'
@@ -11,10 +10,10 @@ import { loginApi } from '../redux/user.slice'
 //   console.log('Failed:', errorInfo)
 // }
 
-type FieldType = {
-  username?: string
-  password?: string
-}
+// type FieldType = {
+//   username?: string
+//   password?: string
+// }
 
 // interface SyntheticEvent {
 //   bubbles: boolean
@@ -56,11 +55,7 @@ const Login: React.FC = () => {
       onFinish={handleSubmit}
       // onFinishFailed={onFinishFailed}
     >
-      <Form.Item<FieldType>
-        label='Username'
-        name='username'
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
+      <Form.Item label='Username' name='username' rules={[{ required: true, message: 'Please input your username!' }]}>
         <Input
           value={email}
           onChange={(e) => {
@@ -69,11 +64,7 @@ const Login: React.FC = () => {
         />
       </Form.Item>
 
-      <Form.Item<FieldType>
-        label='Password'
-        name='password'
-        rules={[{ required: true, message: 'Please input your password!' }]}
-      >
+      <Form.Item label='Password' name='password' rules={[{ required: true, message: 'Please input your password!' }]}>
         <Input.Password
           value={password}
           onChange={(e) => {

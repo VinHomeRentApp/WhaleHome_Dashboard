@@ -25,6 +25,7 @@ const RecentPost: React.FC = () => {
 
   const [dataSource, setDataSource] = useState<Post[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+
   async function getPost() {
     try {
       setLoading(true)
