@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Appointment: React.FC = () => {
-  return <></>
+const AppointmentPage: React.FC = () => {
+  return <>AppointmentPage</>
 }
 
-export default Appointment
+export default AppointmentPage

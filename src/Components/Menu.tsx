@@ -4,10 +4,11 @@ import {
   FileTextOutlined,
   BarChartOutlined,
   UserOutlined,
-  HomeFilled,
+  HomeOutlined,
   CalendarOutlined,
   ContactsOutlined
 } from '@ant-design/icons'
+
 import { useNavigate } from 'react-router-dom'
 
 const MenuNav: React.FC = () => {
@@ -36,7 +37,7 @@ const MenuNav: React.FC = () => {
         },
         {
           key: 'appartments',
-          icon: <HomeFilled />,
+          icon: <HomeOutlined />,
           label: 'Appartment'
         },
         {
@@ -53,6 +54,21 @@ const MenuNav: React.FC = () => {
           key: 'contracts',
           icon: <ContactsOutlined />,
           label: 'Contracts'
+        },
+        {
+          key: 'review',
+          icon: <span className='material-symbols-outlined'>reviews</span>,
+          label: 'Review'
+        },
+        {
+          key: 'problem',
+          icon: <span className='material-symbols-outlined'>problem</span>,
+          label: 'Problem'
+        },
+        {
+          key: 'issue',
+          icon: <span className='material-symbols-outlined'>error</span>,
+          label: 'Issue'
         }
       ]}
     />

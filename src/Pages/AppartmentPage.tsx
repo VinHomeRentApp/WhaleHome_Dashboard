@@ -1,7 +1,7 @@
 import React from 'react'
 
 const AppartmentPage: React.FC = () => {
-  return <></>
+  return <>AppartmentPage</>
 }
 
 export default AppartmentPage

@@ -4,12 +4,11 @@ import { EllipsisOutlined } from '@ant-design/icons'
 
 interface ButtonActionProps {
   ID: string
-  text: string
 }
 
-const ButtonAction: React.FC<ButtonActionProps> = ({ ID, text }) => {
+const ButtonAction: React.FC<ButtonActionProps> = ({ ID }) => {
   const handleButtonClick = (ID: string) => {
-    console.log(`${text} và ${ID}`)
+    console.log(ID)
   }
 
   return <Button icon={<EllipsisOutlined />} onClick={() => handleButtonClick(ID)}></Button>

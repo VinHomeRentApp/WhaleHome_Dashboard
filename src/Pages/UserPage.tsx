@@ -35,7 +35,8 @@ const UserPage: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      width: '5%'
+      width: '8%',
+      align: 'center'
     },
     {
       title: 'Full Name',
@@ -44,27 +45,32 @@ const UserPage: React.FC = () => {
       filteredValue: [search],
       onFilter: (value, record) => {
         return String(record.fullName).toLowerCase().includes(String(value).toLowerCase())
-      }
+      },
+      render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto' }}>{text}</div>
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      key: 'id'
+      key: 'id',
+      render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
     {
-      title: 'Password',
-      dataIndex: 'password',
-      key: 'id'
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'id',
+      width: '8%'
     },
     {
       title: 'Date of Birth',
       dataIndex: 'dateOfBirth',
-      key: 'id'
+      key: 'id',
+      width: '15%'
     },
     {
       title: 'Address',
       dataIndex: 'address',
-      key: 'id'
+      key: 'id',
+      width: '10%'
     },
     {
       title: 'Verified',
@@ -78,7 +84,7 @@ const UserPage: React.FC = () => {
       dataIndex: 'user',
       key: 'id',
       width: '7%',
-      render: (text, record) => <ButtonAction ID={record.id} text={text} />
+      render: (_, record) => <ButtonAction ID={record.id} />
     }
   ]
 
@@ -98,8 +104,9 @@ const UserPage: React.FC = () => {
         columns={columns}
         dataSource={dataSource}
         pagination={{
-          pageSize: 5
+          pageSize: 7
         }}
+        scroll={{ y: 400 }}
         loading={loading}
         rowKey='id'
       />
