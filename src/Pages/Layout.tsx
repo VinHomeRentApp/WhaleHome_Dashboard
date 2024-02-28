@@ -39,8 +39,6 @@ const LayoutAdmin = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>()
 
   const storedUserData = localStorage.getItem('user')
-  console.log(storedUserData)
-
   useEffect(() => {
     if (storedUserData) {
       setUser(JSON.parse(storedUserData))

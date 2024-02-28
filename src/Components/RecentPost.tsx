@@ -8,14 +8,10 @@ const RecentPost: React.FC = () => {
   const colums: TableProps['columns'] = [
     {
       title: 'Title',
-      dataIndex: 'title',
+      dataIndex: 'description',
       key: 'id'
     },
-    {
-      title: 'createBy',
-      dataIndex: 'createBy',
-      key: 'createBy'
-    },
+
     {
       title: 'createDate',
       dataIndex: 'createDate',
@@ -34,6 +30,8 @@ const RecentPost: React.FC = () => {
           Accept: 'application/json'
         }
       })
+      console.log(response)
+
       setDataSource(response.data.data)
       setLoading(false)
     } catch (error) {

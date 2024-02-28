@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 const MenuNav: React.FC = () => {
-  const [key, setKey] = useState('1')
+  const [key, setKey] = useState('')
   const navigate = useNavigate()
   return (
     <Menu
