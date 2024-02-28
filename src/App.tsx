@@ -1,9 +1,5 @@
-import Layout from './Pages/Layout.tsx'
+import ContentRoutes from './Router/router.tsx'
 
 export default function App() {
-  return (
-    <>
-      <Layout />
-    </>
-  )
+  return <ContentRoutes></ContentRoutes>
 }
