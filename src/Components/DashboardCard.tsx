@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
 import { Card, Space, Statistic } from 'antd'
-
-import { useEffect } from 'react'
-import { http } from '../utils/http'
+import React, { useEffect, useState } from 'react'
 import { ResponseSuccessful } from '../types/response.type'
+import { http } from '../utils/http'
 
 interface props {
   title: string
@@ -13,7 +11,8 @@ interface props {
 
 const DashboardCard: React.FC<props> = ({ title, icon, URL }) => {
   const [data, setData] = useState<number>()
-  async function getUsers() {
+
+  async function getData() {
     try {
       const response = await http.get<ResponseSuccessful<number>>(URL, {
         headers: {
@@ -28,7 +27,8 @@ const DashboardCard: React.FC<props> = ({ title, icon, URL }) => {
   }
 
   useEffect(() => {
-    getUsers()
+    getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

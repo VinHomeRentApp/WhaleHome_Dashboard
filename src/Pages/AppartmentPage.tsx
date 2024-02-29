@@ -1,8 +1,9 @@
+import { Input, Table, TableProps } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { appartment, area_c, building, zone } from '../types/appartment.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
-import { Input, Table, TableProps } from 'antd'
+import ButtonAction from '../Components/ButtonAction'
 // import ButtonAction from '../Components/ButtonAction'
 
 const AppartmentPage: React.FC = () => {
@@ -131,7 +132,7 @@ const AppartmentPage: React.FC = () => {
       title: 'Name Apartment',
       dataIndex: 'name',
       key: 'id',
-      width: '20%',
+      width: '10%',
       filteredValue: [search],
       onFilter: (value, record) => {
         return String(record.name).toLowerCase().includes(String(value).toLowerCase())
@@ -141,7 +142,7 @@ const AppartmentPage: React.FC = () => {
       title: 'Description',
       dataIndex: 'description',
       key: 'id',
-      width: '15%',
+      width: '10%',
       render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
     {
@@ -150,6 +151,13 @@ const AppartmentPage: React.FC = () => {
       key: 'id',
       width: '5%',
       render: (text) => String(text)
+    },
+    {
+      title: 'More',
+      dataIndex: 'user',
+      key: 'id',
+      width: '7%',
+      render: (_, record) => <ButtonAction ID={record.id} />
     }
   ]
   return (

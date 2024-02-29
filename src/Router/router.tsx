@@ -1,15 +1,15 @@
 import { Route, Routes } from 'react-router-dom'
-import DashBoard from '../Pages/Dashboard'
-import UserPage from '../Pages/UserPage'
 import AppartmentPage from '../Pages/AppartmentPage'
-import LayoutAdmin from '../Pages/Layout'
-import Login from '../Pages/Login'
 import Appointment from '../Pages/AppointmentPage'
 import ContractPage from '../Pages/ContractPage'
-import ProblemPage from '../Pages/ProblemsPage'
-import PostPage from '../Pages/PostPage'
-import ReviewPage from '../Pages/ReviewPage'
+import DashBoard from '../Pages/Dashboard'
 import IssuePage from '../Pages/IssuePage'
+import LayoutAdmin from '../Pages/Layout'
+import Login from '../Pages/Login'
+import PostPage from '../Pages/PostPage'
+import ProblemPage from '../Pages/ProblemsPage'
+import ReviewPage from '../Pages/ReviewPage'
+import UserPage from '../Pages/UserPage'
 
 const ContentRoutes: React.FC = () => {
   return (
