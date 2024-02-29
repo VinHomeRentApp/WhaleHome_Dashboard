@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import { Menu } from 'antd'
 import {
-  FileTextOutlined,
   BarChartOutlined,
-  UserOutlined,
-  HomeOutlined,
   CalendarOutlined,
-  ContactsOutlined
+  ContactsOutlined,
+  FileTextOutlined,
+  HomeOutlined,
+  UserOutlined
 } from '@ant-design/icons'
+import { Menu } from 'antd'
+import React, { useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
 const MenuNav: React.FC = () => {
-  const [key, setKey] = useState('1')
+  const [key, setKey] = useState('')
   const navigate = useNavigate()
   return (
     <Menu

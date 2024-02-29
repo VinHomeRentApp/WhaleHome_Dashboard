@@ -118,9 +118,9 @@
 import { Button, Form, Grid, Input, theme, Typography } from 'antd'
 
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
-import { getUserDataFromToken, loginApi } from '../redux/user.slice'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { getUserDataFromToken, loginApi } from '../redux/user.slice'
 
 const { useToken } = theme
 const { useBreakpoint } = Grid

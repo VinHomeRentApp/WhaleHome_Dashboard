@@ -1,21 +1,17 @@
-import { useState, useEffect } from 'react'
 import { Table, TableProps, Typography } from 'antd'
+import { useEffect, useState } from 'react'
 import { Post } from '../types/post.type'
-import { http } from '../utils/http'
 import { ResponseSuccessful } from '../types/response.type'
+import { http } from '../utils/http'
 
 const RecentPost: React.FC = () => {
   const colums: TableProps['columns'] = [
     {
       title: 'Title',
-      dataIndex: 'title',
+      dataIndex: 'description',
       key: 'id'
     },
-    {
-      title: 'createBy',
-      dataIndex: 'createBy',
-      key: 'createBy'
-    },
+
     {
       title: 'createDate',
       dataIndex: 'createDate',
@@ -34,6 +30,8 @@ const RecentPost: React.FC = () => {
           Accept: 'application/json'
         }
       })
+      console.log(response)
+
       setDataSource(response.data.data)
       setLoading(false)
     } catch (error) {

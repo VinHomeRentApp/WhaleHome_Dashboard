@@ -1,6 +1,6 @@
+import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import { Avatar, Button, Layout, theme } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { MenuFoldOutlined, MenuUnfoldOutlined, LoginOutlined } from '@ant-design/icons'
-import { Layout, Button, theme, Avatar } from 'antd'
 import MenuNav from '../Components/Menu.tsx'
 import { User } from '../types/user.type.ts'
 
@@ -16,31 +16,9 @@ const LayoutAdmin = ({ children }: Props) => {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
-  // interface initialUser = {
-  //   id: number,
-  //   modifiedBy?: string,
-  //   createBy: string,
-  //   deleteBy: string,
-  //   modifiedDate: string,
-  //   createDate: string,
-  //   deleteAt: string,
-  //   status: boolean,
-  //   email: string,
-  //   password: string,
-  //   phone: string,
-  //   fullName: string,
-  //   dateOfBirth: string,
-  //   image: string,
-  //   gender: string,
-  //   address: string,
-  //   role: Role,
-  //   verified: boolean
-  // }
   const [user, setUser] = useState<User | null>()
 
   const storedUserData = localStorage.getItem('user')
-  console.log(storedUserData)
-
   useEffect(() => {
     if (storedUserData) {
       setUser(JSON.parse(storedUserData))
@@ -48,19 +26,6 @@ const LayoutAdmin = ({ children }: Props) => {
       setUser(null)
     }
   }, [storedUserData])
-
-  // useEffect(() => {
-  //   const token = JSON.stringify(localStorage.getItem('token'))
-
-  //   async function FetchUser(token: string) {
-  //     const res = await http.post<ResponseSuccessful<User>>('/auth/getUser', { access_token: token })
-  //     console.log(res.data.data)
-  //     return res.data.data
-  //   }
-  //   FetchUser(token).then((data) => {
-  //     setUser(data)
-  //   })
-  // }, [user])
 
   return (
     <Layout style={{ height: '100vh' }}>
