@@ -54,12 +54,7 @@ const UserPage: React.FC = () => {
       key: 'id',
       render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'id',
-      width: '8%'
-    },
+
     {
       title: 'Date of Birth',
       dataIndex: 'dateOfBirth',
@@ -78,6 +73,12 @@ const UserPage: React.FC = () => {
       key: 'id',
       width: '7%',
       render: (text) => String(text)
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'id',
+      width: '8%'
     },
     {
       title: 'More',
