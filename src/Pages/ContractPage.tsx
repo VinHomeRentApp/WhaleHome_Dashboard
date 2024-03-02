@@ -80,7 +80,7 @@ const ContractPage: React.FC = () => {
       title: 'Renter',
       dataIndex: 'contractHistory',
       key: 'id',
-      width: '15%',
+      width: '12%',
       render: (record: contractHistory) => (
         <div style={{ display: 'flex', gap: '1rem' }}>
           <Avatar size='default' src={record.users.image}></Avatar>
