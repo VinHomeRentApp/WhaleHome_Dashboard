@@ -1,6 +1,6 @@
 import { Input, Table, TableProps } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { appartment, area_c, building, zone } from '../types/appartment.type'
+import { appartment /*area_c, building, zone*/ } from '../types/appartment.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
 import ButtonAction from '../Components/ButtonAction'
@@ -8,9 +8,9 @@ import ButtonAction from '../Components/ButtonAction'
 
 const AppartmentPage: React.FC = () => {
   const [data, setDataSource] = useState<appartment[]>([])
-  const [zone, setZone] = useState<zone[]>([])
-  const [building, setBuilding] = useState<building[]>([])
-  const [area, setArea] = useState<area_c[]>([])
+  // const [zone, setZone] = useState<zone[]>([])
+  // const [building, setBuilding] = useState<building[]>([])
+  // const [area, setArea] = useState<area_c[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
 
@@ -29,57 +29,57 @@ const AppartmentPage: React.FC = () => {
     }
   }
 
-  async function getZone() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<zone[]>>('/zone', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setLoading(false)
+  // async function getZone() {
+  //   try {
+  //     setLoading(true)
+  //     const response = await http.get<ResponseSuccessful<zone[]>>('/zone', {
+  //       headers: {
+  //         Accept: 'application/json'
+  //       }
+  //     })
+  //     setLoading(false)
 
-      setZone(response.data.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //     setZone(response.data.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  async function getBuilding() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<building[]>>('/buildings', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setLoading(false)
+  // async function getBuilding() {
+  //   try {
+  //     setLoading(true)
+  //     const response = await http.get<ResponseSuccessful<building[]>>('/buildings', {
+  //       headers: {
+  //         Accept: 'application/json'
+  //       }
+  //     })
+  //     setLoading(false)
 
-      setBuilding(response.data.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  async function getArea() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<area_c[]>>('/areas', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setLoading(false)
-      setArea(response.data.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //     setBuilding(response.data.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  // async function getArea() {
+  //   try {
+  //     setLoading(true)
+  //     const response = await http.get<ResponseSuccessful<area_c[]>>('/areas', {
+  //       headers: {
+  //         Accept: 'application/json'
+  //       }
+  //     })
+  //     setLoading(false)
+  //     setArea(response.data.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   useEffect(() => {
     getAppartment()
-    getZone()
-    getBuilding()
-    getArea()
+    // getZone()
+    // getBuilding()
+    // getArea()
   }, [])
 
   const columns: TableProps['columns'] = [
@@ -87,13 +87,11 @@ const AppartmentPage: React.FC = () => {
       title: 'Area',
       dataIndex: 'area_c',
       key: 'id',
-      filters: area.map((z) => ({
-        text: String(z.name),
-        value: String(z.name)
-      })),
-      onFilter: (value, record) => {
-        return String(record.name) === String(value)
-      },
+      // filters: area.map((z) => ({
+      //   text: String(z.name),
+      //   value: String(z.name)
+      // })),
+      // onFilter: (value, record: appartment) => String(record.name).includes(String(value)),
       width: '5%',
       align: 'center',
       render: (record) => String(record.name)
@@ -102,13 +100,13 @@ const AppartmentPage: React.FC = () => {
       title: 'Zone',
       dataIndex: 'zone',
       key: 'id',
-      filters: zone.map((z) => ({
-        text: z.name,
-        value: z.name
-      })),
-      onFilter: (value, record) => {
-        return String(record.name).includes(String(value))
-      },
+      // filters: zone.map((z) => ({
+      //   text: z.name,
+      //   value: z.name
+      // })),
+      // onFilter: (value, record) => {
+      //   return String(record.name).includes(String(value))
+      // },
       width: '8%',
       align: 'center',
       render: (record) => String(record.name)
@@ -117,13 +115,13 @@ const AppartmentPage: React.FC = () => {
       title: 'Building',
       dataIndex: 'building',
       key: 'id',
-      filters: building.map((b) => ({
-        text: b.name,
-        value: b.name
-      })),
-      onFilter: (value, record) => {
-        return String(record.name).includes(String(value))
-      },
+      // filters: building.map((b) => ({
+      //   text: b.name,
+      //   value: b.name
+      // })),
+      // onFilter: (value, record) => {
+      //   return String(record.name).includes(String(value))
+      // },
       width: '8%',
       align: 'center',
       render: (record) => String(record.name)
