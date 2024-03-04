@@ -36,6 +36,16 @@ const MenuNav: React.FC = () => {
           label: 'User'
         },
         {
+          key: 'zones',
+          icon: <span className='material-symbols-outlined'>location_city</span>,
+          label: 'Zone'
+        },
+        {
+          key: 'buildings',
+          icon: <span className='material-symbols-outlined'>apartment</span>,
+          label: 'Building'
+        },
+        {
           key: 'appartments',
           icon: <HomeOutlined />,
           label: 'Appartment'

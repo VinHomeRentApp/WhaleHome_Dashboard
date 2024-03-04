@@ -1,13 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authSlice from './auth'
-
+import { useDispatch } from 'react-redux'
+import ZoneReducer from './zone.slice'
+import buildingSlice from './building.slice'
 export const store = configureStore({
   reducer: {
-    auth: authSlice
+    auth: authSlice,
+    zone: ZoneReducer,
+    building: buildingSlice
   }
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// Lấy RootState và AppDispatch từ store của chúng ta
+// Lấy RootState và AppDispatch từ store của chúng ta.
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+
 export type AppDispatch = typeof store.dispatch
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
