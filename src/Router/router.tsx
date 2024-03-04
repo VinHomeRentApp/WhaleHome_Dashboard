@@ -10,6 +10,8 @@ import PostPage from '../Pages/PostPage'
 import ProblemPage from '../Pages/ProblemsPage'
 import ReviewPage from '../Pages/ReviewPage'
 import UserPage from '../Pages/UserPage'
+import ZonePage from '../Pages/ZonePage'
+import BuildingPage from '../Pages/BuildingPage'
 
 const ContentRoutes: React.FC = () => {
   return (
@@ -54,7 +56,6 @@ const ContentRoutes: React.FC = () => {
           </LayoutAdmin>
         }
       />
-
       <Route
         path='/contracts'
         element={
@@ -84,6 +85,23 @@ const ContentRoutes: React.FC = () => {
         element={
           <LayoutAdmin>
             <IssuePage />
+          </LayoutAdmin>
+        }
+      />
+      ,
+      <Route
+        path='/zones'
+        element={
+          <LayoutAdmin>
+            <ZonePage />
+          </LayoutAdmin>
+        }
+      />
+      <Route
+        path='/buildings'
+        element={
+          <LayoutAdmin>
+            <BuildingPage />
           </LayoutAdmin>
         }
       />

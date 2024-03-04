@@ -179,6 +179,7 @@ const AppartmentPage: React.FC = () => {
         scroll={{ y: 400 }}
         loading={loading}
         rowKey='id'
+        bordered
       />
     </>
   )
