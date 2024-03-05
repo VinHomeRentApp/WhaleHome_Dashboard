@@ -36,6 +36,11 @@ const MenuNav: React.FC = () => {
           label: 'User'
         },
         {
+          key: 'areas',
+          icon: <span className='material-symbols-outlined'>pin_drop</span>,
+          label: 'Area'
+        },
+        {
           key: 'zones',
           icon: <span className='material-symbols-outlined'>location_city</span>,
           label: 'Zone'
@@ -56,15 +61,16 @@ const MenuNav: React.FC = () => {
           label: 'Appointment'
         },
         {
-          key: 'posts',
-          icon: <FileTextOutlined />,
-          label: 'Post'
-        },
-        {
           key: 'contracts',
           icon: <ContactsOutlined />,
           label: 'Contracts'
         },
+        {
+          key: 'posts',
+          icon: <FileTextOutlined />,
+          label: 'Post'
+        },
+
         {
           key: 'review',
           icon: <span className='material-symbols-outlined'>reviews</span>,

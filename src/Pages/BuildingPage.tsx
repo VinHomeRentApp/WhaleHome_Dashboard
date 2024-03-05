@@ -8,7 +8,7 @@ import { getBuildingList } from '../redux/building.slice'
 const BuildingPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
-  const loading = useSelector((state: RootState) => state.zone.loading)
+  const loading = useSelector((state: RootState) => state.building.loading)
   const [search, setSearch] = useState<string>('')
 
   useEffect(() => {
