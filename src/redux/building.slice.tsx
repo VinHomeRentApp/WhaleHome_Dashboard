@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { current, PayloadAction, AsyncThunk, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { AsyncThunk, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { http } from '../utils/http'
 import { ResponseSuccessful } from '../types/response.type'
 import { building } from '../types/building.type'
