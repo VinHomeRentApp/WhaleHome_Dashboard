@@ -42,8 +42,6 @@ export const createArea = createAsyncThunk('area/createArea', async (name: strin
 export const updateArea = createAsyncThunk(
   'area/updateArea',
   async ({ areaId, body }: { areaId: number; body: Omit<area, 'id' | 'createDate'> }, thunkAPI) => {
-    console.log('sss', body)
-
     const response = await http.put<ResponseSuccessful<area>>(`areas/update/${areaId}`, body, {
       signal: thunkAPI.signal
     })
