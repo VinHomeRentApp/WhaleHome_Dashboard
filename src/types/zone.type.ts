@@ -8,7 +8,7 @@ export interface zone {
 
 export interface area {
   id: number
-  createDate: string
-  name: string
-  status: true
+  createDate?: string
+  name?: string
+  status?: true
 }

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react'
 import { RootState, useAppDispatch } from '../redux/store'
-import { getZoneList } from '../redux/zone.slice'
+import { createZone, deleteZone, getZoneList, startEditingZone, updateZone } from '../redux/zone.slice'
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Input, Modal, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Checkbox, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
 import { useSelector } from 'react-redux'
 import { zone } from '../types/zone.type'
+import { getArea } from '../redux/area.slice'
 
 const formData: zone = {
   id: NaN,
@@ -12,21 +14,21 @@ const formData: zone = {
   status: true,
   name: '',
   area: {
-    id: NaN,
-    createDate: '',
-    status: true,
-    name: ''
+    id: NaN
   }
 }
 
 const ZonePage: React.FC = () => {
   const dispatch = useAppDispatch()
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
+  const editingZone = useSelector((state: RootState) => state.zone.editingZone)
   const loading = useSelector((state: RootState) => state.zone.loading)
   const [search, setSearch] = useState<string>('')
   const [modal, setModal] = useState<boolean>(false)
   const [modalData, setModalData] = useState<zone>(formData)
   const [modalAdd, setModalAdd] = useState<boolean>(false)
+
+  const areaList = useSelector((state: RootState) => state.area.areaList)
 
   useEffect(() => {
     const promise = dispatch(getZoneList())
@@ -34,6 +36,17 @@ const ZonePage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
+
+  useEffect(() => {
+    const promise = dispatch(getArea())
+    return () => {
+      promise.abort()
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    setModalData(editingZone || formData)
+  }, [editingZone])
 
   const columns: TableProps['columns'] = [
     {
@@ -84,7 +97,7 @@ const ZonePage: React.FC = () => {
       render: (record) => {
         return (
           <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
-            <EditOutlined onClick={() => handleOpenModal(/*record.id*/)} />
+            <EditOutlined onClick={() => handleOpenModal(record.id)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
           </div>
         )
@@ -93,17 +106,16 @@ const ZonePage: React.FC = () => {
   ]
 
   function handleDelte(id: number) {
-    // dispatch(deleteArea(id))
-    console.log(id)
+    dispatch(deleteZone(id))
   }
 
-  function handleOpenModal(/*id: number*/) {
+  function handleOpenModal(id: number) {
     setModal(true)
-    // dispatch(startEditingArea(id))
+    dispatch(startEditingZone(id))
   }
-  const handleOk = () => {
+  const handleOkEdit = () => {
     setModal(false)
-    // dispatch(updateArea({ areaId: modalData.id, body: modalData }))
+    dispatch(updateZone({ id: modalData.id, body: modalData }))
   }
   const handleCancel = () => {
     setModal(false)
@@ -114,7 +126,17 @@ const ZonePage: React.FC = () => {
   }
   const handleOkAdd = () => {
     setModalAdd(false)
-    // dispatch(createArea(modalData.name))
+    dispatch(createZone(modalData))
+  }
+
+  const handleSelectZone = (e: any) => {
+    setModalData((curr) => ({
+      ...curr,
+      area: {
+        ...curr.area,
+        id: Number(e)
+      }
+    }))
   }
 
   return (
@@ -127,7 +149,14 @@ const ZonePage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
-        <Button style={{ width: '10%' }} type='primary' block>
+        <Button
+          style={{ width: '10%' }}
+          type='primary'
+          block
+          onClick={() => {
+            setModalAdd(true)
+          }}
+        >
           Add New Zone
         </Button>
       </div>
@@ -136,24 +165,28 @@ const ZonePage: React.FC = () => {
         dataSource={zoneList}
         loading={loading}
         pagination={{
-          pageSize: 7
+          pageSize: 6
         }}
         rowKey='id'
         bordered
       />
-      <Modal title='Edit Area' open={modal} onOk={handleOk} onCancel={handleCancel}>
-        <Typography.Title level={5}>ID</Typography.Title>
-        <Input
-          placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, id: Number(e.target.value) }))}
-          value={modalData.id}
-          disabled
-        />
+      <Modal title='Edit Zone' open={modal} onOk={handleOkEdit} onCancel={handleCancel}>
+        <Input placeholder='input name' value={modalData.id} disabled />
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
           onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
           value={modalData.name}
+        />
+
+        <Typography.Title level={5}>Area</Typography.Title>
+        <Select
+          defaultValue={1}
+          style={{ minWidth: 150 }}
+          onChange={handleSelectZone}
+          options={areaList?.map((area) => {
+            return { value: area.id, label: area.name }
+          })}
         />
         <Typography.Title level={5}>Status</Typography.Title>
         <Checkbox
@@ -161,12 +194,24 @@ const ZonePage: React.FC = () => {
           checked={modalData.status}
         />
       </Modal>
-      <Modal title='Add Area' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
+
+      <Modal title='Add Zone' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
           onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
           value={modalData.name}
+        />
+
+        <Typography.Title level={5}>Area</Typography.Title>
+
+        <Select
+          defaultValue={1}
+          style={{ minWidth: 150 }}
+          onChange={handleSelectZone}
+          options={areaList?.map((area) => {
+            return { value: area.id, label: area.name }
+          })}
         />
       </Modal>
     </>
