@@ -83,14 +83,6 @@ const ZonePage: React.FC = () => {
       align: 'center'
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-      render: (record) => String(record)
-    },
-    {
       title: 'Action',
       key: 'id',
       width: '7%',
