@@ -37,9 +37,27 @@ const BuildingSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getBuildingList.fulfilled, (state, action) => {
-      state.buildingList = action.payload
-    })
+    builder
+      .addCase(getBuildingList.fulfilled, (state, action) => {
+        state.buildingList = action.payload
+        state.loading = false
+      })
+      .addMatcher<PendingAction>(
+        (action) => action.type.endsWith('/pending'),
+        (state, action) => {
+          state.loading = true
+          state.currentRequestId = action.meta.requestId
+        }
+      )
+      .addMatcher<RejectedAction | FulfilledAction>(
+        (action) => action.type.endsWith('/rejected') || action.type.endsWith('/fulfilled'),
+        (state, action) => {
+          if (state.loading && state.currentRequestId === action.meta.requestId) {
+            state.loading = false
+            state.currentRequestId = undefined
+          }
+        }
+      )
   }
 })
 

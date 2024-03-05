@@ -10,4 +10,5 @@ export interface area {
   id: number
   createDate: string
   name: string
+  status: true
 }

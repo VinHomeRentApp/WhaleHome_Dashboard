@@ -12,6 +12,7 @@ import ReviewPage from '../Pages/ReviewPage'
 import UserPage from '../Pages/UserPage'
 import ZonePage from '../Pages/ZonePage'
 import BuildingPage from '../Pages/BuildingPage'
+import AreaPage from '../Pages/AreaPage'
 
 const ContentRoutes: React.FC = () => {
   return (
@@ -102,6 +103,14 @@ const ContentRoutes: React.FC = () => {
         element={
           <LayoutAdmin>
             <BuildingPage />
+          </LayoutAdmin>
+        }
+      />
+      <Route
+        path='/areas'
+        element={
+          <LayoutAdmin>
+            <AreaPage />
           </LayoutAdmin>
         }
       />

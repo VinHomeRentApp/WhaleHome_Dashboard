@@ -1,61 +1,50 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RootState, useAppDispatch } from '../redux/store'
-import { getZoneList } from '../redux/zone.slice'
+import { cancelEditingArea, createArea, deleteArea, getArea, startEditingArea, updateArea } from '../redux/area.slice'
 import { EditOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Input, Modal, Switch, Table, TableProps, Typography } from 'antd'
 import { useSelector } from 'react-redux'
-import { zone } from '../types/zone.type'
+import { area } from '../types/area.type'
 
-const formData: zone = {
-  id: NaN,
+const formData: area = {
+  name: '',
   createDate: '',
   status: true,
-  name: '',
-  area: {
-    id: NaN,
-    createDate: '',
-    status: true,
-    name: ''
-  }
+  id: NaN
 }
 
-const ZonePage: React.FC = () => {
+export default function AreaPage() {
   const dispatch = useAppDispatch()
-  const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
-  const loading = useSelector((state: RootState) => state.zone.loading)
+  const areaList = useSelector((state: RootState) => state.area.areaList)
+  const areaEditing = useSelector((state: RootState) => state.area.editArea)
+  const loading = useSelector((state: RootState) => state.area.loading)
   const [search, setSearch] = useState<string>('')
   const [modal, setModal] = useState<boolean>(false)
-  const [modalData, setModalData] = useState<zone>(formData)
+  const [modalData, setModalData] = useState<area>(formData)
   const [modalAdd, setModalAdd] = useState<boolean>(false)
 
   useEffect(() => {
-    const promise = dispatch(getZoneList())
+    const promise = dispatch(getArea())
     return () => {
       promise.abort()
     }
   }, [dispatch])
+
+  useEffect(() => {
+    setModalData(areaEditing || formData)
+  }, [areaEditing])
 
   const columns: TableProps['columns'] = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      width: '8%',
       align: 'center'
     },
     {
       title: 'Area',
-      dataIndex: 'area',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-      render: (r) => String(r.name)
-    },
-    {
-      title: 'Name',
       dataIndex: 'name',
       key: 'id',
-      width: '8%',
       align: 'center',
       filteredValue: [search],
       onFilter: (value, record) => {
@@ -63,29 +52,22 @@ const ZonePage: React.FC = () => {
       }
     },
     {
-      title: 'Create Date',
+      title: 'createDate',
       dataIndex: 'createDate',
       key: 'id',
-      width: '8%',
       align: 'center'
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-      render: (record) => String(record)
-    },
+
     {
       title: 'Action',
       key: 'id',
-      width: '7%',
-      render: (record) => {
+
+      render: (record: area) => {
         return (
-          <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
-            <EditOutlined onClick={() => handleOpenModal(/*record.id*/)} />
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <EditOutlined onClick={() => handleOpenModal(record.id)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
+            {/* <DeleteOutlined style={{ color: 'red' }} onClick={() => handleDelte(record.id)} /> */}
           </div>
         )
       }
@@ -93,28 +75,29 @@ const ZonePage: React.FC = () => {
   ]
 
   function handleDelte(id: number) {
-    // dispatch(deleteArea(id))
     console.log(id)
+
+    dispatch(deleteArea(id))
   }
 
-  function handleOpenModal(/*id: number*/) {
+  function handleOpenModal(id: number) {
     setModal(true)
-    // dispatch(startEditingArea(id))
+    dispatch(startEditingArea(id))
   }
   const handleOk = () => {
     setModal(false)
-    // dispatch(updateArea({ areaId: modalData.id, body: modalData }))
+    dispatch(updateArea({ areaId: modalData.id, body: modalData }))
   }
   const handleCancel = () => {
     setModal(false)
-    // dispatch(cancelEditingArea())
+    dispatch(cancelEditingArea())
   }
   const handleCancelAdd = () => {
     setModalAdd(false)
   }
   const handleOkAdd = () => {
     setModalAdd(false)
-    // dispatch(createArea(modalData.name))
+    dispatch(createArea(modalData.name))
   }
 
   return (
@@ -127,13 +110,20 @@ const ZonePage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
-        <Button style={{ width: '10%' }} type='primary' block>
-          Add New Zone
+        <Button
+          style={{ width: '10%' }}
+          type='primary'
+          block
+          onClick={() => {
+            setModalAdd(true)
+          }}
+        >
+          Add New Area
         </Button>
       </div>
       <Table
         columns={columns}
-        dataSource={zoneList}
+        dataSource={areaList}
         loading={loading}
         pagination={{
           pageSize: 7
@@ -141,6 +131,7 @@ const ZonePage: React.FC = () => {
         rowKey='id'
         bordered
       />
+
       <Modal title='Edit Area' open={modal} onOk={handleOk} onCancel={handleCancel}>
         <Typography.Title level={5}>ID</Typography.Title>
         <Input
@@ -161,6 +152,7 @@ const ZonePage: React.FC = () => {
           checked={modalData.status}
         />
       </Modal>
+
       <Modal title='Add Area' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
@@ -172,5 +164,3 @@ const ZonePage: React.FC = () => {
     </>
   )
 }
-
-export default ZonePage
