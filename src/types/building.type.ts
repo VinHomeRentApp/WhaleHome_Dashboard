@@ -11,7 +11,7 @@ export interface zone {
   createDate?: string
   status?: boolean
   name?: string
-  area?: area
+  area: area
 }
 
 export interface area {
