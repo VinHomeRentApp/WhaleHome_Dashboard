@@ -36,7 +36,12 @@ const UserPage: React.FC = () => {
       dataIndex: 'id',
       key: 'id',
       width: '8%',
-      align: 'center'
+      align: 'center',
+      sorter: {
+        compare: (a: User, b: User) => a.id - b.id
+      },
+      sortDirections: ['ascend', 'descend'],
+      defaultSortOrder: 'ascend'
     },
     {
       title: 'Full Name',

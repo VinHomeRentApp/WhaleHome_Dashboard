@@ -40,7 +40,12 @@ const AppointmentPage: React.FC = () => {
       dataIndex: 'id',
       key: 'id',
       width: '4%',
-      align: 'center'
+      align: 'center',
+      sorter: {
+        compare: (a: appointments, b: appointments) => a.id - b.id
+      },
+      defaultSortOrder: 'ascend',
+      sortDirections: ['ascend', 'descend']
     },
     {
       title: 'createDate',

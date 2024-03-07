@@ -32,10 +32,23 @@ const ContractPage: React.FC = () => {
 
   const columns: TableProps['columns'] = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: '3%',
+      align: 'center',
+      sorter: {
+        compare: (a: contract, b: contract) => a.id - b.id
+      },
+      sortDirections: ['ascend', 'descend'],
+      defaultSortOrder: 'ascend'
+    },
+    {
       title: 'Contract',
       dataIndex: 'description',
       key: 'id',
-      width: '12%',
+      width: '15%',
+      align: 'center',
       filteredValue: [search],
       onFilter: (value, record) => {
         return record.description.toLowerCase().includes(String(value).toLowerCase())
@@ -45,7 +58,8 @@ const ContractPage: React.FC = () => {
       title: 'Date Sign',
       dataIndex: 'dateSign',
       key: 'id',
-      width: '5%'
+      width: '7%',
+      align: 'center'
     },
     {
       title: 'Date Start Rent',
