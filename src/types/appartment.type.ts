@@ -1,4 +1,5 @@
 export interface appartment {
+  id: number
   name: string
   description: string
   living_room: number

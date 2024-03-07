@@ -54,7 +54,12 @@ const ZonePage: React.FC = () => {
       dataIndex: 'id',
       key: 'id',
       width: '8%',
-      align: 'center'
+      align: 'center',
+      sorter: {
+        compare: (a: zone, b: zone) => a.id - b.id
+      },
+      defaultSortOrder: 'ascend',
+      sortDirections: ['descend', 'ascend']
     },
     {
       title: 'Area',

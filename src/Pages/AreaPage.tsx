@@ -39,7 +39,12 @@ export default function AreaPage() {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      align: 'center'
+      align: 'center',
+      sorter: {
+        compare: (a: area, b: area) => a.id - b.id
+      },
+      sortDirections: ['ascend', 'descend'],
+      defaultSortOrder: 'ascend'
     },
     {
       title: 'Area',

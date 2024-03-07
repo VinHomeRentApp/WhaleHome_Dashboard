@@ -84,14 +84,26 @@ const AppartmentPage: React.FC = () => {
 
   const columns: TableProps['columns'] = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: '5%',
+      align: 'center',
+      sorter: {
+        compare: (a: appartment, b: appartment) => a.id - b.id
+      },
+      sortDirections: ['ascend', 'descend'],
+      defaultSortOrder: 'ascend'
+    },
+    {
       title: 'Area',
       dataIndex: 'area_c',
       key: 'id',
-      // filters: area.map((z) => ({
-      //   text: String(z.name),
-      //   value: String(z.name)
+      // filters: data.map((z) => ({
+      //   text: String(z.area_c.name),
+      //   value: String(z.area_c.name)
       // })),
-      // onFilter: (value, record: appartment) => String(record.name).includes(String(value)),
+      // onFilter: (value, record) => record.name.indexOf(value) === 0,
       width: '5%',
       align: 'center',
       render: (record) => String(record.name)
@@ -143,13 +155,7 @@ const AppartmentPage: React.FC = () => {
       width: '10%',
       render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'id',
-      width: '5%',
-      render: (text) => String(text)
-    },
+
     {
       title: 'More',
       dataIndex: 'user',
@@ -158,6 +164,7 @@ const AppartmentPage: React.FC = () => {
       render: (_, record) => <ButtonAction ID={record.id} />
     }
   ]
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>

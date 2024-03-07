@@ -1,22 +1,22 @@
 export interface building {
   id: number
-  createDate: string
-  status: boolean
+  createDate?: string
+  status?: boolean
   name: string
   zone: zone
 }
 
 export interface zone {
   id: number
-  createDate: string
-  status: boolean
-  name: string
-  area: area
+  createDate?: string
+  status?: boolean
+  name?: string
+  area?: area
 }
 
 export interface area {
   id: number
-  createDate: string
-  status: boolean
-  name: string
+  createDate?: string
+  status?: boolean
+  name?: string
 }
