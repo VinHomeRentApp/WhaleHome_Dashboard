@@ -25,12 +25,17 @@ const initialState: BuildingState = {
 }
 
 interface updateBuilding {
-  id: number
   name: string
   zone: {
     id: number
+    createDate: '2024-03-07'
+    status: true
+    name: 'string'
     area: {
-      id: number
+      id: 2
+      createDate: '2024-03-07'
+      status: true
+      name: 'string'
     }
   }
 }
@@ -44,13 +49,40 @@ export const getBuildingList = createAsyncThunk('building/getBuildingList', asyn
 
 export const updateBuilding = createAsyncThunk(
   'building/updateBuilding',
-  async ({ id, body }: { id: number; body: updateBuilding }, thunkAPI) => {
-    const res = await http.put<ResponseSuccessful<building>>(`/update/${id}`, body, {
+  async ({ id, body }: { id: number; body: building }, thunkAPI) => {
+    const res = await http.put<ResponseSuccessful<building>>(`/buildings/update/${id}`, body, {
       signal: thunkAPI.signal
     })
     return res.data.data
   }
 )
+
+export const createBuilding = createAsyncThunk('building/createBuilding', async (body: building, thunkAPI) => {
+  const res = await http.post<ResponseSuccessful<building>>(`/buildings`, {
+    signal: thunkAPI.signal,
+    name: body.name,
+    zone: {
+      id: body.zone.id,
+      createDate: '2024-03-07',
+      status: true,
+      name: 'string',
+      area: {
+        id: body.zone.area.id,
+        createDate: '2024-03-07',
+        status: true,
+        name: 'string'
+      }
+    }
+  })
+  return res.data.data
+})
+
+export const deleteBuilding = createAsyncThunk('building/deleteBuilding', async ({ id }: { id: number }, thunkAPI) => {
+  const res = await http.put<ResponseSuccessful<building>>(`/buildings/delete/${id}`, {
+    signal: thunkAPI.signal
+  })
+  return res.data.data
+})
 const BuildingSlice = createSlice({
   name: 'building',
   initialState,
@@ -80,6 +112,19 @@ const BuildingSlice = createSlice({
           }
           return false
         })
+      })
+      .addCase(createBuilding.fulfilled, (state, action) => {
+        state.buildingList.push(action.payload)
+        state.loading = false
+      })
+      .addCase(deleteBuilding.fulfilled, (state, action) => {
+        const id = action.meta.arg.id
+        state.buildingList.find((z, index) => {
+          if (z.id === id) {
+            state.buildingList[index] = { ...state.buildingList[index], status: Boolean(!state.buildingList[index]) }
+          }
+        })
+        state.loading = false
       })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),

@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { RootState, useAppDispatch } from '../redux/store'
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Input, Modal, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
 import { useSelector } from 'react-redux'
-import { cancelEditingBuilding, getBuildingList, startEditBuilding } from '../redux/building.slice'
+import {
+  cancelEditingBuilding,
+  createBuilding,
+  deleteBuilding,
+  getBuildingList,
+  startEditBuilding,
+  updateBuilding
+} from '../redux/building.slice'
 import { building } from '../types/building.type'
+import { getArea } from '../redux/area.slice'
+import { zone } from '../types/zone.type'
+import { area } from '../types/area.type'
+import { getZoneList } from '../redux/zone.slice'
 
 const formData: building = {
   id: NaN,
@@ -18,6 +29,8 @@ const formData: building = {
 }
 
 const BuildingPage: React.FC = () => {
+  const zoneSTate = useSelector((state: RootState) => state.zone.ZoneList)
+
   const dispatch = useAppDispatch()
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
   const loading = useSelector((state: RootState) => state.building.loading)
@@ -26,18 +39,59 @@ const BuildingPage: React.FC = () => {
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<building>(formData)
   const editBuilding = useSelector((state: RootState) => state.building.editingBuilding)
+  const [enabnle, setEnabnle] = useState<boolean>(true)
+  const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneSTate)
+  const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
+
+  // useEffect(() => {
+  //   const promise = dispatch(getArea())
+  //   return () => {
+  //     promise.abort()
+  //   }
+  // }, [dispatch])
+
+  const ZoneListFilter = (e: number) => zoneSTate.filter((z) => z.area.id == e)
 
   useEffect(() => {
+    dispatch(getArea())
+    dispatch(getZoneList())
     const promise = dispatch(getBuildingList())
     return () => {
       promise.abort()
     }
   }, [dispatch])
 
+  const handleSelectArea = (e: number) => {
+    setModalData((curr) => ({
+      ...curr,
+      zone: {
+        ...curr.zone,
+        area: {
+          ...curr.zone.area,
+          id: e
+        }
+      }
+    }))
+    setZoneListfilter(ZoneListFilter(e))
+    setEnabnle(false)
+
+    console.log(zoneListfilter)
+  }
+
+  const handleSelectZone = (e: number) => {
+    setModalData((curr) => ({
+      ...curr,
+      zone: {
+        ...curr.zone,
+
+        id: e
+      }
+    }))
+  }
+
   useEffect(() => {
     setModalData(editBuilding || formData)
-    console.log(modalData)
-  }, [editBuilding, modalData])
+  }, [editBuilding])
 
   const columns: TableProps['columns'] = [
     {
@@ -56,7 +110,7 @@ const BuildingPage: React.FC = () => {
       title: 'Area',
       dataIndex: 'zone',
       key: 'id',
-      width: '8%',
+      width: '5%',
       align: 'center',
       render: (r) => String(r.area.name)
     },
@@ -91,10 +145,11 @@ const BuildingPage: React.FC = () => {
     {
       title: 'Action',
       key: 'id',
-      width: '7%',
+      width: '5%',
+      align: 'center',
       render: (record: building) => {
         return (
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
           </div>
@@ -104,7 +159,7 @@ const BuildingPage: React.FC = () => {
   ]
 
   const handleDelte = (id: number) => {
-    console.log(id)
+    dispatch(deleteBuilding({ id: id }))
   }
 
   const handleOpenModalEdit = (id: number) => {
@@ -115,19 +170,26 @@ const BuildingPage: React.FC = () => {
   const handleOk = () => {
     setModal(false)
     dispatch(cancelEditingBuilding())
+    dispatch(updateBuilding({ id: modalData.id, body: modalData }))
   }
   const handleCancel = () => {
     setModal(false)
     dispatch(cancelEditingBuilding())
+    setModalData(formData)
   }
 
   const handleOkAdd = () => {
     setModalAdd(false)
+    setModalData(formData)
+    setEnabnle(true)
+    dispatch(createBuilding(modalData))
     dispatch(cancelEditingBuilding())
   }
 
   const handleCancelAdd = () => {
     setModalAdd(false)
+    setModalData(formData)
+    setEnabnle(true)
     dispatch(cancelEditingBuilding())
   }
   return (
@@ -140,8 +202,8 @@ const BuildingPage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
-        <Button style={{ width: '10%' }} type='primary' block onClick={() => setModalAdd(true)}>
-          Add New Zone
+        <Button style={{ width: '15%' }} type='primary' block onClick={() => setModalAdd(true)}>
+          Add New Building
         </Button>
       </div>
       <Table
@@ -155,24 +217,31 @@ const BuildingPage: React.FC = () => {
         bordered
       />
 
-      <Modal title='Edit Building' open={modal} onOk={handleOk} onCancel={handleCancel}>
-        <Typography.Title level={5}>ID</Typography.Title>
-        <Input
-          placeholder='input name'
-          value={modalData.id}
-          onChange={(e) => setModalData((data) => ({ ...data, id: Number(e.target.value) }))}
-          disabled
-        />
+      <Modal title='Edit Area' open={modal} onOk={handleOk} onCancel={handleCancel}>
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
           value={modalData.name}
           onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
         />
-        <Typography.Title level={5}>Status</Typography.Title>
-        <Checkbox
-          onChange={(e) => setModalData((data) => ({ ...data, status: e.target.value }))}
-          checked={modalData.status}
+        <Typography.Title level={5}>Area</Typography.Title>
+        <Select
+          style={{ minWidth: 150 }}
+          onChange={handleSelectArea}
+          options={arealist.map((area) => {
+            return { value: area.id, label: area.name }
+          })}
+          value={modalData.zone.area.id}
+        />
+
+        <Typography.Title level={5}>Zone</Typography.Title>
+        <Select
+          style={{ minWidth: 150 }}
+          onChange={handleSelectZone}
+          options={zoneListfilter.map((z) => {
+            return { value: z.id, label: z.name }
+          })}
+          value={modalData.zone.id}
         />
       </Modal>
 
@@ -180,8 +249,26 @@ const BuildingPage: React.FC = () => {
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
           value={modalData.name}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
+        />
+        <Typography.Title level={5}>Area</Typography.Title>
+        <Select
+          style={{ minWidth: 150 }}
+          onChange={handleSelectArea}
+          options={arealist.map((area) => {
+            return { value: area.id, label: area.name }
+          })}
+        />
+
+        <Typography.Title level={5}>Zone</Typography.Title>
+        <Select
+          style={{ minWidth: 150 }}
+          onChange={handleSelectZone}
+          disabled={enabnle}
+          options={zoneListfilter.map((z) => {
+            return { value: z.id, label: z.name }
+          })}
         />
       </Modal>
     </>

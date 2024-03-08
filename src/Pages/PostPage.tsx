@@ -1,73 +1,169 @@
-// import { useState } from 'react'
-// import { Table, TableProps, Typography } from 'antd'
-// import { Post } from '../types/post.type'
+import { Button, Carousel, Modal, Switch, Table, TableProps } from 'antd'
+import { post, postImages } from '../types/post.type'
+import { v4 as uuidv4 } from 'uuid'
+import { RootState, useAppDispatch } from '../redux/store'
+import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { getPostList } from '../redux/post.slice'
+import { EditOutlined } from '@ant-design/icons'
 
-// const PostPage: React.FC = () => {
-//   const colums: TableProps['columns'] = [
-//     {
-//       title: 'Title',
-//       dataIndex: 'title',
-//       key: 'id'
-//     },
-//     {
-//       title: 'createBy',
-//       dataIndex: 'createBy',
-//       key: 'createBy'
-//     },
-//     {
-//       title: 'createDate',
-//       dataIndex: 'createDate',
-//       key: 'createDate'
-//     }
-//   ]
-
-//   const [dataSource, setDataSource] = useState<Post[]>([])
-//   const [loading, setLoading] = useState<boolean>(true)
-
-//   //   async function getPost() {
-//   //     try {
-//   //       setLoading(true)
-//   //       const response = await http.get<ResponseSuccessful<Post[]>>('/post', {
-//   //         headers: {
-//   //           Accept: 'application/json'
-//   //         }
-//   //       })
-//   //       setDataSource(response.data.data)
-//   //       setLoading(false)
-//   //     } catch (error) {
-//   //       console.log(error)
-//   //     }
-//   //   }
-
-//   //   useEffect(() => {
-//   //     getPost()
-//   //   }, [])
-//   // useEffect(FetchPost('/post/'))
-
-//   return (
-//     <>
-//       <Typography.Text strong>Recent Post</Typography.Text>
-//       <Table
-//         columns={colums}
-//         // loading={loading}
-//         // dataSource={dataSource}
-//         scroll={{ y: 200 }}
-//         pagination={{
-//           pageSize: 4,
-//           hideOnSinglePage: true
-//         }}
-//         rowKey='id'
-//       ></Table>
-//     </>
-//   )
+// const onChange = (currentSlide: number) => {
+//   console.log(currentSlide)
 // }
 
-// export default PostPage
-
-import React from 'react'
-
 const PostPage: React.FC = () => {
-  return <>PostPage</>
+  const dispatch = useAppDispatch()
+  const data = useSelector((state: RootState) => state.post.postList)
+  const loading = useSelector((state: RootState) => state.post.loading)
+  const [modal, setModal] = useState<boolean>(false)
+  const [imageList, setImageList] = useState<postImages[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [modalEdit, setModalEdit] = useState<boolean>(false)
+
+  useEffect(() => {
+    const promise = dispatch(getPostList())
+
+    return () => {
+      promise.abort()
+    }
+  }, [dispatch])
+
+  const colums: TableProps['columns'] = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: '3%',
+      align: 'center',
+      key: 'id'
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      width: '8%',
+      align: 'center',
+      key: 'id'
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      width: '13%',
+      align: 'center',
+      key: 'id'
+    },
+    {
+      title: 'Apartment',
+      children: [
+        {
+          title: 'Area',
+          key: uuidv4(),
+          width: '4%',
+          align: 'center',
+          render: (record: post) => String(record.apartment.building.zone.area.name)
+        },
+        {
+          title: 'Zone',
+          key: uuidv4(),
+          width: '6%',
+          align: 'center',
+
+          render: (record: post) => String(record.apartment.building.zone.name)
+        },
+        {
+          title: 'Building',
+          key: uuidv4(),
+          width: '5%',
+          align: 'center',
+
+          render: (record: post) => String(record.apartment.building.name)
+        },
+        {
+          title: 'RoomName',
+          key: uuidv4(),
+          width: '6%',
+          align: 'center',
+          render: (record: post) => String(record.apartment.name)
+        }
+      ]
+    },
+    {
+      title: 'ViewImage',
+      width: '8%',
+      align: 'center',
+      render: (record: post) => <Button onClick={() => handleOnClickImage(record)}> ViewImage </Button>
+    },
+    {
+      title: 'Action',
+      key: 'id',
+      width: '7%',
+      render: (record: post) => {
+        return (
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
+            <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
+          </div>
+        )
+      }
+    }
+  ]
+  const handleOpenModalEdit = (id: number) => {
+    setModalEdit(true)
+    console.log(id)
+  }
+
+  const handleDelte = (id: number) => {
+    console.log(id)
+  }
+
+  function handleOnClickImage(record: post) {
+    setModal(true)
+    setImageList(record.postImages)
+  }
+
+  return (
+    <>
+      <Table
+        columns={colums}
+        loading={loading}
+        dataSource={data}
+        scroll={{ y: 500 }}
+        pagination={{
+          pageSize: 5,
+          hideOnSinglePage: true
+        }}
+        rowKey='id'
+        bordered
+      ></Table>
+
+      <Modal
+        footer={null}
+        centered
+        closable={false}
+        title={'Image'}
+        open={modal}
+        onCancel={() => {
+          setModal(false)
+          setImageList([])
+        }}
+        // okButtonProps={{ style: { display: 'none' } }}
+      >
+        <Carousel swipeToSlide draggable arrows>
+          {imageList.map((img) => (
+            <div key={img.id} style={{ display: 'flex', justifyContent: 'center' }}>
+              <img width='100%' alt={img.image_alt} src={img.image_url} className='card' />
+            </div>
+          ))}
+        </Carousel>
+      </Modal>
+    </>
+  )
 }
 
 export default PostPage
+
+// import React from 'react'
+
+// const PostPage: React.FC = () => {
+//   return <>PostPage</>
+// }
+
+// export default PostPage

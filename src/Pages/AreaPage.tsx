@@ -66,6 +66,7 @@ export default function AreaPage() {
     {
       title: 'Action',
       key: 'id',
+      align: 'center',
 
       render: (record: area) => {
         return (

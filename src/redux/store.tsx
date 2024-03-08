@@ -4,12 +4,14 @@ import { useDispatch } from 'react-redux'
 import ZoneReducer from './zone.slice'
 import buildingSlice from './building.slice'
 import areaSlice from './area.slice'
+import postSlice from './post.slice'
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     zone: ZoneReducer,
     building: buildingSlice,
-    area: areaSlice
+    area: areaSlice,
+    post: postSlice
   }
 })
 
