@@ -51,7 +51,7 @@ const AppointmentPage: React.FC = () => {
       title: 'createDate',
       dataIndex: 'createDate',
       align: 'center',
-      width: '5%',
+      width: '6%',
       key: 'id'
     },
     {
@@ -59,7 +59,7 @@ const AppointmentPage: React.FC = () => {
       dataIndex: 'dateTime',
       key: 'id',
       align: 'center',
-      width: '5%'
+      width: '6%'
     },
     {
       title: 'Apartment',

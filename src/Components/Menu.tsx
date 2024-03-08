@@ -77,14 +77,14 @@ const MenuNav: React.FC = () => {
           label: 'Review'
         },
         {
-          key: 'problem',
-          icon: <span className='material-symbols-outlined'>problem</span>,
-          label: 'Problem'
-        },
-        {
           key: 'issue',
           icon: <span className='material-symbols-outlined'>error</span>,
           label: 'Issue'
+        },
+        {
+          key: 'problem',
+          icon: <span className='material-symbols-outlined'>problem</span>,
+          label: 'Problem'
         }
       ]}
     />
