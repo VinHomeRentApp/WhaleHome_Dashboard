@@ -1,8 +1,8 @@
 import { Table, TableProps } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { getIssueList } from '../redux/issue.slice'
-import { RootState, useAppDispatch } from '../redux/store'
+import { getIssueList } from '../redux/actions/issue.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
 import { issue } from '../types/issue.type'
 
 const ReviewPage: React.FC = () => {

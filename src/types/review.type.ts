@@ -1,4 +1,4 @@
-export interface reivew {
+export interface review {
   reviewId: number
   content: string
   status: boolean

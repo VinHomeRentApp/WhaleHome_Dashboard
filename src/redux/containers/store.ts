@@ -1,16 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authSlice from './auth'
 import { useDispatch } from 'react-redux'
-import ZoneReducer from './zone.slice'
-import buildingSlice from './building.slice'
-import areaSlice from './area.slice'
-import postSlice from './post.slice'
-import reviewSlice from './review.slice'
-import issueSlice from './issue.slice'
+import areaSlice from '../slices/area.slice'
+import authSlice from '../slices/auth.slice'
+import buildingSlice from '../slices/building.slice'
+import issueSlice from '../slices/issue.slice'
+import postSlice from '../slices/post.slice'
+import reviewSlice from '../slices/review.slice'
+import zoneSlice from '../slices/zone.slice'
 export const store = configureStore({
   reducer: {
     auth: authSlice,
-    zone: ZoneReducer,
+    zone: zoneSlice,
     building: buildingSlice,
     area: areaSlice,
     post: postSlice,
@@ -20,7 +20,6 @@ export const store = configureStore({
 })
 
 // Lấy RootState và AppDispatch từ store của chúng ta
-// Lấy RootState và AppDispatch từ store của chúng ta.
 export type RootState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch

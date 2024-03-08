@@ -1,13 +1,14 @@
-import React from 'react'
+import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
-import DashboardCard from '../Components/DashboardCard'
-import { FileTextOutlined, UserOutlined, HomeFilled, SolutionOutlined } from '@ant-design/icons'
+import React from 'react'
+import DashboardCard from '../Components/Dashboard/DashboardCard'
+import DashboardChart from '../Components/Dashboard/DashboardChar'
 import RecentPost from '../Components/RecentPost'
-import DashboardChart from '../Components/DashboardChar'
+
 const DashBoard: React.FC = () => {
   return (
-    <Space size={20} direction='vertical' style={{ paddingLeft: '2%' }}>
-      <Space direction='horizontal' size={[100, 50]}>
+    <div>
+      <Space direction='horizontal' style={{ width: '100%' }}>
         <DashboardCard
           icon={
             <FileTextOutlined
@@ -22,7 +23,8 @@ const DashBoard: React.FC = () => {
           }
           title={'Post'}
           URL='/post/count-all'
-        ></DashboardCard>
+        />
+
         <DashboardCard
           icon={
             <UserOutlined
@@ -38,6 +40,7 @@ const DashBoard: React.FC = () => {
           title={'Customer'}
           URL='/user/count-all'
         />
+
         <DashboardCard
           icon={
             <HomeFilled
@@ -53,6 +56,7 @@ const DashBoard: React.FC = () => {
           title={'Appartment'}
           URL='/apartments/count-all'
         />
+
         <DashboardCard
           icon={
             <SolutionOutlined
@@ -69,11 +73,12 @@ const DashBoard: React.FC = () => {
           URL='/contracts/count-all'
         />
       </Space>
-      <Space size={[200, 20]}>
-        <RecentPost></RecentPost>
-        <DashboardChart></DashboardChart>
-      </Space>
-    </Space>
+
+      <DashboardChart />
+      <div>
+        <RecentPost />
+      </div>
+    </div>
   )
 }
 

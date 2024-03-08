@@ -1,7 +1,7 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Avatar, Button, Layout, theme } from 'antd'
 import React, { useEffect, useState } from 'react'
-import MenuNav from '../Components/Menu.tsx'
+import MenuNav from '../Components/UI/Menu.tsx'
 import { User } from '../types/user.type.ts'
 
 const { Header, Sider, Content } = Layout
@@ -30,7 +30,7 @@ const LayoutAdmin = ({ children }: Props) => {
   return (
     <Layout style={{ height: '100vh' }}>
       <Sider
-        theme='light'
+        theme='dark'
         trigger={null}
         collapsible
         collapsed={collapsed}
@@ -42,6 +42,9 @@ const LayoutAdmin = ({ children }: Props) => {
           overflowY: 'scroll'
         }}
       >
+        <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
+          <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
+        </div>
         <MenuNav />
         {user != null ? (
           <div

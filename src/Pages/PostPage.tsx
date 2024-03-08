@@ -1,11 +1,11 @@
-import { Button, Carousel, Modal, Switch, Table, TableProps } from 'antd'
-import { post, postImages } from '../types/post.type'
-import { v4 as uuidv4 } from 'uuid'
-import { RootState, useAppDispatch } from '../redux/store'
-import { useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { getPostList } from '../redux/post.slice'
 import { EditOutlined } from '@ant-design/icons'
+import { Button, Carousel, Modal, Switch, Table, TableProps } from 'antd'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
+import { getPostList } from '../redux/actions/post.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
+import { post, postImages } from '../types/post.type'
 
 // const onChange = (currentSlide: number) => {
 //   console.log(currentSlide)

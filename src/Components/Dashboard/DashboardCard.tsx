@@ -1,7 +1,7 @@
 import { Card, Space, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { ResponseSuccessful } from '../types/response.type'
-import { http } from '../utils/http'
+import { ResponseSuccessful } from '../../types/response.type'
+import { http } from '../../utils/http'
 
 interface props {
   title: string
@@ -28,14 +28,13 @@ const DashboardCard: React.FC<props> = ({ title, icon, URL }) => {
 
   useEffect(() => {
     getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <Card style={{ width: 200 }}>
-      <Space direction='horizontal'>
+    <Card style={{ minWidth: 100, width: 260, maxWidth: 500 }}>
+      <Space direction='horizontal' size={30}>
         {icon}
-        <Statistic title={title} value={data} />
+        <Statistic style={{ fontWeight: 'bold' }} title={title} value={data} />
       </Space>
     </Card>
   )

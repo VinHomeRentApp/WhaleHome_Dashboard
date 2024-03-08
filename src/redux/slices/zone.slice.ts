@@ -1,68 +1,11 @@
-import { zone } from '../types/zone.type'
-import { http } from '../utils/http'
-import { ResponseSuccessful } from '../types/response.type'
-import { AsyncThunk, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type GenericAsyncThunk = AsyncThunk<unknown, unknown, any>
-
-type PendingAction = ReturnType<GenericAsyncThunk['pending']>
-type RejectedAction = ReturnType<GenericAsyncThunk['rejected']>
-type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>
-
-interface ZoneState {
-  ZoneList: zone[]
-  editingZone: zone | null
-  loading: boolean
-  currentRequestId: undefined | string
-}
-
-const initialState: ZoneState = {
-  ZoneList: [],
-  editingZone: null,
-  loading: false,
-  currentRequestId: undefined
-}
-
-export const getZoneList = createAsyncThunk('zone/getZoneList', async (_, thunkAPI) => {
-  const response = await http.get<ResponseSuccessful<zone[]>>('/zone', {
-    signal: thunkAPI.signal
-  })
-  return response.data.data
-})
-
-export const createZone = createAsyncThunk('zone/createZone', async (body: zone, thunkAPI) => {
-  const response = await http.post<ResponseSuccessful<zone>>('/zone', {
-    signal: thunkAPI.signal,
-    name: body.name,
-    area: {
-      id: body.area.id
-    },
-    status: true
-  })
-  return response.data.data
-})
-
-export const updateZone = createAsyncThunk(
-  'zone/updateZone',
-  async ({ id, body }: { id: number; body: zone }, thunkAPI) => {
-    const response = await http.put<ResponseSuccessful<zone>>(`zone/update/${id}`, body, {
-      signal: thunkAPI.signal
-    })
-    return response.data.data
-  }
-)
-
-export const deleteZone = createAsyncThunk('zone/deleteZone', async (id: number, thunkAPI) => {
-  const response = await http.put<ResponseSuccessful<zone>>(`zone/delete/${id}`, {
-    signal: thunkAPI.signal
-  })
-  return response.data.data
-})
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
+import { createZone, deleteZone, getZoneList, updateZone } from '../actions/zone.actions'
+import { initialZoneState } from '../types/zone.types'
 
 const ZoneSlice = createSlice({
   name: 'zone',
-  initialState,
+  initialState: initialZoneState,
   reducers: {
     startEditingZone: (state, action: PayloadAction<number>) => {
       const zoneID = action.payload

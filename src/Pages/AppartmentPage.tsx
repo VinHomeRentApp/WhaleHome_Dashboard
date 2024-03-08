@@ -1,13 +1,13 @@
 import { Input, Table, TableProps } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { appartment /*area_c, building, zone*/ } from '../types/appartment.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
-import ButtonAction from '../Components/ButtonAction'
+import ButtonAction from '../Components/UI/ButtonAction'
+import { apartment } from '../types/appartment.type'
 // import ButtonAction from '../Components/ButtonAction'
 
 const AppartmentPage: React.FC = () => {
-  const [data, setDataSource] = useState<appartment[]>([])
+  const [data, setDataSource] = useState<apartment[]>([])
   // const [zone, setZone] = useState<zone[]>([])
   // const [building, setBuilding] = useState<building[]>([])
   // const [area, setArea] = useState<area_c[]>([])
@@ -17,7 +17,7 @@ const AppartmentPage: React.FC = () => {
   async function getAppartment() {
     try {
       setLoading(true)
-      const response = await http.get<ResponseSuccessful<appartment[]>>('/apartments/get-all-details', {
+      const response = await http.get<ResponseSuccessful<apartment[]>>('/apartments/get-all-details', {
         headers: {
           Accept: 'application/json'
         }
@@ -90,7 +90,7 @@ const AppartmentPage: React.FC = () => {
       width: '5%',
       align: 'center',
       sorter: {
-        compare: (a: appartment, b: appartment) => a.id - b.id
+        compare: (a: apartment, b: apartment) => a.id - b.id
       },
       sortDirections: ['ascend', 'descend'],
       defaultSortOrder: 'ascend'

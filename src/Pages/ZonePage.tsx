@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react'
-import { RootState, useAppDispatch } from '../redux/store'
-import { createZone, deleteZone, getZoneList, startEditingZone, updateZone } from '../redux/zone.slice'
 import { EditOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { getArea } from '../redux/actions/area.actions'
+import { createZone, deleteZone, getZoneList, updateZone } from '../redux/actions/zone.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
+import { startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
-import { getArea } from '../redux/area.slice'
 
 const formData: zone = {
   id: NaN,
@@ -14,7 +15,10 @@ const formData: zone = {
   status: true,
   name: '',
   area: {
-    id: NaN
+    id: NaN,
+    createDate: '',
+    status: false,
+    name: ''
   }
 }
 

@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
 import AppartmentPage from '../Pages/AppartmentPage'
 import Appointment from '../Pages/AppointmentPage'
+import AreaPage from '../Pages/AreaPage'
+import BuildingPage from '../Pages/BuildingPage'
 import ContractPage from '../Pages/ContractPage'
 import DashBoard from '../Pages/Dashboard'
 import IssuePage from '../Pages/IssuePage'
@@ -11,8 +13,6 @@ import ProblemPage from '../Pages/ProblemsPage'
 import ReviewPage from '../Pages/ReviewPage'
 import UserPage from '../Pages/UserPage'
 import ZonePage from '../Pages/ZonePage'
-import BuildingPage from '../Pages/BuildingPage'
-import AreaPage from '../Pages/AreaPage'
 
 const ContentRoutes: React.FC = () => {
   return (

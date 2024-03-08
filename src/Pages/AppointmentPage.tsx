@@ -1,16 +1,12 @@
-import { Table, TableProps } from 'antd'
+import { Table } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { appointments } from '../types/appointments.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
-import ButtonAction from '../Components/ButtonAction'
-import { apartment, appointments } from '../types/appointments.type'
-import { v4 as uuidv4 } from 'uuid'
-import { User } from '../types/user.type'
-import Avatar from 'antd/es/avatar/avatar'
+import ColumnsAppointmentPage from './Settings/ColumnAppointmentPage'
 
 const AppointmentPage: React.FC = () => {
   const [data, setDataSource] = useState<appointments[]>([])
-
   const [loading, setLoading] = useState<boolean>(true)
 
   async function getAppointments() {
@@ -34,97 +30,10 @@ const AppointmentPage: React.FC = () => {
     getAppointments()
   }, [])
 
-  const columns: TableProps['columns'] = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: '4%',
-      align: 'center',
-      sorter: {
-        compare: (a: appointments, b: appointments) => a.id - b.id
-      },
-      defaultSortOrder: 'ascend',
-      sortDirections: ['ascend', 'descend']
-    },
-    {
-      title: 'createDate',
-      dataIndex: 'createDate',
-      align: 'center',
-      width: '6%',
-      key: 'id'
-    },
-    {
-      title: 'dateTime',
-      dataIndex: 'dateTime',
-      key: 'id',
-      align: 'center',
-      width: '6%'
-    },
-    {
-      title: 'Apartment',
-      children: [
-        {
-          title: 'Area',
-          dataIndex: 'apartment',
-          key: uuidv4(),
-          width: '6%',
-          align: 'center',
-          render: (record: apartment) => String(record.building.zone.area.name)
-        },
-        {
-          title: 'Zone',
-          dataIndex: 'apartment',
-          key: uuidv4(),
-          width: '8%',
-          align: 'center',
-
-          render: (record: apartment) => String(record.building.zone.name)
-        },
-        {
-          title: 'Building',
-          dataIndex: 'apartment',
-          key: uuidv4(),
-          width: '7%',
-          align: 'center',
-
-          render: (record: apartment) => String(record.building.name)
-        },
-        {
-          title: 'RoomName',
-          dataIndex: 'apartment',
-          key: uuidv4(),
-          width: '6%',
-          align: 'center',
-          render: (record: apartment) => String(record.name)
-        }
-      ]
-    },
-    {
-      title: 'User',
-      dataIndex: 'users',
-      key: 'id',
-      align: 'center',
-      width: '10%',
-      render: (record: User) => (
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Avatar size='default' src={record.image}></Avatar>
-          <span>{record.fullName}</span>
-        </div>
-      )
-    },
-    {
-      title: 'More',
-      dataIndex: 'id',
-      key: 'id',
-      width: '7%',
-      render: (_, record) => <ButtonAction ID={record.id} />
-    }
-  ]
   return (
     <>
       <Table
-        columns={columns}
+        columns={ColumnsAppointmentPage}
         dataSource={data}
         pagination={{
           pageSize: 7
