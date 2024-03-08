@@ -108,6 +108,7 @@ const PostPage: React.FC = () => {
   const handleOpenModalEdit = (id: number) => {
     setModalEdit(true)
     console.log(id)
+    console.log(modalEdit)
   }
 
   const handleDelte = (id: number) => {
