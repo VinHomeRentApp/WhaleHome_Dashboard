@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getArea } from '../redux/actions/area.actions'
 
+import { createBuilding, deleteBuilding, getBuildingList, updateBuilding } from '../redux/actions/building.actions'
+import { getZoneList } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
+import { cancelEditingBuilding, startEditBuilding } from '../redux/slices/building.slice'
 import { area } from '../types/area.type'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
-import { createBuilding, deleteBuilding, getBuildingList, updateBuilding } from '../redux/actions/building.actions'
-import { cancelEditingBuilding, startEditBuilding } from '../redux/slices/building.slice'
-import { getZoneList } from '../redux/actions/zone.actions'
 
 const formData: building = {
   id: NaN,

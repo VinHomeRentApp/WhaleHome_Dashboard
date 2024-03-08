@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { initialPostState } from '../types/post.types'
-import { getPostList } from '../actions/post.actions'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
+import { getPostList } from '../actions/post.actions'
+import { initialPostState } from '../types/post.types'
 
 const postSlice = createSlice({
   name: 'post',

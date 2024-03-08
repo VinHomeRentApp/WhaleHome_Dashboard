@@ -15,7 +15,10 @@ const formData: zone = {
   status: true,
   name: '',
   area: {
-    id: NaN
+    id: NaN,
+    createDate: '',
+    status: false,
+    name: ''
   }
 }
 

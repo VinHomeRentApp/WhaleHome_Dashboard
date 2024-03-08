@@ -1,9 +1,9 @@
-import React from 'react'
+import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
+import React from 'react'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
-import { FileTextOutlined, UserOutlined, HomeFilled, SolutionOutlined } from '@ant-design/icons'
-import RecentPost from '../Components/RecentPost'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
+import RecentPost from '../Components/RecentPost'
 
 const DashBoard: React.FC = () => {
   return (

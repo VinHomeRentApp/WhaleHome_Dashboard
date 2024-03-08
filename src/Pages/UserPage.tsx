@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
 import type { TableProps } from 'antd'
-import { http } from '../utils/http'
+import { Input, Table } from 'antd'
+import React, { useEffect, useState } from 'react'
+import ButtonAction from '../Components/UI/ButtonAction'
 import { ResponseSuccessful } from '../types/response.type'
 import { User } from '../types/user.type'
-import ButtonAction from '../Components/UI/ButtonAction'
-import { Input, Table } from 'antd'
+import { http } from '../utils/http'
 
 const UserPage: React.FC = () => {
   const [dataSource, setDataSource] = useState<User[]>([])
