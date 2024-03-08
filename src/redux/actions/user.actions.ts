@@ -1,6 +1,6 @@
-import { LoginResponse, ResponseSuccessful } from '../types/response.type'
-import { User } from '../types/user.type'
-import { http } from '../utils/http'
+import { LoginResponse, ResponseSuccessful } from '../../types/response.type'
+import { User } from '../../types/user.type'
+import { http } from '../../utils/http'
 
 export const loginApi = async (email: string, password: string) => {
   return await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {

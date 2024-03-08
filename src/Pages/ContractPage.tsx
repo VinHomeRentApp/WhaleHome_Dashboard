@@ -4,7 +4,7 @@ import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
 import { contract, contractHistory } from '../types/contract.type'
 import Avatar from 'antd/es/avatar/avatar'
-import ButtonAction from '../Components/ButtonAction'
+import ButtonAction from '../Components/UI/ButtonAction'
 
 const ContractPage: React.FC = () => {
   const [data, setDataSource] = useState<contract[]>([])

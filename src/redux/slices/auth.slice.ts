@@ -1,3 +1,37 @@
+import { createSlice } from '@reduxjs/toolkit'
+import { initialAuthState } from '../types/auth.types'
+import { login } from '../actions/auth.actions'
+
+const authSlice = createSlice({
+  name: 'user',
+  initialState: initialAuthState,
+  reducers: {
+    logout: (state) => {
+      localStorage.removeItem('userToken') // delete token from storage
+      state.loading = false
+      state.userInfo = null
+      state.userToken = null
+      state.error = null
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        ;(state.loading = true), (state.error = null)
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        ;(state.loading = false), (state.userToken = action.payload)
+      })
+      .addCase(login.rejected, (state) => {
+        state.loading = false
+      })
+  }
+})
+
+export const { logout } = authSlice.actions
+
+export default authSlice.reducer
+
 // import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 // import { User } from '../types/user.type'
 // import { http } from '../utils/http'
@@ -67,70 +101,7 @@
 // })
 
 // export default authSlice.reducer
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { http } from '../utils/http'
-import { LoginResponse, ResponseSuccessful } from '../types/response.type'
+
 // import { registerUser, userLogin } from './authActions'
 
 // initialize userToken from local storage
-const userToken = localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null
-
-const initialState = {
-  loading: false,
-  userInfo: null,
-  userToken,
-  error: null,
-  success: false
-}
-
-export interface LoginArgs {
-  email: string
-  password: string
-}
-
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
-  try {
-    const response = await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {
-      email: user,
-      password: user
-    })
-    return response.data.data.access_token
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.response && error.response.data.error_message) {
-      return thunkAPI.rejectWithValue(error.response.data.error_message)
-    } else {
-      return thunkAPI.rejectWithValue(error.message)
-    }
-  }
-})
-
-const authSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    logout: (state) => {
-      localStorage.removeItem('userToken') // delete token from storage
-      state.loading = false
-      state.userInfo = null
-      state.userToken = null
-      state.error = null
-    }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(login.pending, (state) => {
-        ;(state.loading = true), (state.error = null)
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        ;(state.loading = false), (state.userToken = action.payload)
-      })
-      .addCase(login.rejected, (state) => {
-        state.loading = false
-      })
-  }
-})
-
-export const { logout } = authSlice.actions
-
-export default authSlice.reducer

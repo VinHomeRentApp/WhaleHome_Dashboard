@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { RootState, useAppDispatch } from '../redux/store'
 import { EditOutlined } from '@ant-design/icons'
 import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  cancelEditingBuilding,
-  createBuilding,
-  deleteBuilding,
-  getBuildingList,
-  startEditBuilding,
-  updateBuilding
-} from '../redux/building.slice'
-import { building } from '../types/building.type'
-import { getArea } from '../redux/area.slice'
-import { zone } from '../types/zone.type'
+import { getArea } from '../redux/actions/area.actions'
+
+import { RootState, useAppDispatch } from '../redux/containers/store'
 import { area } from '../types/area.type'
-import { getZoneList } from '../redux/zone.slice'
+import { building } from '../types/building.type'
+import { zone } from '../types/zone.type'
+import { createBuilding, deleteBuilding, getBuildingList, updateBuilding } from '../redux/actions/building.actions'
+import { cancelEditingBuilding, startEditBuilding } from '../redux/slices/building.slice'
+import { getZoneList } from '../redux/actions/zone.actions'
 
 const formData: building = {
   id: NaN,
@@ -23,8 +18,14 @@ const formData: building = {
   zone: {
     id: NaN,
     area: {
-      id: NaN
-    }
+      id: NaN,
+      createDate: '',
+      status: false,
+      name: ''
+    },
+    createDate: '',
+    status: false,
+    name: ''
   }
 }
 
@@ -42,13 +43,6 @@ const BuildingPage: React.FC = () => {
   const [enabnle, setEnabnle] = useState<boolean>(true)
   const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneSTate)
   const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
-
-  // useEffect(() => {
-  //   const promise = dispatch(getArea())
-  //   return () => {
-  //     promise.abort()
-  //   }
-  // }, [dispatch])
 
   const ZoneListFilter = (e: number) => zoneSTate.filter((z) => z.area.id == e)
 

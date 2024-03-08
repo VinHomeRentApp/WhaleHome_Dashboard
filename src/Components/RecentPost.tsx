@@ -43,7 +43,7 @@ const RecentPost: React.FC = () => {
     getPost()
   }, [])
   return (
-    <>
+    <div style={{ marginTop: 150 }}>
       <Typography.Text strong>Recent Post</Typography.Text>
       <Table
         columns={colums}
@@ -56,7 +56,7 @@ const RecentPost: React.FC = () => {
         }}
         rowKey='id'
       ></Table>
-    </>
+    </div>
   )
 }
 

@@ -3,7 +3,7 @@ import type { TableProps } from 'antd'
 import { http } from '../utils/http'
 import { ResponseSuccessful } from '../types/response.type'
 import { User } from '../types/user.type'
-import ButtonAction from '../Components/ButtonAction'
+import ButtonAction from '../Components/UI/ButtonAction'
 import { Input, Table } from 'antd'
 
 const UserPage: React.FC = () => {
