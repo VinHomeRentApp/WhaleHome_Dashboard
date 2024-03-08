@@ -1,4 +1,3 @@
-import { Menu } from 'antd'
 import {
   BarChartOutlined,
   CalendarOutlined,
@@ -7,6 +6,7 @@ import {
   HomeOutlined,
   UserOutlined
 } from '@ant-design/icons'
+import { Menu } from 'antd'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

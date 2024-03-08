@@ -1,11 +1,11 @@
-import { Switch, Table, TableProps } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '../../redux/containers/store'
-import { area } from '../../types/area.type'
-import { startEditingArea } from '../../redux/slices/area.slice'
-import { deleteArea } from '../../redux/actions/area.actions'
+import { Switch, Table, TableProps } from 'antd'
 import { Dispatch } from 'react'
+import { useSelector } from 'react-redux'
+import { deleteArea } from '../../redux/actions/area.actions'
+import { RootState, useAppDispatch } from '../../redux/containers/store'
+import { startEditingArea } from '../../redux/slices/area.slice'
+import { area } from '../../types/area.type'
 
 type TableArePageProps = {
   search: string
