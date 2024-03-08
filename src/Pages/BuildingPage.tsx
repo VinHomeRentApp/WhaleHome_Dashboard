@@ -15,6 +15,7 @@ import { building } from '../types/building.type'
 import { getArea } from '../redux/area.slice'
 import { zone } from '../types/zone.type'
 import { area } from '../types/area.type'
+import { getZoneList } from '../redux/zone.slice'
 
 const formData: building = {
   id: NaN,
@@ -42,16 +43,18 @@ const BuildingPage: React.FC = () => {
   const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneSTate)
   const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
 
-  useEffect(() => {
-    const promise = dispatch(getArea())
-    return () => {
-      promise.abort()
-    }
-  }, [dispatch])
+  // useEffect(() => {
+  //   const promise = dispatch(getArea())
+  //   return () => {
+  //     promise.abort()
+  //   }
+  // }, [dispatch])
 
   const ZoneListFilter = (e: number) => zoneSTate.filter((z) => z.area.id == e)
 
   useEffect(() => {
+    dispatch(getArea())
+    dispatch(getZoneList())
     const promise = dispatch(getBuildingList())
     return () => {
       promise.abort()
@@ -107,7 +110,7 @@ const BuildingPage: React.FC = () => {
       title: 'Area',
       dataIndex: 'zone',
       key: 'id',
-      width: '8%',
+      width: '5%',
       align: 'center',
       render: (r) => String(r.area.name)
     },
@@ -142,10 +145,11 @@ const BuildingPage: React.FC = () => {
     {
       title: 'Action',
       key: 'id',
-      width: '7%',
+      width: '5%',
+      align: 'center',
       render: (record: building) => {
         return (
-          <div style={{ display: 'flex', gap: '1rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
           </div>

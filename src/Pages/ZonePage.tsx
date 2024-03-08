@@ -53,7 +53,7 @@ const ZonePage: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      width: '8%',
+      width: '3%',
       align: 'center',
       sorter: {
         compare: (a: zone, b: zone) => a.id - b.id
@@ -91,6 +91,7 @@ const ZonePage: React.FC = () => {
       title: 'Action',
       key: 'id',
       width: '7%',
+      align: 'center',
       render: (record) => {
         return (
           <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center' }}>
