@@ -6,19 +6,30 @@ import {
   HomeOutlined,
   UserOutlined
 } from '@ant-design/icons'
-import { Menu } from 'antd'
-import React, { useState } from 'react'
+import { Avatar, Menu } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { User } from '../../types/user.type'
 
 const { SubMenu } = Menu // Destructure SubMenu from Menu
 
 const MenuNav: React.FC = () => {
   const [key, setKey] = useState('')
   const navigate = useNavigate()
+  const [user, setUser] = useState<User | null>()
+
+  const storedUserData = localStorage.getItem('user')
+  useEffect(() => {
+    if (storedUserData) {
+      setUser(JSON.parse(storedUserData))
+    } else {
+      setUser(null)
+    }
+  }, [storedUserData])
 
   return (
     <Menu
-      theme='dark'
+      theme='light'
       mode='inline'
       defaultSelectedKeys={[key]}
       onClick={({ key }) => {
@@ -27,6 +38,26 @@ const MenuNav: React.FC = () => {
       }}
       style={{ border: '0' }}
     >
+      {user != null ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            rowGap: '1.5rem',
+            marginBottom: '2rem'
+          }}
+        >
+          <Avatar size='large' src={user.image}></Avatar>
+          <div style={{ textAlign: 'center' }}>{user.fullName}</div>
+        </div>
+      ) : (
+        <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
+          <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
+        </div>
+      )}
+
       {/* Your existing menu items */}
       <Menu.Item key='' icon={<BarChartOutlined />}>
         DashBoard
