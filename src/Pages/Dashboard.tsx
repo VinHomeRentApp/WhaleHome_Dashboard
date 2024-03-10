@@ -10,6 +10,7 @@ import { User } from '../types/user.type'
 
 const DashBoard: React.FC = () => {
   const dispatch = useAppDispatch()
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || 'null') as User
     dispatch(setUser(user))
