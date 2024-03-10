@@ -6,8 +6,8 @@ export interface problem {
   status: boolean
   title: string
   description: string
-  issues: issue
-  problemImages: problemImages
+  issues: issue[]
+  problemImages: problemImages[]
 }
 
 export interface problemImages {

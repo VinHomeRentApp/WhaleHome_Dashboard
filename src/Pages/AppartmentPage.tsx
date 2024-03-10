@@ -6,11 +6,8 @@ import ButtonAction from '../Components/UI/ButtonAction'
 import { apartment } from '../types/appartment.type'
 // import ButtonAction from '../Components/ButtonAction'
 
-const AppartmentPage: React.FC = () => {
+const ApartmentPage: React.FC = () => {
   const [data, setDataSource] = useState<apartment[]>([])
-  // const [zone, setZone] = useState<zone[]>([])
-  // const [building, setBuilding] = useState<building[]>([])
-  // const [area, setArea] = useState<area_c[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
 
@@ -28,52 +25,6 @@ const AppartmentPage: React.FC = () => {
       console.log(error)
     }
   }
-
-  // async function getZone() {
-  //   try {
-  //     setLoading(true)
-  //     const response = await http.get<ResponseSuccessful<zone[]>>('/zone', {
-  //       headers: {
-  //         Accept: 'application/json'
-  //       }
-  //     })
-  //     setLoading(false)
-
-  //     setZone(response.data.data)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // async function getBuilding() {
-  //   try {
-  //     setLoading(true)
-  //     const response = await http.get<ResponseSuccessful<building[]>>('/buildings', {
-  //       headers: {
-  //         Accept: 'application/json'
-  //       }
-  //     })
-  //     setLoading(false)
-
-  //     setBuilding(response.data.data)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // async function getArea() {
-  //   try {
-  //     setLoading(true)
-  //     const response = await http.get<ResponseSuccessful<area_c[]>>('/areas', {
-  //       headers: {
-  //         Accept: 'application/json'
-  //       }
-  //     })
-  //     setLoading(false)
-  //     setArea(response.data.data)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
   useEffect(() => {
     getAppartment()
@@ -192,4 +143,4 @@ const AppartmentPage: React.FC = () => {
   )
 }
 
-export default AppartmentPage
+export default ApartmentPage

@@ -1,11 +1,21 @@
-const userToken = localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null
+import { User } from '../../types/user.type'
 
-export const initialAuthState = {
-  loading: false,
+const userToken = localStorage.getItem('userToken') ?? null
+
+type initialAuthStateTypes = {
+  isLoading: boolean
+  userInfo: User | null
+  userToken: string | null
+  error: string | null
+  isSuccess: boolean
+}
+
+export const initialAuthState: initialAuthStateTypes = {
+  isLoading: false,
   userInfo: null,
   userToken,
   error: null,
-  success: false
+  isSuccess: false
 }
 
 export interface LoginArgs {

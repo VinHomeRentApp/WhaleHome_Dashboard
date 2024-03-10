@@ -25,8 +25,12 @@ const MenuNav: React.FC = () => {
         navigate(`/${key}`)
         setKey(key)
       }}
-      style={{ border: '0' }}
+      style={{ border: '0', height: '100vh', overflowY: 'hidden' }}
     >
+      <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
+        <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
+      </div>
+
       {/* Your existing menu items */}
       <Menu.Item key='' icon={<BarChartOutlined />}>
         DashBoard
