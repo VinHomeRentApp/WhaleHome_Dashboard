@@ -1,5 +1,5 @@
 import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
-import { Space, notification } from 'antd'
+import { Space } from 'antd'
 import React, { useEffect } from 'react'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
