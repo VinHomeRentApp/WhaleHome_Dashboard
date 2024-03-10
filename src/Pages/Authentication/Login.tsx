@@ -3,9 +3,8 @@ import { Button, Form, Grid, Input, theme, Typography } from 'antd'
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { getUserDataFromToken, loginApi } from '../../redux/actions/user.actions'
 import { useAppDispatch } from '../../redux/containers/store'
-import { setUser } from '../../redux/slices/auth.slice'
+import { handleSubmit } from '../../usecases/HandleLogin'
 
 const { useToken } = theme
 const { useBreakpoint } = Grid
@@ -52,22 +51,6 @@ export default function Login() {
     }
   }
 
-  const handleSubmit = () => {
-    loginApi(email, password)
-      .then((response) => {
-        const token = response.data.data.access_token
-        localStorage.setItem('token', token)
-        getUserDataFromToken().then((data) => {
-          dispatch(setUser(data))
-          localStorage.setItem('user', JSON.stringify(data))
-        })
-        navigate('/')
-      })
-      .catch((error) => {
-        console.error('Đăng nhập thất bại', error)
-      })
-  }
-
   return (
     <section style={styles.section}>
       <div style={styles.container}>
@@ -80,7 +63,7 @@ export default function Login() {
           initialValues={{
             remember: true
           }}
-          onFinish={handleSubmit}
+          onFinish={() => handleSubmit(email, password, dispatch, navigate)}
           layout='vertical'
           requiredMark='optional'
         >
@@ -120,7 +103,7 @@ export default function Login() {
               placeholder='Password'
             />
           </Form.Item>
-
+          {/*  */}
           <Form.Item style={{ marginBottom: '0px' }}>
             <Button block={true} type='primary' htmlType='submit'>
               Log in
