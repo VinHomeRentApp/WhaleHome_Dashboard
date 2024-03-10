@@ -11,7 +11,13 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
   const [description, setDescription] = useState('')
   const [searchApartment, setSearchApartment] = useState('')
   return (
-    <Modal title='Edit Area' open={isOpenModalAdd} onOk={() => {}} onCancel={() => setIsOpenModalAdd(false)}>
+    <Modal
+      title='Edit Area'
+      open={isOpenModalAdd}
+      okText='Add New Post'
+      onOk={() => {}}
+      onCancel={() => setIsOpenModalAdd(false)}
+    >
       <Typography.Title level={5}>Title</Typography.Title>
       <Input placeholder='Input Title' onChange={(e) => setTitle(e.target.value)} value={title} />
       <Typography.Title level={5}>Description</Typography.Title>
