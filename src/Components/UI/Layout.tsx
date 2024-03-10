@@ -1,9 +1,10 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Avatar, Button, Layout, theme } from 'antd'
+import { Avatar, Button, Layout, Modal, Typography, theme } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '../../redux/containers/store.ts'
+import { handleLogout } from '../../usecases/HandleLogout.ts'
 import MenuNav from './Menu.tsx'
-import { RootState } from '../../redux/containers/store.ts'
 
 const { Header, Sider, Content } = Layout
 
@@ -14,8 +15,8 @@ type Props = {
 const LayoutAdmin = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false)
   const { userInfo } = useSelector((state: RootState) => state.auth)
-
-  console.log(userInfo)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const dispatch = useAppDispatch()
 
   const {
     token: { colorBgContainer, borderRadiusLG }
@@ -41,9 +42,20 @@ const LayoutAdmin = ({ children }: Props) => {
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}
-            <Button style={{ color: 'blue', border: '1px solid blue', marginTop: '1%', marginRight: '2%' }}>
+            <Button
+              onClick={() => setIsOpenModal(!isOpenModal)}
+              style={{ color: 'blue', border: '1px solid blue', marginTop: '1%', marginRight: '2%' }}
+            >
               <LoginOutlined />
             </Button>
+            <Modal
+              title='Confirmation'
+              open={isOpenModal}
+              onOk={() => handleLogout(dispatch)}
+              onCancel={() => setIsOpenModal(!isOpenModal)}
+            >
+              <Typography>Are you sure that you want to logout?</Typography>
+            </Modal>
           </div>
         </Header>
 

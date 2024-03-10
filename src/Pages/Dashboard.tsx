@@ -1,5 +1,5 @@
 import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
-import { Space } from 'antd'
+import { Space, notification } from 'antd'
 import React, { useEffect } from 'react'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
@@ -10,6 +10,7 @@ import { User } from '../types/user.type'
 
 const DashBoard: React.FC = () => {
   const dispatch = useAppDispatch()
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || 'null') as User
     dispatch(setUser(user))

@@ -1,7 +1,7 @@
 import { Button, Form, Grid, Input, theme, Typography } from 'antd'
 
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
-import { useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAppDispatch } from '../../redux/containers/store'
 import { handleSubmit } from '../../usecases/HandleLogin'
@@ -23,7 +23,10 @@ export default function Login() {
     container: {
       margin: '0 auto',
       padding: screens.md ? `${token.paddingXL}px` : `${token.sizeXXL}px ${token.padding}px`,
-      width: '380px'
+      width: '380px',
+      border: '1px solid #fff',
+      borderRadius: '12px',
+      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3)' // Add box shadow here
     },
     footer: {
       marginTop: token.marginLG,
@@ -32,9 +35,6 @@ export default function Login() {
     },
     forgotPassword: {
       float: 'right'
-    },
-    header: {
-      marginBottom: token.marginXL
     },
     section: {
       alignItems: 'center',
@@ -54,7 +54,7 @@ export default function Login() {
   return (
     <section style={styles.section}>
       <div style={styles.container}>
-        <div style={styles.header}>
+        <div style={{ textAlign: 'center', marginBottom: token.marginXL }}>
           <Title style={styles.title}>Login</Title>
           <Text style={styles.text}>Welcome back WhaleHome DashBoard</Text>
         </div>
@@ -63,7 +63,9 @@ export default function Login() {
           initialValues={{
             remember: true
           }}
-          onFinish={() => handleSubmit(email, password, dispatch, navigate)}
+          onFinish={async () => {
+            await handleSubmit(email, password, dispatch, navigate)
+          }}
           layout='vertical'
           requiredMark='optional'
         >
