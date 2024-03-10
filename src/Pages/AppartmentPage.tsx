@@ -1,8 +1,8 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getApartmentList } from '../redux/actions/apartment.actions'
+import { createApartment, deleteApartment, getApartmentList, updateApartment } from '../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../redux/actions/apartmentClass.action'
 import { getArea } from '../redux/actions/area.actions'
 import { getBuildingList } from '../redux/actions/building.actions'
@@ -12,11 +12,12 @@ import { cancelEditingApartment, startEditingApartment } from '../redux/slices/a
 import { apartment } from '../types/appartment.type'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
+import { log } from 'console'
 
 const formData: apartment = {
   id: NaN,
   createDate: '',
-  status: false,
+  status: true,
   name: '',
   description: '',
   living_room: NaN,
@@ -55,6 +56,7 @@ const ApartmentPage: React.FC = () => {
   const loading = useSelector((state: RootState) => state.apartment.loading)
   const [search, setSearch] = useState<string>('')
   const [modalData, setModalData] = useState<apartment>(formData)
+  const [isModalAdd, setIsModalAdd] = useState<boolean>(false)
   const [isModalEdit, setIsModalEdit] = useState<boolean>(false)
   const editModalData = useSelector((state: RootState) => state.apartment.editApartment)
 
@@ -75,15 +77,15 @@ const ApartmentPage: React.FC = () => {
   //   buildingList.filter((building) => building.zone.area.id == idArea && building.zone.id == idZone)
 
   useEffect(() => {
-    if (zoneID & areaID) {
+    if (typeof zoneID === 'number' && !isNaN(zoneID) && typeof areaID === 'number' && !isNaN(areaID)) {
+      console.log('vào đây 2', zoneID, areaID)
+
       setBuildingListFilter(
-        buildingListFilter.filter((building) => building.zone.area.id == areaID && building.zone.id == zoneID)
+        buildingList.filter((building) => building.zone.area.id == areaID && building.zone.id == zoneID)
       )
-    } else if (zoneID) {
-      setBuildingListFilter(buildingListFilter.filter((building) => building.zone.id == zoneID))
-    } else if (areaID) {
-      setBuildingListFilter(buildingListFilter.filter((building) => building.zone.area.id == areaID))
     } else {
+      console.log('vào đây nà')
+
       setBuildingListFilter(buildingList)
     }
   }, [areaID, zoneID])
@@ -119,11 +121,6 @@ const ApartmentPage: React.FC = () => {
     {
       title: 'Area',
       key: 'id',
-      // filters: data.map((z) => ({
-      //   text: String(z.area_c.name),
-      //   value: String(z.area_c.name)
-      // })),
-      // onFilter: (value, record) => record.name.indexOf(value) === 0,
       width: '5%',
       align: 'center',
       render: (record: apartment) => String(record.building.zone.area.name)
@@ -131,13 +128,6 @@ const ApartmentPage: React.FC = () => {
     {
       title: 'Zone',
       key: 'id',
-      // filters: zone.map((z) => ({
-      //   text: z.name,
-      //   value: z.name
-      // })),
-      // onFilter: (value, record) => {
-      //   return String(record.name).includes(String(value))
-      // },
       width: '8%',
       align: 'center',
       render: (record: apartment) => String(record.building.zone.name)
@@ -145,13 +135,6 @@ const ApartmentPage: React.FC = () => {
     {
       title: 'Building',
       key: 'id',
-      // filters: building.map((b) => ({
-      //   text: b.name,
-      //   value: b.name
-      // })),
-      // onFilter: (value, record) => {
-      //   return String(record.name).includes(String(value))
-      // },
       width: '8%',
       align: 'center',
       render: (record: apartment) => String(record.building.name)
@@ -174,6 +157,12 @@ const ApartmentPage: React.FC = () => {
       render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
     {
+      title: 'Type',
+      key: 'id',
+      width: '10%',
+      render: (record: apartment) => String(record.apartmentClass.name)
+    },
+    {
       title: 'Action',
       key: 'id',
       width: '5%',
@@ -194,11 +183,12 @@ const ApartmentPage: React.FC = () => {
     setIsModalEdit(true)
   }
   const handleDelte = (id: number) => {
-    console.log(id)
+    dispatch(deleteApartment(id))
   }
 
   const handleOk = () => {
     setIsModalEdit(false)
+    dispatch(updateApartment({ id: modalData.id, body: modalData }))
     dispatch(cancelEditingApartment())
   }
   const handleCancel = () => {
@@ -220,6 +210,7 @@ const ApartmentPage: React.FC = () => {
         }
       }
     }))
+    setZoneID(NaN)
     setAreaID(e)
     setZoneListfilter(ZoneListFilterFunc(e))
   }
@@ -248,7 +239,23 @@ const ApartmentPage: React.FC = () => {
     }))
   }
 
-  const handleSelectTypeApartment = () => {}
+  const handleSelectTypeApartment = (e: number) => {
+    setModalData((curr) => ({
+      ...curr,
+      apartmentClass: {
+        ...curr.apartmentClass,
+        id: e
+      }
+    }))
+  }
+
+  const handleOkAdd = () => {
+    setIsModalAdd(false)
+    dispatch(createApartment(modalData))
+  }
+  const handleCancelAdd = () => {
+    setIsModalAdd(false)
+  }
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
@@ -259,6 +266,16 @@ const ApartmentPage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
+        <Button
+          style={{ width: '10%' }}
+          type='primary'
+          block
+          onClick={() => {
+            setIsModalAdd(true)
+          }}
+        >
+          Add New Area
+        </Button>
       </div>
 
       <Table
@@ -272,6 +289,57 @@ const ApartmentPage: React.FC = () => {
         rowKey='id'
         bordered
       />
+
+      <Modal title='Add Apartment' open={isModalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
+        <Typography.Title level={5}>Name</Typography.Title>
+        <Input placeholder='input name' onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))} />
+        <Typography.Title level={5}>Description</Typography.Title>
+        <Input
+          placeholder='input Description'
+          onChange={(e) => setModalData((data) => ({ ...data, description: e.target.value }))}
+        />
+
+        <Typography.Title level={5}>Area</Typography.Title>
+        <Select
+          value={modalData.building.zone.area.id || 1}
+          style={{ minWidth: 150 }}
+          onChange={handleSelectArea}
+          options={areaList.map((area) => {
+            return { value: area.id, label: area.name }
+          })}
+        />
+
+        <Typography.Title level={5}>Zone</Typography.Title>
+        <Select
+          value={modalData.building.zone.id}
+          style={{ minWidth: 150 }}
+          onChange={handleSelectZone}
+          options={zoneListfilter.map((zone) => {
+            return { value: zone.id, label: zone.name }
+          })}
+        />
+
+        <Typography.Title level={5}>Building</Typography.Title>
+        <Select
+          value={modalData.building.id}
+          style={{ minWidth: 150 }}
+          disabled={buildingListFilter.length === 0 ? true : false}
+          onChange={handleSelectBuilding}
+          options={buildingListFilter.map((b) => {
+            return { value: b.id, label: b.name }
+          })}
+        />
+
+        <Typography.Title level={5}>Type Apartment</Typography.Title>
+        <Select
+          value={modalData.apartmentClass.id}
+          style={{ minWidth: 150 }}
+          onChange={handleSelectTypeApartment}
+          options={apartmentClass.map((b) => {
+            return { value: b.id, label: b.name }
+          })}
+        />
+      </Modal>
 
       <Modal title='Edit Apartment' open={isModalEdit} onOk={handleOk} onCancel={handleCancel}>
         <Typography.Title level={5}>ID</Typography.Title>
@@ -295,7 +363,7 @@ const ApartmentPage: React.FC = () => {
 
         <Typography.Title level={5}>Area</Typography.Title>
         <Select
-          defaultValue={editModalData?.building.zone.area.id || 1}
+          value={modalData.building.zone.area.id || 1}
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
           options={areaList.map((area) => {
@@ -305,24 +373,19 @@ const ApartmentPage: React.FC = () => {
 
         <Typography.Title level={5}>Zone</Typography.Title>
         <Select
-          defaultValue={editModalData?.building.zone.id}
+          value={modalData.building.zone.id}
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
-          options={
-            zoneListfilter != null
-              ? zoneListfilter.map((zone) => {
-                  return { value: zone.id, label: zone.name }
-                })
-              : zoneList.map((zone) => {
-                  return { value: zone.id, label: zone.name }
-                })
-          }
+          options={zoneListfilter.map((zone) => {
+            return { value: zone.id, label: zone.name }
+          })}
         />
 
         <Typography.Title level={5}>Building</Typography.Title>
         <Select
-          defaultValue={editModalData?.building.id}
+          value={modalData.building.id}
           style={{ minWidth: 150 }}
+          disabled={buildingListFilter.length === 0 ? true : false}
           onChange={handleSelectBuilding}
           options={buildingListFilter.map((b) => {
             return { value: b.id, label: b.name }
@@ -331,7 +394,7 @@ const ApartmentPage: React.FC = () => {
 
         <Typography.Title level={5}>Type Apartment</Typography.Title>
         <Select
-          defaultValue={1}
+          value={modalData.apartmentClass.id}
           style={{ minWidth: 150 }}
           onChange={handleSelectTypeApartment}
           options={apartmentClass.map((b) => {

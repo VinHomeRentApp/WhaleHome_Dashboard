@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { initialApartmentState } from '../types/apartment.type'
-import { getApartmentList } from '../actions/apartment.actions'
+import { createApartment, deleteApartment, getApartmentList, updateApartment } from '../actions/apartment.actions'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
 
 const apartmentSlice = createSlice({
@@ -20,6 +20,27 @@ const apartmentSlice = createSlice({
     builder
       .addCase(getApartmentList.fulfilled, (state, action) => {
         state.apartmentList = action.payload
+      })
+      .addCase(updateApartment.fulfilled, (state, action) => {
+        const id = action.meta.arg.id
+        state.apartmentList.find((a, index) => {
+          if (a.id == id) {
+            state.apartmentList[index] = action.payload
+            return true
+          }
+          return false
+        })
+      })
+      .addCase(deleteApartment.fulfilled, (state, action) => {
+        const id = action.meta.arg
+        state.apartmentList.find((a, index) => {
+          if (a.id === id) {
+            state.apartmentList[index] = { ...state.apartmentList[index], status: Boolean(!state.apartmentList[index]) }
+          }
+        })
+      })
+      .addCase(createApartment.fulfilled, (state, action) => {
+        state.apartmentList.push(action.payload)
       })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),
