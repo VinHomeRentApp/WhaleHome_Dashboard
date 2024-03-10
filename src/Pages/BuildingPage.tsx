@@ -30,8 +30,7 @@ const formData: building = {
 }
 
 const BuildingPage: React.FC = () => {
-  const zoneSTate = useSelector((state: RootState) => state.zone.ZoneList)
-
+  const zoneState = useSelector((state: RootState) => state.zone.ZoneList)
   const dispatch = useAppDispatch()
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
   const loading = useSelector((state: RootState) => state.building.loading)
@@ -41,10 +40,10 @@ const BuildingPage: React.FC = () => {
   const [modalData, setModalData] = useState<building>(formData)
   const editBuilding = useSelector((state: RootState) => state.building.editingBuilding)
   const [enabnle, setEnabnle] = useState<boolean>(true)
-  const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneSTate)
-  const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
+  const [zoneListFilter, setZoneListFilter] = useState<zone[]>(zoneState)
+  const [areaList, setAreaList] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
 
-  const ZoneListFilter = (e: number) => zoneSTate.filter((z) => z.area.id == e)
+  const ZoneListFilter = (e: number) => zoneState.filter((z) => z.area.id == e)
 
   useEffect(() => {
     dispatch(getArea())
@@ -66,10 +65,10 @@ const BuildingPage: React.FC = () => {
         }
       }
     }))
-    setZoneListfilter(ZoneListFilter(e))
+    setZoneListFilter(ZoneListFilter(e))
     setEnabnle(false)
 
-    console.log(zoneListfilter)
+    console.log(zoneListFilter)
   }
 
   const handleSelectZone = (e: number) => {
@@ -222,7 +221,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
-          options={arealist.map((area) => {
+          options={areaList.map((area) => {
             return { value: area.id, label: area.name }
           })}
           value={modalData.zone.area.id}
@@ -232,7 +231,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
-          options={zoneListfilter.map((z) => {
+          options={zoneListFilter.map((z) => {
             return { value: z.id, label: z.name }
           })}
           value={modalData.zone.id}
@@ -250,7 +249,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
-          options={arealist.map((area) => {
+          options={areaList.map((area) => {
             return { value: area.id, label: area.name }
           })}
         />
@@ -260,7 +259,7 @@ const BuildingPage: React.FC = () => {
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
           disabled={enabnle}
-          options={zoneListfilter.map((z) => {
+          options={zoneListFilter.map((z) => {
             return { value: z.id, label: z.name }
           })}
         />
