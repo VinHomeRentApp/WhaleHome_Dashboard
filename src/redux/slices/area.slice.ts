@@ -4,7 +4,7 @@ import { createArea, deleteArea, getArea, updateArea } from '../actions/area.act
 import { initialAreaState } from '../types/area.types'
 
 const areaSlice = createSlice({
-  name: 'areaaaa',
+  name: 'area',
   initialState: initialAreaState,
   reducers: {
     startEditingArea: (state, action: PayloadAction<number>) => {
