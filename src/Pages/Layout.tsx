@@ -1,8 +1,7 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Avatar, Button, Layout, theme } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Layout, theme } from 'antd'
+import React, { useState } from 'react'
 import MenuNav from '../Components/UI/Menu.tsx'
-import { User } from '../types/user.type.ts'
 
 const { Header, Sider, Content } = Layout
 
@@ -16,58 +15,21 @@ const LayoutAdmin = ({ children }: Props) => {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
-  const [user, setUser] = useState<User | null>()
-
-  const storedUserData = localStorage.getItem('user')
-  useEffect(() => {
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData))
-    } else {
-      setUser(null)
-    }
-  }, [storedUserData])
-
   return (
-    <Layout style={{ height: '100vh' }}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Sider
-        theme='dark'
+        theme='light'
         trigger={null}
         collapsible
         collapsed={collapsed}
         style={{
           paddingTop: '1%',
           width: '100%',
-          minHeight: '100vh',
           height: '100vh',
           overflowY: 'scroll'
         }}
       >
-        <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
-          <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
-        </div>
         <MenuNav />
-        {user != null ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              rowGap: '1em',
-              padding: '8%',
-              position: 'absolute',
-              bottom: '10px',
-              left: '10px',
-              borderRadius: '10px',
-              boxShadow: '0px 0px 15px -3px'
-            }}
-          >
-            <Avatar size='large' src={user.image} />
-            <div style={{ textAlign: 'center' }}>{user.fullName}</div>
-          </div>
-        ) : (
-          ''
-        )}
       </Sider>
 
       <Layout>

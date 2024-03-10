@@ -110,7 +110,7 @@ const UserPage: React.FC = () => {
         columns={columns}
         dataSource={dataSource}
         pagination={{
-          pageSize: 7
+          pageSize: 5
         }}
         scroll={{ y: 400 }}
         loading={loading}
