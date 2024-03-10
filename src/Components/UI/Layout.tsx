@@ -1,7 +1,9 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Button, Layout, theme } from 'antd'
+import { Avatar, Button, Layout, theme } from 'antd'
 import React, { useState } from 'react'
-import MenuNav from '../Components/UI/Menu.tsx'
+import { useSelector } from 'react-redux'
+import MenuNav from './Menu.tsx'
+import { RootState } from '../../redux/containers/store.ts'
 
 const { Header, Sider, Content } = Layout
 
@@ -11,24 +13,17 @@ type Props = {
 
 const LayoutAdmin = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false)
+  const { userInfo } = useSelector((state: RootState) => state.auth)
+
+  console.log(userInfo)
+
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        theme='light'
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        style={{
-          paddingTop: '1%',
-          width: '100%',
-          height: '100vh',
-          overflowY: 'scroll'
-        }}
-      >
+    <Layout>
+      <Sider theme='dark' trigger={null} collapsible collapsed={collapsed}>
         <MenuNav />
       </Sider>
 
@@ -44,9 +39,12 @@ const LayoutAdmin = ({ children }: Props) => {
               height: 64
             }}
           />
-          <Button style={{ color: 'blue', border: '1px solid blue', marginTop: '1%', marginRight: '2%' }}>
-            <LoginOutlined />
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}
+            <Button style={{ color: 'blue', border: '1px solid blue', marginTop: '1%', marginRight: '2%' }}>
+              <LoginOutlined />
+            </Button>
+          </div>
         </Header>
 
         <Content

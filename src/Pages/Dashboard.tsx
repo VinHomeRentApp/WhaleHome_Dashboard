@@ -1,11 +1,20 @@
 import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Space } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
 import RecentPost from '../Components/RecentPost'
+import { useAppDispatch } from '../redux/containers/store'
+import { setUser } from '../redux/slices/auth.slice'
+import { User } from '../types/user.type'
 
 const DashBoard: React.FC = () => {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || 'null') as User
+    dispatch(setUser(user))
+  }, [])
+
   return (
     <div>
       <Space direction='horizontal' style={{ width: '100%' }}>
