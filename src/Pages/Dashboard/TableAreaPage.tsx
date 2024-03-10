@@ -67,7 +67,6 @@ const TableAreaPage = ({ search, setIsOpenModal }: TableArePageProps) => {
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleOpenModal(record.id)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
-            {/* <DeleteOutlined style={{ color: 'red' }} onClick={() => handleDelte(record.id)} /> */}
           </div>
         )
       }
