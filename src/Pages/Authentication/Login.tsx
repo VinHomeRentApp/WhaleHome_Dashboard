@@ -1,7 +1,7 @@
 import { Button, Form, Grid, Input, theme, Typography } from 'antd'
 
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
-import { CSSProperties, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAppDispatch } from '../../redux/containers/store'
 import { handleSubmit } from '../../usecases/HandleLogin'
