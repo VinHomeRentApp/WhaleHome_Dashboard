@@ -274,7 +274,7 @@ const ApartmentPage: React.FC = () => {
             setIsModalAdd(true)
           }}
         >
-          Add New Area
+          Add New
         </Button>
       </div>
 

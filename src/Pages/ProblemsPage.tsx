@@ -108,16 +108,6 @@ export default function AreaPage() {
           //   setSearch(e.target.value)
           // }}
         />
-        <Button
-          style={{ width: '10%' }}
-          type='primary'
-          block
-          onClick={() => {
-            // setModalAdd(true)
-          }}
-        >
-          Add New Area
-        </Button>
       </div>
       <Table
         columns={columns}
