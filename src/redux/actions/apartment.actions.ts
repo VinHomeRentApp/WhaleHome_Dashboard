@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apartment } from '../../types/appartment.type'
 import { ResponseSuccessful } from '../../types/response.type'
 import { http } from '../../utils/http'
@@ -17,3 +18,10 @@ export const FetchPost = async (url: string) => {
     console.log(error)
   }
 }
+
+export const getApartmentList = createAsyncThunk('apartment/getApartmentList', async (_, thunkAPI) => {
+  const response = await http.get<ResponseSuccessful<apartment[]>>('/apartments', {
+    signal: thunkAPI.signal
+  })
+  return response.data.data
+})

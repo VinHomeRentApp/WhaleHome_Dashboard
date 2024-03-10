@@ -8,7 +8,6 @@ import { createBuilding, deleteBuilding, getBuildingList, updateBuilding } from 
 import { getZoneList } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingBuilding, startEditBuilding } from '../redux/slices/building.slice'
-import { area } from '../types/area.type'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
 
@@ -30,7 +29,8 @@ const formData: building = {
 }
 
 const BuildingPage: React.FC = () => {
-  const zoneSTate = useSelector((state: RootState) => state.zone.ZoneList)
+  const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
+  const areaList = useSelector((state: RootState) => state.area.areaList)
 
   const dispatch = useAppDispatch()
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
@@ -41,10 +41,12 @@ const BuildingPage: React.FC = () => {
   const [modalData, setModalData] = useState<building>(formData)
   const editBuilding = useSelector((state: RootState) => state.building.editingBuilding)
   const [enabnle, setEnabnle] = useState<boolean>(true)
-  const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneSTate)
-  const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
 
-  const ZoneListFilter = (e: number) => zoneSTate.filter((z) => z.area.id == e)
+  const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneList)
+
+  // const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
+
+  const ZoneListFilterFunc = (e: number) => zoneList.filter((z) => z.area.id == e)
 
   useEffect(() => {
     dispatch(getArea())
@@ -66,7 +68,7 @@ const BuildingPage: React.FC = () => {
         }
       }
     }))
-    setZoneListfilter(ZoneListFilter(e))
+    setZoneListfilter(ZoneListFilterFunc(e))
     setEnabnle(false)
 
     console.log(zoneListfilter)
@@ -211,7 +213,7 @@ const BuildingPage: React.FC = () => {
         bordered
       />
 
-      <Modal title='Edit Area' open={modal} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title='Edit Building' open={modal} onOk={handleOk} onCancel={handleCancel}>
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
@@ -222,7 +224,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
-          options={arealist.map((area) => {
+          options={areaList.map((area) => {
             return { value: area.id, label: area.name }
           })}
           value={modalData.zone.area.id}
@@ -250,7 +252,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
-          options={arealist.map((area) => {
+          options={areaList.map((area) => {
             return { value: area.id, label: area.name }
           })}
         />
