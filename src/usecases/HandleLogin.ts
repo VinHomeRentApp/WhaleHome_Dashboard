@@ -4,10 +4,11 @@ import { HttpStatusCode } from 'axios'
 import toast from 'react-hot-toast'
 import { NavigateFunction } from 'react-router'
 import { getUserDataFromToken, loginApi } from '../redux/actions/user.actions'
-import { setUser } from '../redux/slices/auth.slice'
+import { setIsLoading, setUser } from '../redux/slices/auth.slice'
 
 export const handleSubmit = async (email: string, password: string, dispatch: Dispatch, navigate: NavigateFunction) => {
   try {
+    dispatch(setIsLoading(true))
     const response = await loginApi(email, password)
     const token = response.data.data.access_token
     localStorage.setItem('token', token)
@@ -21,5 +22,7 @@ export const handleSubmit = async (email: string, password: string, dispatch: Di
     } else {
       toast.error(error.message)
     }
+  } finally {
+    dispatch(setIsLoading(false))
   }
 }
