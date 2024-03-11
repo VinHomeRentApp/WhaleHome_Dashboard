@@ -31,7 +31,7 @@ const PostPage: React.FC = () => {
     setImageList(record.postImages)
   }
 
-  const handleEdit = (id: number) => {
+  const handleEdit = () => {
     // setIsOpenModalEdit(true)
   }
 

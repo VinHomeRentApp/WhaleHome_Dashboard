@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { Button, Switch, Table, TableProps } from 'antd'
 import React from 'react'
