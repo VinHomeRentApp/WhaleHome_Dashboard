@@ -1,17 +1,5 @@
-import {
-  AutoComplete,
-  Button,
-  Calendar,
-  DatePicker,
-  Input,
-  InputNumber,
-  Modal,
-  Select,
-  Table,
-  TableProps,
-  Tag,
-  Typography
-} from 'antd'
+
+import { AutoComplete, Button, DatePicker, Input, InputNumber, Modal, Table, TableProps, Tag, Typography } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import ButtonAction from '../Components/UI/ButtonAction'
@@ -19,6 +7,22 @@ import { contract, contractHistory } from '../types/contract.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
 import { tr } from '@faker-js/faker'
+
+const formData: contract = {
+  id: NaN,
+  contractHistory: {
+    price: NaN,
+    description: '',
+    expiredTime: '',
+    users: {
+      id: NaN,
+      image: ''
+    }
+  },
+  dateSign: '',
+  description: '',
+  dateStartRent: ''
+}
 
 const formData: contract = {
   id: NaN,
