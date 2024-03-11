@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Input, Modal, Select, Typography, message } from 'antd'
+import { Input, Modal, Select, Spin, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Controller, FieldErrors, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -11,7 +11,7 @@ import { getBuildingList } from '../../../redux/actions/building.actions'
 import { getPostList } from '../../../redux/actions/post.actions'
 import { getZoneList } from '../../../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
-import { setIsLoading, updatePostList } from '../../../redux/slices/post.slice'
+import { setIsLoading } from '../../../redux/slices/post.slice'
 import { createPostFormValues, createPostSchema } from '../../../schema/post.schema'
 import { apartment } from '../../../types/appartment.type'
 import { building } from '../../../types/building.type'
@@ -126,111 +126,113 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
       onOk={handleSubmit(onSubmit, onError)}
       onCancel={() => setIsOpenModalAdd(false)}
     >
-      {contextHolder}
-      <Typography.Title level={5}>Title</Typography.Title>
-      <Controller
-        control={control}
-        name='title'
-        render={({ field }) => (
-          <Input
-            status={errors.title && 'error'}
-            placeholder='Input Title'
-            value={field.value}
-            onChange={(e) => setValue('title', e.target.value)}
-          />
-        )}
-      />
-      <Typography.Title level={5}>Description</Typography.Title>
-      <Controller
-        control={control}
-        name='description'
-        render={({ field }) => (
-          <Input
-            status={errors.description && 'error'}
-            placeholder='Input Description'
-            value={field.value}
-            onChange={(e) => setValue('description', e.target.value)}
-          />
-        )}
-      />
-      <Typography.Title level={5}>Apartment</Typography.Title>
-      <div style={{ padding: 10, display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <div style={{ width: '50%' }}>
-          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Area</Typography.Paragraph>
+      <Spin spinning={isPostLoading}>
+        {contextHolder}
+        <Typography.Title level={5}>Title</Typography.Title>
+        <Controller
+          control={control}
+          name='title'
+          render={({ field }) => (
+            <Input
+              status={errors.title && 'error'}
+              placeholder='Input Title'
+              value={field.value}
+              onChange={(e) => setValue('title', e.target.value)}
+            />
+          )}
+        />
+        <Typography.Title level={5}>Description</Typography.Title>
+        <Controller
+          control={control}
+          name='description'
+          render={({ field }) => (
+            <Input
+              status={errors.description && 'error'}
+              placeholder='Input Description'
+              value={field.value}
+              onChange={(e) => setValue('description', e.target.value)}
+            />
+          )}
+        />
+        <Typography.Title level={5}>Apartment</Typography.Title>
+        <div style={{ padding: 10, display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <div style={{ width: '50%' }}>
+            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Area</Typography.Paragraph>
+            <Controller
+              control={control}
+              name='areaId'
+              defaultValue={null}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  style={{ width: '90%' }}
+                  onChange={(value) => {
+                    setValue('areaId', value)
+                    setValue('zoneId', null)
+                    setValue('buildingId', null)
+                    setValue('apartmentId', null)
+                  }}
+                  options={areaList.map((area) => ({ value: area.id, label: area.name }))}
+                />
+              )}
+            />
+          </div>
+          <div style={{ width: '50%' }}>
+            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Zone</Typography.Paragraph>
+            <Controller
+              control={control}
+              name='zoneId'
+              defaultValue={null}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  style={{ width: '90%' }}
+                  onChange={(value) => {
+                    setValue('zoneId', value)
+                    setValue('buildingId', null)
+                  }}
+                  options={filteredZoneList.map((zone) => ({
+                    value: zone.id,
+                    label: zone.name
+                  }))}
+                />
+              )}
+            />
+          </div>
+        </div>
+        <div style={{ padding: 10 }}>
+          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Building</Typography.Paragraph>
           <Controller
             control={control}
-            name='areaId'
+            name='buildingId'
             defaultValue={null}
             render={({ field }) => (
               <Select
                 value={field.value}
-                style={{ width: '90%' }}
-                onChange={(value) => {
-                  setValue('areaId', value)
-                  setValue('zoneId', null)
-                  setValue('buildingId', null)
-                  setValue('apartmentId', null)
-                }}
-                options={areaList.map((area) => ({ value: area.id, label: area.name }))}
+                style={{ width: '100%' }}
+                onChange={(value) => setValue('buildingId', value)}
+                options={filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))}
               />
             )}
           />
         </div>
-        <div style={{ width: '50%' }}>
-          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Zone</Typography.Paragraph>
+        <div style={{ padding: 10 }}>
+          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Apartment</Typography.Paragraph>
           <Controller
             control={control}
-            name='zoneId'
-            defaultValue={null}
+            name='apartmentId'
             render={({ field }) => (
               <Select
+                status={errors.apartmentId && 'error'}
                 value={field.value}
-                style={{ width: '90%' }}
-                onChange={(value) => {
-                  setValue('zoneId', value)
-                  setValue('buildingId', null)
-                }}
-                options={filteredZoneList.map((zone) => ({
-                  value: zone.id,
-                  label: zone.name
-                }))}
+                style={{ width: '100%' }}
+                onChange={(value) => setValue('apartmentId', value)}
+                options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
               />
             )}
           />
         </div>
-      </div>
-      <div style={{ padding: 10 }}>
-        <Typography.Paragraph style={{ fontWeight: 'bold' }}>Building</Typography.Paragraph>
-        <Controller
-          control={control}
-          name='buildingId'
-          defaultValue={null}
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              style={{ width: '100%' }}
-              onChange={(value) => setValue('buildingId', value)}
-              options={filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))}
-            />
-          )}
-        />
-      </div>
-      <div style={{ padding: 10 }}>
-        <Typography.Paragraph style={{ fontWeight: 'bold' }}>Apartment</Typography.Paragraph>
-        <Controller
-          control={control}
-          name='apartmentId'
-          render={({ field }) => (
-            <Select
-              status={errors.apartmentId && 'error'}
-              value={field.value}
-              style={{ width: '100%' }}
-              onChange={(value) => setValue('apartmentId', value)}
-              options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
-            />
-          )}
-        />
-      </div>
+      </Spin>
     </Modal>
   )
 }
