@@ -15,7 +15,7 @@ const PostPage: React.FC = () => {
   const loading = useSelector((state: RootState) => state.post.loading)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [imageList, setImageList] = useState<postImages[]>([])
-  const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
+  // const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
   const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false)
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const PostPage: React.FC = () => {
   }
 
   const handleEdit = (id: number) => {
-    setIsOpenModalEdit(true)
+    // setIsOpenModalEdit(true)
   }
 
   const handleDelete = (id: number) => {

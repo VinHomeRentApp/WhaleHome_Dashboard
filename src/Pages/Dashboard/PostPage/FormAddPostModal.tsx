@@ -9,7 +9,7 @@ type Props = {
 const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [searchApartment, setSearchApartment] = useState('')
+  // const [searchApartment, setSearchApartment] = useState('')
   return (
     <Modal
       title='Edit Area'

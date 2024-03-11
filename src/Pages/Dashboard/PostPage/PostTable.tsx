@@ -1,5 +1,5 @@
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Switch, Table, TableProps } from 'antd'
+import { Button, Switch, Table, TableProps } from 'antd'
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { post } from '../../../types/post.type'

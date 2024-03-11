@@ -12,7 +12,6 @@ import { cancelEditingApartment, startEditingApartment } from '../redux/slices/a
 import { apartment } from '../types/appartment.type'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
-import { log } from 'console'
 
 const formData: apartment = {
   id: NaN,
