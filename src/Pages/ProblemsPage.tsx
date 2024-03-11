@@ -1,9 +1,9 @@
-import { Button, Input, Table, TableProps } from 'antd'
+import { Input, Table, TableProps } from 'antd'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { getProblemList } from '../redux/actions/problem.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { problem } from '../types/problem.type'
-import { getProblemList } from '../redux/actions/problem.action'
 
 // const formData: problem = {
 //   id: NaN,
@@ -108,16 +108,6 @@ export default function AreaPage() {
           //   setSearch(e.target.value)
           // }}
         />
-        <Button
-          style={{ width: '10%' }}
-          type='primary'
-          block
-          onClick={() => {
-            // setModalAdd(true)
-          }}
-        >
-          Add New Area
-        </Button>
       </div>
       <Table
         columns={columns}

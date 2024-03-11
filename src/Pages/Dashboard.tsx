@@ -1,13 +1,13 @@
 import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Space, Spin } from 'antd'
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
 import RecentPost from '../Components/RecentPost'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { setUser } from '../redux/slices/auth.slice'
 import { User } from '../types/user.type'
-import { useSelector } from 'react-redux'
 
 const DashBoard: React.FC = () => {
   const dispatch = useAppDispatch()
