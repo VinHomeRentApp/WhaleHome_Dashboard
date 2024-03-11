@@ -10,6 +10,8 @@ import postSlice from '../slices/post.slice'
 import problemSlice from '../slices/problem.slice'
 import reviewSlice from '../slices/review.slice'
 import zoneSlice from '../slices/zone.slice'
+import contractSlice from '../slices/contract.slice'
+import userSlice from '../slices/user.slice'
 export const store = configureStore({
   reducer: {
     auth: authSlice,
@@ -21,7 +23,9 @@ export const store = configureStore({
     issue: issueSlice,
     problem: problemSlice,
     apartment: apartmentSlice,
-    apartmentClass: apartmentClassSlice
+    apartmentClass: apartmentClassSlice,
+    contract: contractSlice,
+    user: userSlice
   }
 })
 
