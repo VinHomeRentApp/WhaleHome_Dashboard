@@ -32,7 +32,7 @@ type Props = {
 }
 
 const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
-  const { control, handleSubmit, setValue, formState, register, getValues } = useForm<createPostFormValues>({
+  const { control, handleSubmit, setValue, formState, getValues } = useForm<createPostFormValues>({
     resolver: yupResolver(createPostSchema),
     defaultValues: defaultFormValues
   })
@@ -99,7 +99,7 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
         message.error('Please Apartment')
         return
       }
-      const response = await createPost({ apartmentId, description, title })
+      await createPost({ apartmentId, description, title })
       message.success('Create Post Successfully!')
       setIsOpenModalAdd(false)
       dispatch(getPostList())
