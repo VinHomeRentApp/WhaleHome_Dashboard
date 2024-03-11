@@ -57,7 +57,7 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
     return () => {
       promise.abort()
     }
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     // Logic để lọc danh sách Zone dựa trên giá trị của area
@@ -80,7 +80,7 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
         (!getValues('buildingId') || apartment.building.id === getValues('buildingId'))
     )
     setFilteredApartmentList(filteredApartments)
-  }, [zoneList, buildingList, apartmentList])
+  }, [zoneList, buildingList, apartmentList, getValues])
 
   useEffect(() => {
     setValue('zoneId', null)
@@ -112,7 +112,8 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
   }
 
   const onError: SubmitErrorHandler<createPostFormValues> = (errors: FieldErrors<createPostFormValues>) => {
-    Object.entries(errors).forEach(([field, error]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(errors).forEach(([_field, error]) => {
       const errorMessage = error?.message
       errorMessage && messageApi.error(errorMessage)
     })
