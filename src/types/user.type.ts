@@ -12,21 +12,21 @@ export interface Role {
 
 export interface User {
   id: number
-  modifiedBy: string
-  createBy: string
-  deleteBy: string
-  modifiedDate: string
-  createDate: string
-  deleteAt: string
-  status: boolean
-  email: string
-  password: string
-  phone: string
-  fullName: string
-  dateOfBirth: string
+  modifiedBy?: string
+  createBy?: string
+  deleteBy?: string
+  modifiedDate?: string
+  createDate?: string
+  deleteAt?: string
+  status?: boolean
+  email?: string
+  password?: string
+  phone?: string
+  fullName?: string
+  dateOfBirth?: string
   image: string
-  gender: string
-  address: string
-  role: Role
-  verified: boolean
+  gender?: string
+  address?: string
+  role?: Role
+  verified?: boolean
 }
