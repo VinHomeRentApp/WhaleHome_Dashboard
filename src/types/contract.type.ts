@@ -9,6 +9,11 @@ export interface contract {
   dateStartRent: string
   payments?: []
   contractHistory: contractHistory
+  apartmentId?: number
+  apartmentName?: string
+  buildingName?: string
+  zoneName?: string
+  areaName?: string
 }
 
 export interface contractHistory {

@@ -3,8 +3,11 @@ import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import ButtonAction from '../Components/UI/ButtonAction'
 import { contract, contractHistory } from '../types/contract.type'
-import { ResponseSuccessful } from '../types/response.type'
-import { http } from '../utils/http'
+import { useSelector } from 'react-redux'
+import { createContract, getContractList } from '../redux/actions/contract.action'
+import { RootState, useAppDispatch } from '../redux/containers/store'
+import { searchUser } from '../redux/actions/user.actions'
+import { User } from '../types/user.type'
 
 const formData: contract = {
   id: NaN,
@@ -23,38 +26,35 @@ const formData: contract = {
 }
 
 const ContractPage: React.FC = () => {
-  const [data, setDataSource] = useState<contract[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
+  const searchUserData = useSelector((state: RootState) => state.user.userList)
+
+  const [searchUserState, setSearchUserState] = useState<User[]>(searchUserData)
+
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<contract>(formData)
   const [startDate, setStartDate] = useState(null)
-
-  async function getContract() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<contract[]>>('/contracts', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setDataSource(response.data.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const dispatch = useAppDispatch()
+  const data = useSelector((state: RootState) => state.contract.contractList)
+  const loading = useSelector((state: RootState) => state.contract.loading)
 
   useEffect(() => {
-    getContract()
-  }, [])
+    const promise = dispatch(getContractList())
+    return () => {
+      promise.abort()
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    setSearchUserState(searchUserData)
+  }, [searchUserData])
 
   const columns: TableProps['columns'] = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      width: '3%',
+      width: '4%',
       align: 'center',
       sorter: {
         compare: (a: contract, b: contract) => a.id - b.id
@@ -66,7 +66,7 @@ const ContractPage: React.FC = () => {
       title: 'Contract',
       dataIndex: 'description',
       key: 'id',
-      width: '15%',
+      width: '10%',
       align: 'center',
       filteredValue: [search],
       onFilter: (value, record) => {
@@ -77,21 +77,20 @@ const ContractPage: React.FC = () => {
       title: 'Date Sign',
       dataIndex: 'dateSign',
       key: 'id',
-      width: '7%',
+      width: '8%',
       align: 'center'
     },
     {
       title: 'Date Start Rent',
       dataIndex: 'dateStartRent',
       key: 'id',
-      width: '7%',
+      width: '8%',
       align: 'center'
     },
-
     {
       title: 'Expired Time',
       dataIndex: 'contractHistory',
-      width: '7%',
+      width: '10%',
       key: 'id',
       render: (record: contractHistory) => String(record.expiredTime)
     },
@@ -99,7 +98,8 @@ const ContractPage: React.FC = () => {
       title: 'Status Of Contract',
       dataIndex: 'contractHistory',
       key: 'id',
-      width: '8%',
+      align: 'center',
+      width: '10%',
       render: (record: contractHistory) => {
         const now = new Date()
         const expiredTime = new Date(record.expiredTime)
@@ -109,10 +109,45 @@ const ContractPage: React.FC = () => {
         return <Tag color={'red'}>Đã hết hạn</Tag>
       }
     },
+
+    {
+      title: 'Apartment',
+      children: [
+        {
+          title: 'Area',
+          key: 'id',
+          width: '5%',
+          align: 'center',
+          render: (record: contract) => String(record.areaName)
+        },
+        {
+          title: 'Zone',
+          key: 'id',
+          width: '8%',
+          align: 'center',
+          render: (record: contract) => String(record.zoneName)
+        },
+        {
+          title: 'Building',
+          key: 'id',
+          width: '7%',
+          align: 'center',
+          render: (record: contract) => String(record.buildingName)
+        },
+        {
+          title: 'RoomName',
+          key: 'id',
+          width: '6%',
+          align: 'center',
+          render: (record: contract) => String(record.apartmentName)
+        }
+      ]
+    },
     {
       title: 'Renter',
       dataIndex: 'contractHistory',
       key: 'id',
+      align: 'center',
       width: '12%',
       render: (record: contractHistory) => (
         <div style={{ display: 'flex', gap: '1rem' }}>
@@ -125,7 +160,7 @@ const ContractPage: React.FC = () => {
       title: 'More',
       dataIndex: 'user',
       key: 'id',
-      width: '7%',
+      width: '6%',
       render: (_, record) => <ButtonAction ID={record.id} />
     }
   ]
@@ -137,17 +172,56 @@ const ContractPage: React.FC = () => {
   }
   const handleOkAdd = () => {
     setModalAdd(false)
+    dispatch(createContract(modalData))
+    setModalData(formData)
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleInputDescription = (e: any) => {
+    setModalData((prevData) => ({
+      ...prevData,
+      description: e.target.value,
+      contractHistory: {
+        ...prevData.contractHistory,
+        description: e.target.value
+      }
+    }))
+  }
+
+  const handleSearchUser = (e: string) => {
+    dispatch(searchUser(e))
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateChange = (_: any, dateString: string) => {
-    console.log('Selected Date: ', dateString)
+  const handleDateChangeExpired = (_: any, dateString: string) => {
+    setModalData((data) => ({
+      ...data,
+      contractHistory: { ...data.contractHistory, expiredTime: dateString }
+    }))
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateChangeSign = (_: any, dateString: string) => {
+    setModalData((data) => ({
+      ...data,
+      dateSign: dateString
+    }))
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateStartChange = (date: any, dateString: string) => {
-    console.log('Selected Date: ', dateString)
     setStartDate(date)
+    setModalData((data) => ({
+      ...data,
+      dateStartRent: dateString
+    }))
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleChangePrice = (e: any) => {
+    setModalData((data) => ({
+      ...data,
+      contractHistory: { ...data.contractHistory, price: e }
+    }))
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,6 +229,7 @@ const ContractPage: React.FC = () => {
     // Disable dates after the selected start date
     if (startDate) return current && current < startDate
   }
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
@@ -181,7 +256,7 @@ const ContractPage: React.FC = () => {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 7
+          pageSize: 4
         }}
         scroll={{ y: 400 }}
         loading={loading}
@@ -193,23 +268,31 @@ const ContractPage: React.FC = () => {
         <div style={{ display: 'flex', gap: '5%' }}>
           <div style={{ width: '45%' }}>
             <Typography.Title level={5}>Description</Typography.Title>
-            <Input.TextArea
-              placeholder='input name'
-              value={modalData.description}
-              onChange={(e) => setModalData((data) => ({ ...data, description: e.target.value }))}
-            />
+            <Input.TextArea placeholder='input name' value={modalData.description} onChange={handleInputDescription} />
           </div>
           <div style={{ width: '50%' }}>
             <Typography.Title level={5}>User</Typography.Title>
             <AutoComplete
               style={{ width: '100%' }}
               placeholder='input name'
-              options={[]}
-              filterOption={true}
+              options={searchUserState.map((user) => ({
+                label: (
+                  <div>
+                    <img style={{ width: 20, height: 20 }} src={user.image} alt={user.fullName} />
+                    {user.fullName}
+                  </div>
+                ),
+                value: Number(user.id)
+              }))}
               onSearch={(e) => {
-                console.log(e)
+                handleSearchUser(e)
               }}
-              onSelect={(e) => setModalData((data) => ({ ...data, description: e }))}
+              onSelect={(e) =>
+                setModalData((data) => ({
+                  ...data,
+                  contractHistory: { ...data.contractHistory, users: { ...data.contractHistory.users, id: e } }
+                }))
+              }
             />
           </div>
         </div>
@@ -224,7 +307,7 @@ const ContractPage: React.FC = () => {
             <DatePicker
               style={{ width: '80%' }}
               format={dateFormat}
-              onChange={handleDateChange}
+              onChange={handleDateChangeExpired}
               disabledDate={disabledEndDate}
             />
           </div>
@@ -233,19 +316,11 @@ const ContractPage: React.FC = () => {
         <div style={{ display: 'flex', gap: '5%' }}>
           <div style={{ width: '45%' }}>
             <Typography.Title level={5}>Date Sign</Typography.Title>
-            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateChange} />
+            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateChangeSign} />
           </div>
           <div style={{ width: '50%' }}>
             <Typography.Title level={5}>Price</Typography.Title>
-            <InputNumber
-              min={0}
-              defaultValue={0}
-              onChange={(e) => {
-                console.log(e)
-              }}
-              controls={false}
-              required={true}
-            />
+            <InputNumber min={0} defaultValue={0} onChange={handleChangePrice} controls={false} required={true} />
           </div>
         </div>
       </Modal>
