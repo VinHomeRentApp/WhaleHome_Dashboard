@@ -63,8 +63,8 @@ const ApartmentPage: React.FC = () => {
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
 
-  const [areaID, setAreaID] = useState<number>(NaN)
-  const [zoneID, setZoneID] = useState<number>(NaN)
+  const [areaID, setAreaID] = useState<number>(1)
+  const [zoneID, setZoneID] = useState<number>(2)
   const [buildingListFilter, setBuildingListFilter] = useState<building[]>(buildingList)
 
   const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneList)
@@ -170,7 +170,7 @@ const ApartmentPage: React.FC = () => {
         return (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
-            <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
+            <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
           </div>
         )
       }
@@ -181,7 +181,7 @@ const ApartmentPage: React.FC = () => {
     dispatch(startEditingApartment(id))
     setIsModalEdit(true)
   }
-  const handleDelte = (id: number) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteApartment(id))
   }
 
