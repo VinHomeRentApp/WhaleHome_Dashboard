@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { EditOutlined } from '@ant-design/icons'
 import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'

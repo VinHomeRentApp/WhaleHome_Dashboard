@@ -117,7 +117,7 @@ export default function AreaPage() {
         }}
         scroll={{ y: 400 }}
         loading={loading}
-        rowKey='reviewId'
+        rowKey='id'
         bordered
       />
       {/* 
