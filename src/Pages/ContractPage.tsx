@@ -1,4 +1,4 @@
-import { Input, Table, TableProps, Tag } from 'antd'
+import { AutoComplete, Button, DatePicker, Input, InputNumber, Modal, Table, TableProps, Tag, Typography } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import ButtonAction from '../Components/UI/ButtonAction'
@@ -6,10 +6,29 @@ import { contract, contractHistory } from '../types/contract.type'
 import { ResponseSuccessful } from '../types/response.type'
 import { http } from '../utils/http'
 
+const formData: contract = {
+  id: NaN,
+  contractHistory: {
+    price: NaN,
+    description: '',
+    expiredTime: '',
+    users: {
+      id: NaN,
+      image: ''
+    }
+  },
+  dateSign: '',
+  description: '',
+  dateStartRent: ''
+}
+
 const ContractPage: React.FC = () => {
   const [data, setDataSource] = useState<contract[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
+  const [modalAdd, setModalAdd] = useState<boolean>(false)
+  const [modalData, setModalData] = useState<contract>(formData)
+  const [startDate, setStartDate] = useState(null)
 
   async function getContract() {
     try {
@@ -110,6 +129,32 @@ const ContractPage: React.FC = () => {
       render: (_, record) => <ButtonAction ID={record.id} />
     }
   ]
+
+  const dateFormat = 'YYYY-MM-DD'
+
+  const handleCancelAdd = () => {
+    setModalAdd(false)
+  }
+  const handleOkAdd = () => {
+    setModalAdd(false)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateChange = (_: any, dateString: string) => {
+    console.log('Selected Date: ', dateString)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateStartChange = (date: any, dateString: string) => {
+    console.log('Selected Date: ', dateString)
+    setStartDate(date)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const disabledEndDate = (current: any) => {
+    // Disable dates after the selected start date
+    if (startDate) return current && current < startDate
+  }
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
@@ -120,6 +165,16 @@ const ContractPage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
+        <Button
+          style={{ width: '10%' }}
+          type='primary'
+          block
+          onClick={() => {
+            setModalAdd(true)
+          }}
+        >
+          Add New
+        </Button>
       </div>
 
       <Table
@@ -133,6 +188,67 @@ const ContractPage: React.FC = () => {
         rowKey='id'
         bordered
       />
+
+      <Modal title='Add Contract' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
+        <div style={{ display: 'flex', gap: '5%' }}>
+          <div style={{ width: '45%' }}>
+            <Typography.Title level={5}>Description</Typography.Title>
+            <Input.TextArea
+              placeholder='input name'
+              value={modalData.description}
+              onChange={(e) => setModalData((data) => ({ ...data, description: e.target.value }))}
+            />
+          </div>
+          <div style={{ width: '50%' }}>
+            <Typography.Title level={5}>User</Typography.Title>
+            <AutoComplete
+              style={{ width: '100%' }}
+              placeholder='input name'
+              options={[]}
+              filterOption={true}
+              onSearch={(e) => {
+                console.log(e)
+              }}
+              onSelect={(e) => setModalData((data) => ({ ...data, description: e }))}
+            />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '5%' }}>
+          <div style={{ width: '45%' }}>
+            <Typography.Title level={5}>Date Start Rent</Typography.Title>
+            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateStartChange} />
+          </div>
+          <div style={{ width: '50%' }}>
+            <Typography.Title level={5}>Expired Time</Typography.Title>
+            <DatePicker
+              style={{ width: '80%' }}
+              format={dateFormat}
+              onChange={handleDateChange}
+              disabledDate={disabledEndDate}
+            />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '5%' }}>
+          <div style={{ width: '45%' }}>
+            <Typography.Title level={5}>Date Sign</Typography.Title>
+            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateChange} />
+          </div>
+          <div style={{ width: '50%' }}>
+            <Typography.Title level={5}>Price</Typography.Title>
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              onChange={(e) => {
+                console.log(e)
+              }}
+              controls={false}
+              required={true}
+            />
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
