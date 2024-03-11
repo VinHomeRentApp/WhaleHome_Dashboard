@@ -40,9 +40,9 @@ const BuildingPage: React.FC = () => {
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<building>(formData)
   const editBuilding = useSelector((state: RootState) => state.building.editingBuilding)
-  const [enabnle, setEnabnle] = useState<boolean>(true)
+  const [enable, setEnable] = useState<boolean>(true)
 
-  const [zoneListfilter, setZoneListfilter] = useState<zone[]>(zoneList)
+  const [zoneListFilter, setZoneListFilter] = useState<zone[]>(zoneList)
 
   // const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
 
@@ -68,10 +68,10 @@ const BuildingPage: React.FC = () => {
         }
       }
     }))
-    setZoneListfilter(ZoneListFilterFunc(e))
-    setEnabnle(false)
+    setZoneListFilter(ZoneListFilterFunc(e))
+    setEnable(false)
 
-    console.log(zoneListfilter)
+    console.log(zoneListFilter)
   }
 
   const handleSelectZone = (e: number) => {
@@ -177,7 +177,7 @@ const BuildingPage: React.FC = () => {
   const handleOkAdd = () => {
     setModalAdd(false)
     setModalData(formData)
-    setEnabnle(true)
+    setEnable(true)
     dispatch(createBuilding(modalData))
     dispatch(cancelEditingBuilding())
   }
@@ -185,7 +185,7 @@ const BuildingPage: React.FC = () => {
   const handleCancelAdd = () => {
     setModalAdd(false)
     setModalData(formData)
-    setEnabnle(true)
+    setEnable(true)
     dispatch(cancelEditingBuilding())
   }
   return (
@@ -234,7 +234,7 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
-          options={zoneListfilter.map((z) => {
+          options={zoneListFilter.map((z) => {
             return { value: z.id, label: z.name }
           })}
           value={modalData.zone.id}
@@ -261,8 +261,8 @@ const BuildingPage: React.FC = () => {
         <Select
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
-          disabled={enabnle}
-          options={zoneListfilter.map((z) => {
+          disabled={enable}
+          options={zoneListFilter.map((z) => {
             return { value: z.id, label: z.name }
           })}
         />

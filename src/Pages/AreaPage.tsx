@@ -5,8 +5,8 @@ import { createArea, getArea } from '../redux/actions/area.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingArea } from '../redux/slices/area.slice'
 import { area } from '../types/area.type'
-import ModalFormAddArea from './Dashboard/ModalFormAddArea'
-import TableAreaPage from './Dashboard/TableAreaPage'
+import ModalFormAddArea from './Dashboard/AreaPage/ModalFormAddArea'
+import TableAreaPage from './Dashboard/AreaPage/TableAreaPage'
 
 const formData: area = {
   name: '',

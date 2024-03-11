@@ -1,8 +1,8 @@
 import { Checkbox, Input, Modal, Typography } from 'antd'
 import React, { Dispatch } from 'react'
-import { updateArea } from '../../redux/actions/area.actions'
-import { useAppDispatch } from '../../redux/containers/store'
-import { area } from '../../types/area.type'
+import { updateArea } from '../../../redux/actions/area.actions'
+import { useAppDispatch } from '../../../redux/containers/store'
+import { area } from '../../../types/area.type'
 
 type ModalFormAddAreaProps = {
   modalData: area
