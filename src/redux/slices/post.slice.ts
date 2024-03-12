@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { post } from '../../types/post.type'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { getPostList } from '../actions/post.actions'
+import { getPostList, updatePost } from '../actions/post.actions'
 import { initialPostState } from '../types/post.types'
 
 const postSlice = createSlice({
@@ -20,6 +20,15 @@ const postSlice = createSlice({
       .addCase(getPostList.fulfilled, (state, action) => {
         state.postList = action.payload
       })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        const id = action.meta.arg.id
+        state.postList.find((post, index) => {
+          if (post.id === id) {
+            state.postList[index] = action.payload
+            return
+          }
+        })
+      })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),
         (state, action) => {
@@ -28,12 +37,21 @@ const postSlice = createSlice({
         }
       )
       .addMatcher<RejectedAction | FulfilledAction>(
-        (action) => action.type.endsWith('/rejected') || action.type.endsWith('/fulfilled'),
+        (action) => action.type.endsWith('/fulfilled'),
         (state, action) => {
           if (state.isLoading && state.currentRequestId === action.meta.requestId) {
             state.isLoading = false
+            state.error = null
             state.currentRequestId = undefined
           }
+        }
+      )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.isLoading = false
+          state.error = action.payload
+          state.error = state.currentRequestId = action.meta.requestId
         }
       )
   }
