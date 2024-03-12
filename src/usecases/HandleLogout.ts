@@ -3,13 +3,15 @@ import { Dispatch } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
 import { logout } from '../apis/user.apis'
 import { setIsLoading, setUser } from '../redux/slices/auth.slice'
+import { NavigateFunction } from 'react-router'
 
-export const handleLogout = async (dispatch: Dispatch) => {
+export const handleLogout = async (dispatch: Dispatch, navigate: NavigateFunction) => {
   try {
     dispatch(setIsLoading(true))
     const token = localStorage.getItem('token')
     if (token) {
       await logout(token)
+      navigate('/login')
       dispatch(setUser(null))
       toast.success('Logout Successfully!')
     } else {

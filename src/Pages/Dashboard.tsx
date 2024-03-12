@@ -21,7 +21,7 @@ const DashBoard: React.FC = () => {
   return (
     <div>
       <Spin spinning={isLoading}>
-        <Space direction='horizontal' style={{ width: '100%' }}>
+        <Space direction='horizontal' style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           <DashboardCard
             icon={
               <FileTextOutlined
@@ -29,8 +29,9 @@ const DashBoard: React.FC = () => {
                   color: 'green',
                   backgroundColor: 'rgba(0,255,0,0.25)',
                   borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8
+                  fontSize: 40,
+                  marginRight: 20,
+                  padding: 10
                 }}
               />
             }
@@ -45,8 +46,9 @@ const DashBoard: React.FC = () => {
                   color: 'purple',
                   backgroundColor: 'rgba(0,255,255,0.25)',
                   borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8
+                  fontSize: 40,
+                  marginRight: 20,
+                  padding: 10
                 }}
               />
             }
@@ -61,8 +63,9 @@ const DashBoard: React.FC = () => {
                   color: 'black',
                   backgroundColor: 'rgba(0,255,255,0.25)',
                   borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8
+                  fontSize: 40,
+                  marginRight: 20,
+                  padding: 10
                 }}
               />
             }
@@ -77,8 +80,9 @@ const DashBoard: React.FC = () => {
                   color: 'black',
                   backgroundColor: 'rgba(0,255,255,0.25)',
                   borderRadius: 20,
-                  fontSize: 24,
-                  padding: 8
+                  fontSize: 40,
+                  marginRight: 20,
+                  padding: 10
                 }}
               />
             }

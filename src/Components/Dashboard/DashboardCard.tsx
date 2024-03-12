@@ -31,8 +31,8 @@ const DashboardCard: React.FC<props> = ({ title, icon, URL }) => {
   }, [])
 
   return (
-    <Card style={{ minWidth: 100, width: 260, maxWidth: 500 }}>
-      <Space direction='horizontal' size={30}>
+    <Card style={{ width: '100%' }}>
+      <Space direction='horizontal' style={{ padding: 10 }}>
         {icon}
         <Statistic style={{ fontWeight: 'bold' }} title={title} value={data} />
       </Space>
