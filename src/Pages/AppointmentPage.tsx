@@ -14,7 +14,7 @@ const AppointmentPage: React.FC = () => {
         columns={ColumnsAppointmentPage}
         dataSource={appointmentList}
         pagination={{
-          pageSize: 7
+          pageSize: 5
         }}
         scroll={{ y: 400 }}
         loading={isLoadingAppointmentList}

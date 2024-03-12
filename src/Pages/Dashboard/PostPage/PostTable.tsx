@@ -20,7 +20,12 @@ const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, h
       dataIndex: 'id',
       width: '3%',
       align: 'center',
-      key: 'id'
+      key: 'id',
+      sorter: {
+        compare: (a: post, b: post) => a.id - b.id
+      },
+      sortDirections: ['ascend', 'descend'],
+      defaultSortOrder: 'ascend'
     },
     {
       title: 'Title',
