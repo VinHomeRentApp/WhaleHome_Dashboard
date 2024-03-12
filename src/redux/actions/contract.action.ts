@@ -33,7 +33,8 @@ export const createContract = createAsyncThunk('contract/createContract', async 
     dateStartRent: body.dateStartRent,
     contractHistory: {
       id: idcontracthistories
-    }
+    },
+    appointmentId: body.appointmentId
   })
   return res2.data.data
 })

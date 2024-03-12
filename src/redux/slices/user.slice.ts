@@ -10,7 +10,7 @@ const userSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(searchUser.fulfilled, (state, action) => {
-        state.userList = action.payload
+        state.searchUserIncludeAppointment = action.payload
       })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),
