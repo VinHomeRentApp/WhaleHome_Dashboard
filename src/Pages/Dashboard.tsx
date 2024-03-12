@@ -7,6 +7,7 @@ import DashboardChart from '../Components/Dashboard/DashboardChar'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { setUser } from '../redux/slices/auth.slice'
 import { User } from '../types/user.type'
+import CalendarAppointment from './Dashboard/CalendarAppointment'
 
 const DashBoard: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -88,6 +89,9 @@ const DashBoard: React.FC = () => {
 
         <DashboardChart />
       </Spin>
+      <div>
+        <CalendarAppointment />
+      </div>
     </div>
   )
 }
