@@ -12,6 +12,7 @@ import { getBadgeStatus } from '../../utils/getBadgeCalendar'
 const CalendarAppointment = () => {
   const { appointmentList, error } = useSelector((state: RootState) => state.appointment)
   const [messageApi, contextHolder] = message.useMessage()
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
