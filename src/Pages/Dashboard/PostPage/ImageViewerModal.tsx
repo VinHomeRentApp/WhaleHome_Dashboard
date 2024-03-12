@@ -15,18 +15,29 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ visible, imageList,
       centered
       closable={false}
       title='Image'
-      visible={visible}
+      open={visible}
       onCancel={() => {
         handleClose()
       }}
     >
-      <Carousel swipeToSlide draggable arrows>
-        {imageList.map((img) => (
-          <div key={img.id} style={{ display: 'flex', justifyContent: 'center' }}>
-            <img width='100%' alt={img.image_alt} src={img.image_url} className='card' />
-          </div>
-        ))}
-      </Carousel>
+      {imageList.length === 0 ? (
+        <img
+          src='https://www.huber-online.com/daisy_website_files/_processed_/8/0/csm_no-image_d5c4ab1322.jpg'
+          alt=''
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+        />
+      ) : (
+        <Carousel autoplay={true} draggable arrows>
+          {imageList.map((img) => (
+            <img
+              key={img.id}
+              alt={img.image_alt}
+              src={img.image_url}
+              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            />
+          ))}
+        </Carousel>
+      )}
     </Modal>
   )
 }

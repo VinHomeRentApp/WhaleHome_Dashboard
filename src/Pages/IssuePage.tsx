@@ -60,7 +60,7 @@ const ReviewPage: React.FC = () => {
         }}
         scroll={{ y: 400 }}
         loading={loading}
-        rowKey='reviewId'
+        rowKey={'id'}
         bordered
       />
     </>

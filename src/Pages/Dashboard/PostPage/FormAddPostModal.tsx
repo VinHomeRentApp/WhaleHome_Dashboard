@@ -15,7 +15,9 @@ import { setIsLoading } from '../../../redux/slices/post.slice'
 import { createPostFormValues, createPostSchema } from '../../../schema/post.schema'
 import { apartment } from '../../../types/appartment.type'
 import { building } from '../../../types/building.type'
+import { post } from '../../../types/post.type'
 import { zone } from '../../../types/zone.type'
+import UploadImage from './UploadImage'
 
 const defaultFormValues: createPostFormValues = {
   title: '',
@@ -27,12 +29,17 @@ const defaultFormValues: createPostFormValues = {
 }
 
 type Props = {
+  postEdit: post | null
   isOpenModalAdd: boolean
+  isOpenModalEdit: boolean
   setIsOpenModalAdd: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOpenModalEdit: React.Dispatch<React.SetStateAction<boolean>>
+  setEditPost: React.Dispatch<React.SetStateAction<post | null>>
 }
 
-const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
-  const { control, handleSubmit, setValue, formState, getValues } = useForm<createPostFormValues>({
+const FormAddPostModal = (props: Props) => {
+  const { isOpenModalAdd, setIsOpenModalAdd, isOpenModalEdit, postEdit, setIsOpenModalEdit, setEditPost } = props
+  const { control, handleSubmit, setValue, formState, getValues, reset } = useForm<createPostFormValues>({
     resolver: yupResolver(createPostSchema),
     defaultValues: defaultFormValues
   })
@@ -58,6 +65,19 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
       promise.abort()
     }
   }, [dispatch])
+
+  useEffect(() => {
+    if (isOpenModalEdit && postEdit) {
+      reset({
+        apartmentId: postEdit.apartment.id,
+        title: postEdit.title,
+        description: postEdit.description,
+        areaId: postEdit.apartment.building.zone.area.id,
+        zoneId: postEdit.apartment.building.zone.id,
+        buildingId: postEdit.apartment.building.id
+      })
+    }
+  }, [isOpenModalEdit])
 
   useEffect(() => {
     // Logic để lọc danh sách Zone dựa trên giá trị của area
@@ -93,16 +113,23 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
 
   const onSubmit: SubmitHandler<createPostFormValues> = async (data) => {
     try {
-      dispatch(setIsLoading(true))
-      const { apartmentId, title, description } = data
-      if (!apartmentId) {
-        message.error('Please Apartment')
-        return
+      if (isOpenModalAdd) {
+        dispatch(setIsLoading(true))
+        const { apartmentId, title, description } = data
+        if (!apartmentId) {
+          message.error('Please Apartment')
+          return
+        }
+        await createPost({ apartmentId, description, title })
+        message.success('Create Post Successfully!')
+        setIsOpenModalAdd(false)
+        dispatch(getPostList())
       }
-      await createPost({ apartmentId, description, title })
-      message.success('Create Post Successfully!')
-      setIsOpenModalAdd(false)
-      dispatch(getPostList())
+      if (isOpenModalEdit) {
+        console.log(data)
+      }
+      reset(defaultFormValues)
+      setEditPost(null)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       message.error(error.message)
@@ -119,13 +146,23 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
     })
   }
 
+  const handleCancel = () => {
+    if (isOpenModalAdd) {
+      setIsOpenModalAdd(false)
+    } else {
+      setIsOpenModalEdit(false)
+    }
+    reset(defaultFormValues)
+    setEditPost(null)
+  }
+
   return (
     <Modal
-      title='Add new post'
-      open={isOpenModalAdd}
+      title={isOpenModalEdit ? 'Edit Post' : 'Add new post'}
+      open={isOpenModalAdd || isOpenModalEdit}
       okText='Add New Post'
       onOk={handleSubmit(onSubmit, onError)}
-      onCancel={() => setIsOpenModalAdd(false)}
+      onCancel={handleCancel}
     >
       <Spin spinning={isPostLoading}>
         {contextHolder}
@@ -233,6 +270,12 @@ const FormAddPostModal = ({ isOpenModalAdd, setIsOpenModalAdd }: Props) => {
             )}
           />
         </div>
+
+        {postEdit !== null && (
+          <div>
+            <UploadImage post={postEdit} />
+          </div>
+        )}
       </Spin>
     </Modal>
   )
