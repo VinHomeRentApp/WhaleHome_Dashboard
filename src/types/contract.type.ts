@@ -14,6 +14,7 @@ export interface contract {
   buildingName?: string
   zoneName?: string
   areaName?: string
+  appointmentId?: number
 }
 
 export interface contractHistory {

@@ -30,9 +30,3 @@ export interface User {
   role?: Role
   verified?: boolean
 }
-
-export interface userSearch {
-  currentPage: number
-  totalPage: number
-  listResult: User[]
-}
