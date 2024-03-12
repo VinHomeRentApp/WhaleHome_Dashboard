@@ -2,16 +2,17 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import apartmentSlice from '../slices/apartment.slice'
 import apartmentClassSlice from '../slices/apartmentClass.slice'
+import appointmentSlice from '../slices/appointment.slice'
 import areaSlice from '../slices/area.slice'
 import authSlice from '../slices/auth.slice'
 import buildingSlice from '../slices/building.slice'
+import contractSlice from '../slices/contract.slice'
 import issueSlice from '../slices/issue.slice'
 import postSlice from '../slices/post.slice'
 import problemSlice from '../slices/problem.slice'
 import reviewSlice from '../slices/review.slice'
-import zoneSlice from '../slices/zone.slice'
-import contractSlice from '../slices/contract.slice'
 import userSlice from '../slices/user.slice'
+import zoneSlice from '../slices/zone.slice'
 export const store = configureStore({
   reducer: {
     auth: authSlice,
@@ -25,7 +26,8 @@ export const store = configureStore({
     apartment: apartmentSlice,
     apartmentClass: apartmentClassSlice,
     contract: contractSlice,
-    user: userSlice
+    user: userSlice,
+    appointment: appointmentSlice
   }
 })
 

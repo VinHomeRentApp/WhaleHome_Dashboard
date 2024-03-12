@@ -7,7 +7,7 @@ export interface appointments {
   status: boolean
   statusAppointment: string
   dateTime: string
-  user: User
+  users: User
   apartment: apartment
 }
 
