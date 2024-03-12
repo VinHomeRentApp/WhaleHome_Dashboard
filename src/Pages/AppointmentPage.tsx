@@ -30,7 +30,7 @@ const AppointmentPage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search
           style={{ width: '30%' }}
-          placeholder='Tìm kiếm theo tên'
+          placeholder='Search'
           onChange={(e) => {
             setSearchText(e.target.value)
           }}
@@ -42,7 +42,7 @@ const AppointmentPage: React.FC = () => {
       </div>
       <DataTableAppointment searchText={searchText} />
       <hr />
-      <Modal title='Edit Area' visible={isOpenAddAppointment} onCancel={() => setIsOpenAddAppointment(false)}>
+      <Modal title='Edit Area' open={isOpenAddAppointment} onCancel={() => setIsOpenAddAppointment(false)}>
         <Typography.Title level={5}>UserID</Typography.Title>
         <Input placeholder='UserID' />
         <Typography.Title level={5}>ApartmentID</Typography.Title>

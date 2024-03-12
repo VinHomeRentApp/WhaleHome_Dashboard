@@ -26,22 +26,6 @@ const CalendarAppointment = () => {
     handleErrorMessage({ error, messageApi, title: 'Appointment' })
   }, [error])
 
-  const monthCellRender = (value: Dayjs) => {
-    const num = getMonthData(value)
-    return num ? (
-      <div className='notes-month'>
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null
-  }
-
-  const getMonthData = (value: Dayjs) => {
-    if (value.month() === 8) {
-      return 1394
-    }
-  }
-
   const dateCellRender = (value: Dayjs) => {
     const appointmentsForDate = appointmentList.filter((appointment) => {
       const appointmentDate = dayjs(appointment.dateTime)
@@ -50,7 +34,6 @@ const CalendarAppointment = () => {
 
     return (
       <ul className='events'>
-        {/* Render appointments */}
         {appointmentsForDate.map((appointment) => (
           <Badge
             key={appointment.id}
@@ -66,6 +49,22 @@ const CalendarAppointment = () => {
     )
   }
 
+  const monthCellRender = (value: Dayjs) => {
+    const monthAppointments = appointmentList.filter((appointment) => {
+      const appointmentMonth = dayjs(appointment.dateTime).month()
+      const appointmentYear = dayjs(appointment.dateTime).year()
+      return appointmentMonth === value.month() && appointmentYear === value.year()
+    })
+
+    return monthAppointments.length > 0 ? (
+      <div className='notes-month'>
+        <section>
+          <span style={{ fontWeight: 'bold' }}>{monthAppointments.length}</span> Appointments this month
+        </section>
+      </div>
+    ) : null
+  }
+
   const cellRender: CalendarProps<Dayjs>['cellRender'] = (current, info) => {
     if (info.type === 'date') return dateCellRender(current)
     if (info.type === 'month') return monthCellRender(current)
@@ -75,7 +74,7 @@ const CalendarAppointment = () => {
   return (
     <>
       {contextHolder}
-      <Calendar mode='month' cellRender={cellRender} />
+      <Calendar cellRender={cellRender} />
     </>
   )
 }

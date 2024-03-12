@@ -18,7 +18,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Bar Chart'
+      text: 'Chart Appointment Year By Year'
     }
   }
 }
@@ -49,14 +49,14 @@ const DashboardChart: React.FC = () => {
     dispatch(countBuildingByZone())
   }, [])
 
-  const filteredLabels = countBuildingList.filter((zone) => zone.countBuilding > 0).map((zone) => zone.zoneName)
+  const filteredData = countBuildingList.filter((zone) => zone.countBuilding > 0)
 
   const pieChartData = {
-    labels: filteredLabels,
+    labels: filteredData.map((zone) => zone.zoneName),
     datasets: [
       {
-        label: '# of Buildings',
-        data: countBuildingList.map((zone) => zone.countBuilding),
+        label: 'Buildings of Zone',
+        data: filteredData.map((zone) => zone.countBuilding),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
