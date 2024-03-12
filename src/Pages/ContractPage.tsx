@@ -41,9 +41,7 @@ const formData: contract = {
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
   const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
-
   const [searchUserState, setSearchUserState] = useState<appointments[]>(searchUserData)
-
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<contract>(formData)
   const [startDate, setStartDate] = useState(null)

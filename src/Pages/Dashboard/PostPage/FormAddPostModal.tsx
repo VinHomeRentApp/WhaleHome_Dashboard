@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Input, Modal, Select, Spin, Typography, message } from 'antd'
+import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { Controller, FieldErrors, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
@@ -8,7 +9,7 @@ import { getApartmentList } from '../../../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../../../redux/actions/apartmentClass.action'
 import { getArea } from '../../../redux/actions/area.actions'
 import { getBuildingList } from '../../../redux/actions/building.actions'
-import { getPostList } from '../../../redux/actions/post.actions'
+import { getPostList, updatePost } from '../../../redux/actions/post.actions'
 import { getZoneList } from '../../../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { setIsLoading } from '../../../redux/slices/post.slice'
@@ -125,8 +126,11 @@ const FormAddPostModal = (props: Props) => {
         setIsOpenModalAdd(false)
         dispatch(getPostList())
       }
-      if (isOpenModalEdit) {
-        console.log(data)
+      if (isOpenModalEdit && !isEmpty(postEdit)) {
+        const { title, description } = data
+        dispatch(updatePost({ id: postEdit?.id, body: { title, description } }))
+        message.success('Update Post Successfully!')
+        setIsOpenModalEdit(false)
       }
       reset(defaultFormValues)
       setEditPost(null)
@@ -160,7 +164,7 @@ const FormAddPostModal = (props: Props) => {
     <Modal
       title={isOpenModalEdit ? 'Edit Post' : 'Add new post'}
       open={isOpenModalAdd || isOpenModalEdit}
-      okText='Add New Post'
+      okText={isOpenModalEdit ? 'Update Post' : 'Add New Post'}
       onOk={handleSubmit(onSubmit, onError)}
       onCancel={handleCancel}
     >
@@ -202,6 +206,7 @@ const FormAddPostModal = (props: Props) => {
               defaultValue={null}
               render={({ field }) => (
                 <Select
+                  disabled={isOpenModalEdit}
                   value={field.value}
                   style={{ width: '90%' }}
                   onChange={(value) => {
@@ -223,6 +228,7 @@ const FormAddPostModal = (props: Props) => {
               defaultValue={null}
               render={({ field }) => (
                 <Select
+                  disabled={isOpenModalEdit}
                   value={field.value}
                   style={{ width: '90%' }}
                   onChange={(value) => {
@@ -246,6 +252,7 @@ const FormAddPostModal = (props: Props) => {
             defaultValue={null}
             render={({ field }) => (
               <Select
+                disabled={isOpenModalEdit}
                 value={field.value}
                 style={{ width: '100%' }}
                 onChange={(value) => setValue('buildingId', value)}
@@ -261,6 +268,7 @@ const FormAddPostModal = (props: Props) => {
             name='apartmentId'
             render={({ field }) => (
               <Select
+                disabled={isOpenModalEdit}
                 status={errors.apartmentId && 'error'}
                 value={field.value}
                 style={{ width: '100%' }}

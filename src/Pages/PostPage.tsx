@@ -1,23 +1,24 @@
 import { FileAddFilled } from '@ant-design/icons'
-import { Button, Input } from 'antd'
+import { Button, Input, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getPostList } from '../redux/actions/post.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { post, postImages } from '../types/post.type'
+import { handleErrorMessage } from '../utils/HandleError'
 import FormAddPostModal from './Dashboard/PostPage/FormAddPostModal'
 import ImageViewerModal from './Dashboard/PostPage/ImageViewerModal'
 import PostTable from './Dashboard/PostPage/PostTable'
 
 const PostPage: React.FC = () => {
   const dispatch = useAppDispatch()
-  const data = useSelector((state: RootState) => state.post.postList)
-  const isLoading = useSelector((state: RootState) => state.post.isLoading)
+  const { postList: data, isLoading, error } = useSelector((state: RootState) => state.post)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [imageList, setImageList] = useState<postImages[]>([])
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
   const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false)
   const [postEdit, setPostEdit] = useState<post | null>(null)
+  const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
     const promise = dispatch(getPostList())
@@ -25,6 +26,10 @@ const PostPage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'post' })
+  }, [error])
 
   const handleViewImage = (record: post) => {
     setIsOpenModal(true)
@@ -42,6 +47,7 @@ const PostPage: React.FC = () => {
 
   return (
     <>
+      {contextHolder}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search style={{ width: '30%' }} placeholder='Find by Name' />
         <Button

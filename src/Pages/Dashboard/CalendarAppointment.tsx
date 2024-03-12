@@ -1,13 +1,12 @@
 import type { CalendarProps } from 'antd'
 import { Badge, Calendar, message } from 'antd'
-import { HttpStatusCode } from 'axios'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
-import { isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { getAppointmentList } from '../../redux/actions/appointment.actions'
 import { RootState, useAppDispatch } from '../../redux/containers/store'
+import { handleErrorMessage } from '../../utils/HandleError'
 import { getBadgeStatus } from '../../utils/getBadgeCalendar'
 
 const CalendarAppointment = () => {
@@ -23,10 +22,7 @@ const CalendarAppointment = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (!isEmpty(error)) {
-      if (error.response.status === HttpStatusCode.NotFound)
-        messageApi.error(`Appointment Cannot Found or Request is not correct`)
-    }
+    handleErrorMessage({ error, messageApi, title: 'Appointment' })
   }, [error])
 
   const monthCellRender = (value: Dayjs) => {
