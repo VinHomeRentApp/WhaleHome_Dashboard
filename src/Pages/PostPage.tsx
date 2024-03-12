@@ -12,7 +12,7 @@ import PostTable from './Dashboard/PostPage/PostTable'
 const PostPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const data = useSelector((state: RootState) => state.post.postList)
-  const loading = useSelector((state: RootState) => state.post.loading)
+  const isLoading = useSelector((state: RootState) => state.post.isLoading)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [imageList, setImageList] = useState<postImages[]>([])
   // const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
@@ -57,7 +57,7 @@ const PostPage: React.FC = () => {
       <FormAddPostModal isOpenModalAdd={isOpenModalAdd} setIsOpenModalAdd={setIsOpenModalAdd} />
       <PostTable
         data={data}
-        loading={loading}
+        loading={isLoading}
         handleViewImage={handleViewImage}
         handleEdit={handleEdit}
         handleDelete={handleDelete}

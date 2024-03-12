@@ -1,18 +1,5 @@
-// export interface Post {
-//   id: number
-//   modifiedBy: string
-//   createBy: string
-//   deleteBy: string
-//   modifiedDate: string
-//   createDate: string
-//   deleteAt: string
-//   status: boolean
-//   title: string
-//   description: string
-
 import { apartment } from './appartment.type'
 
-// }
 export interface count {
   data: number
 }
@@ -33,4 +20,10 @@ export interface postImages {
   status: boolean
   image_url: string
   image_alt: string
+}
+
+export interface postCreateBody {
+  title: string
+  description: string
+  apartmentId: number
 }
