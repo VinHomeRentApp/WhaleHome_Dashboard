@@ -1,5 +1,4 @@
-import { EditOutlined } from '@ant-design/icons'
-import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Input, Modal, Select, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { createApartment, deleteApartment, getApartmentList, updateApartment } from '../redux/actions/apartment.actions'
@@ -12,6 +11,7 @@ import { cancelEditingApartment, startEditingApartment } from '../redux/slices/a
 import { apartment } from '../types/appartment.type'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
+import TableApartment from './Dashboard/ApartmentPage/TableApartment'
 
 const formData: apartment = {
   id: NaN,
@@ -51,8 +51,6 @@ const formData: apartment = {
 
 const ApartmentPage: React.FC = () => {
   const dispatch = useAppDispatch()
-  const data = useSelector((state: RootState) => state.apartment.apartmentList)
-  const loading = useSelector((state: RootState) => state.apartment.loading)
   const [search, setSearch] = useState<string>('')
   const [modalData, setModalData] = useState<apartment>(formData)
   const [isModalAdd, setIsModalAdd] = useState<boolean>(false)
@@ -71,9 +69,6 @@ const ApartmentPage: React.FC = () => {
   const apartmentClass = useSelector((state: RootState) => state.apartmentClass.apartmentClassList)
 
   const ZoneListFilterFunc = (e: number) => zoneList.filter((z) => z.area.id == e)
-
-  // const BuildingListFilterFunc = (idArea: number, idZone: number) =>
-  //   buildingList.filter((building) => building.zone.area.id == idArea && building.zone.id == idZone)
 
   useEffect(() => {
     if (typeof zoneID === 'number' && !isNaN(zoneID) && typeof areaID === 'number' && !isNaN(areaID)) {
@@ -103,79 +98,6 @@ const ApartmentPage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
-
-  const columns: TableProps['columns'] = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: '5%',
-      align: 'center',
-      sorter: {
-        compare: (a: apartment, b: apartment) => a.id - b.id
-      },
-      sortDirections: ['ascend', 'descend'],
-      defaultSortOrder: 'ascend'
-    },
-    {
-      title: 'Area',
-      key: 'id',
-      width: '5%',
-      align: 'center',
-      render: (record: apartment) => String(record.building.zone.area.name)
-    },
-    {
-      title: 'Zone',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-      render: (record: apartment) => String(record.building.zone.name)
-    },
-    {
-      title: 'Building',
-      key: 'id',
-      width: '8%',
-      align: 'center',
-      render: (record: apartment) => String(record.building.name)
-    },
-    {
-      title: 'Name Apartment',
-      key: 'id',
-      width: '10%',
-      filteredValue: [search],
-      onFilter: (value, record) => {
-        return String(record.name).toLowerCase().includes(String(value).toLowerCase())
-      },
-      render: (record: apartment) => String(record.name)
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'id',
-      width: '10%',
-      render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
-    },
-    {
-      title: 'Type',
-      key: 'id',
-      width: '10%',
-      render: (record: apartment) => String(record.apartmentClass.name)
-    },
-    {
-      title: 'Action',
-      key: 'id',
-      width: '5%',
-      align: 'center',
-      render: (record: apartment) => {
-        return (
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
-            <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
-          </div>
-        )
-      }
-    }
-  ]
 
   const handleOpenModalEdit = (id: number) => {
     dispatch(startEditingApartment(id))
@@ -277,17 +199,7 @@ const ApartmentPage: React.FC = () => {
         </Button>
       </div>
 
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={{
-          pageSize: 7
-        }}
-        scroll={{ y: 400 }}
-        loading={loading}
-        rowKey='id'
-        bordered
-      />
+      <TableApartment search={search} handleDelete={handleDelete} handleOpenModalEdit={handleOpenModalEdit} />
 
       <Modal title='Add Apartment' open={isModalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
         <Typography.Title level={5}>Name</Typography.Title>
