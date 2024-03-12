@@ -27,7 +27,9 @@ export const getUserDataFromToken = async () => {
 }
 
 export const searchUser = createAsyncThunk('user/searchUser', async (email: string, thunkAPI) => {
+
   const res = await http.get<ResponseSuccessful<appointments[]>>(
+
     `/user/search-user-complete-appointment-by-email?email=${email.trim()}`,
     {
       signal: thunkAPI.signal
