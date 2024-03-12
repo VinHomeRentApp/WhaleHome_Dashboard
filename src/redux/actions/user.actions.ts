@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { LoginResponse, ResponseSuccessful } from '../../types/response.type'
-import { User, userSearch } from '../../types/user.type'
+import { User } from '../../types/user.type'
 import { http } from '../../utils/http'
+import { appointments } from '../../types/appointments.type'
 
 export const loginApi = async (email: string, password: string) => {
   return await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {
@@ -26,11 +27,11 @@ export const getUserDataFromToken = async () => {
 }
 
 export const searchUser = createAsyncThunk('user/searchUser', async (email: string, thunkAPI) => {
-  const res = await http.get<ResponseSuccessful<userSearch>>(
-    `/user/search-by-email?email=${email.trim()}&field=email`,
+  const res = await http.get<ResponseSuccessful<appointments[]>>(
+    `/user/search-user-complete-appointment-by-email?email=${email.trim()}`,
     {
       signal: thunkAPI.signal
     }
   )
-  return res.data.data.listResult
+  return res.data.data
 })

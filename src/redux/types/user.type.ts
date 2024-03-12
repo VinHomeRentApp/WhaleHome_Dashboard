@@ -1,3 +1,4 @@
+import { appointments } from '../../types/appointments.type'
 import { User } from '../../types/user.type'
 
 export interface userState {
@@ -5,11 +6,13 @@ export interface userState {
   editUser: User | null
   loading: boolean
   currentRequestId: undefined | string
+  searchUserIncludeAppointment: appointments[]
 }
 
 export const initialUserState: userState = {
   userList: [],
   editUser: null,
   loading: false,
-  currentRequestId: undefined
+  currentRequestId: undefined,
+  searchUserIncludeAppointment: []
 }

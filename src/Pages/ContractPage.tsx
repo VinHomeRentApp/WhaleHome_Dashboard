@@ -1,4 +1,16 @@
-import { AutoComplete, Button, DatePicker, Input, InputNumber, Modal, Table, TableProps, Tag, Typography } from 'antd'
+import {
+  AutoComplete,
+  Button,
+  DatePicker,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Table,
+  TableProps,
+  Tag,
+  Typography
+} from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import ButtonAction from '../Components/UI/ButtonAction'
@@ -7,7 +19,7 @@ import { useSelector } from 'react-redux'
 import { createContract, getContractList } from '../redux/actions/contract.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { searchUser } from '../redux/actions/user.actions'
-import { User } from '../types/user.type'
+import { appointments } from '../types/appointments.type'
 
 const formData: contract = {
   id: NaN,
@@ -22,14 +34,15 @@ const formData: contract = {
   },
   dateSign: '',
   description: '',
-  dateStartRent: ''
+  dateStartRent: '',
+  appointmentId: NaN
 }
 
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
-  const searchUserData = useSelector((state: RootState) => state.user.userList)
+  const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
 
-  const [searchUserState, setSearchUserState] = useState<User[]>(searchUserData)
+  const [searchUserState, setSearchUserState] = useState<appointments[]>(searchUserData)
 
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<contract>(formData)
@@ -230,6 +243,9 @@ const ContractPage: React.FC = () => {
     if (startDate) return current && current < startDate
   }
 
+  const handleSelectAppointment = (e: number) => {
+    setModalData((data) => ({ ...data, appointmentId: e }))
+  }
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
@@ -266,7 +282,7 @@ const ContractPage: React.FC = () => {
 
       <Modal title='Add Contract' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
         <div style={{ display: 'flex', gap: '5%' }}>
-          <div style={{ width: '45%' }}>
+          <div style={{ width: '50%' }}>
             <Typography.Title level={5}>Description</Typography.Title>
             <Input.TextArea placeholder='input name' value={modalData.description} onChange={handleInputDescription} />
           </div>
@@ -278,11 +294,11 @@ const ContractPage: React.FC = () => {
               options={searchUserState.map((user) => ({
                 label: (
                   <div>
-                    <img style={{ width: 20, height: 20 }} src={user.image} alt={user.fullName} />
-                    {user.fullName}
+                    <img style={{ width: 20, height: 20 }} src={user.users.image} alt={user.users.fullName} />
+                    {user.users.fullName}
                   </div>
                 ),
-                value: Number(user.id)
+                value: Number(user.users.id)
               }))}
               onSearch={(e) => {
                 handleSearchUser(e)
@@ -296,7 +312,17 @@ const ContractPage: React.FC = () => {
             />
           </div>
         </div>
-
+        <div style={{ width: '100%' }}>
+          <Typography.Title level={5}>Appointment</Typography.Title>
+          <Select
+            style={{ minWidth: 300 }}
+            onChange={handleSelectAppointment}
+            options={searchUserState.map((appointments) => {
+              return { value: appointments.apartment.id, label: <div>{appointments.apartment.description}</div> }
+            })}
+            // value={modalData.zone.area.id}
+          />
+        </div>
         <div style={{ display: 'flex', gap: '5%' }}>
           <div style={{ width: '45%' }}>
             <Typography.Title level={5}>Date Start Rent</Typography.Title>
