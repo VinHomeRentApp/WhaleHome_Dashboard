@@ -4,7 +4,6 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
-import RecentPost from '../Components/RecentPost'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { setUser } from '../redux/slices/auth.slice'
 import { User } from '../types/user.type'
@@ -88,9 +87,6 @@ const DashBoard: React.FC = () => {
         </Space>
 
         <DashboardChart />
-        <div>
-          <RecentPost />
-        </div>
       </Spin>
     </div>
   )

@@ -25,7 +25,7 @@ const MenuNav: React.FC = () => {
         navigate(`/${key}`)
         setKey(key)
       }}
-      style={{ border: '0', height: '100vh', overflowY: 'hidden' }}
+      style={{ border: '0', height: '100vh' }}
     >
       <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
         <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
@@ -39,7 +39,6 @@ const MenuNav: React.FC = () => {
         User
       </Menu.Item>
 
-      {/* Submenu for 'Management' */}
       <SubMenu key='management' icon={<span className='material-symbols-outlined'>pin_drop</span>} title='Management'>
         <Menu.Item key='areas' icon={<span className='material-symbols-outlined'>place</span>}>
           Area
@@ -64,7 +63,6 @@ const MenuNav: React.FC = () => {
         </Menu.Item>
       </SubMenu>
 
-      {/* Submenu for 'Reviews' */}
       <SubMenu key='reviews' icon={<span className='material-symbols-outlined'>reviews</span>} title='Reviews'>
         <Menu.Item key='review' icon={<span className='material-symbols-outlined'>rate_review</span>}>
           Review

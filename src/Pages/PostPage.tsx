@@ -15,12 +15,12 @@ const PostPage: React.FC = () => {
   const isLoading = useSelector((state: RootState) => state.post.isLoading)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [imageList, setImageList] = useState<postImages[]>([])
-  // const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
   const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false)
+  const [postEdit, setPostEdit] = useState<post | null>(null)
 
   useEffect(() => {
     const promise = dispatch(getPostList())
-
     return () => {
       promise.abort()
     }
@@ -31,8 +31,9 @@ const PostPage: React.FC = () => {
     setImageList(record.postImages)
   }
 
-  const handleEdit = () => {
-    // setIsOpenModalEdit(true)
+  const handleEdit = (post: post) => {
+    setPostEdit(post)
+    setIsOpenModalEdit(true)
   }
 
   const handleDelete = (id: number) => {
@@ -54,7 +55,14 @@ const PostPage: React.FC = () => {
           <FileAddFilled />
         </Button>
       </div>
-      <FormAddPostModal isOpenModalAdd={isOpenModalAdd} setIsOpenModalAdd={setIsOpenModalAdd} />
+      <FormAddPostModal
+        setEditPost={setPostEdit}
+        postEdit={postEdit}
+        isOpenModalEdit={isOpenModalEdit}
+        isOpenModalAdd={isOpenModalAdd}
+        setIsOpenModalAdd={setIsOpenModalAdd}
+        setIsOpenModalEdit={setIsOpenModalEdit}
+      />
       <PostTable
         data={data}
         loading={isLoading}

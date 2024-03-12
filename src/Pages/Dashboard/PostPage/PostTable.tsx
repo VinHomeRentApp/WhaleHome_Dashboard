@@ -9,7 +9,7 @@ interface PostTableProps {
   data: post[]
   loading: boolean
   handleViewImage: (record: post) => void
-  handleEdit: (id: number) => void
+  handleEdit: (post: post) => void
   handleDelete: (id: number) => void
 }
 
@@ -88,7 +88,7 @@ const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, h
       render: (record: post) => {
         return (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <EditOutlined onClick={() => handleEdit(record.id)} />
+            <EditOutlined onClick={() => handleEdit(record)} />
             <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
           </div>
         )

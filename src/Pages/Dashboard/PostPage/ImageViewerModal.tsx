@@ -15,16 +15,19 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ visible, imageList,
       centered
       closable={false}
       title='Image'
-      visible={visible}
+      open={visible}
       onCancel={() => {
         handleClose()
       }}
     >
-      <Carousel swipeToSlide draggable arrows>
+      <Carousel autoplay={true} draggable arrows>
         {imageList.map((img) => (
-          <div key={img.id} style={{ display: 'flex', justifyContent: 'center' }}>
-            <img width='100%' alt={img.image_alt} src={img.image_url} className='card' />
-          </div>
+          <img
+            key={img.id}
+            alt={img.image_alt}
+            src={img.image_url}
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          />
         ))}
       </Carousel>
     </Modal>
