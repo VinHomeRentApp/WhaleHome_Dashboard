@@ -1,48 +1,30 @@
 import { Table } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { appointments } from '../types/appointments.type'
-import { ResponseSuccessful } from '../types/response.type'
-import { http } from '../utils/http'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux/containers/store'
+import CalendarAppointment from './Dashboard/CalendarAppointment'
 import ColumnsAppointmentPage from './Settings/ColumnAppointmentPage'
 
 const AppointmentPage: React.FC = () => {
-  const [data, setDataSource] = useState<appointments[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-
-  async function getAppointments() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<appointments[]>>('/appointments', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setDataSource(response.data.data)
-      console.log(response.data.data)
-
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getAppointments()
-  }, [])
+  const { appointmentList, isLoadingAppointmentList } = useSelector((state: RootState) => state.appointment)
 
   return (
     <>
       <Table
         columns={ColumnsAppointmentPage}
-        dataSource={data}
+        dataSource={appointmentList}
         pagination={{
           pageSize: 7
         }}
         scroll={{ y: 400 }}
-        loading={loading}
+        loading={isLoadingAppointmentList}
         rowKey='id'
         bordered
       />
+      <hr />
+      <div>
+        <CalendarAppointment />
+      </div>
     </>
   )
 }
