@@ -3,6 +3,7 @@ import { appointments } from '../../types/appointments.type'
 import { LoginResponse, ResponseSuccessful } from '../../types/response.type'
 import { User } from '../../types/user.type'
 import { http } from '../../utils/http'
+import { updateUserValues } from '../../schema/user.schema'
 
 export const loginApi = async (email: string, password: string) => {
   return await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {
@@ -46,15 +47,34 @@ export const searchUser = createAsyncThunk('user/searchUser', async (email: stri
 })
 
 export const getUser = createAsyncThunk('user/getUser', async (_, thunkAPI) => {
-  const res = await http.get<ResponseSuccessful<User[]>>(`/user`, {
-    signal: thunkAPI.signal
-  })
-  return res.data.data
+  try {
+    const res = await http.get<ResponseSuccessful<User[]>>(`/user`, {
+      signal: thunkAPI.signal
+    })
+    return res.data.data
+  } catch (error) {
+    thunkAPI.rejectWithValue(error)
+  }
 })
 
 export const deactiveUser = createAsyncThunk('user/deactiveUser', async (id: number, thunkAPI) => {
-  const res = await http.put<ResponseSuccessful<User[]>>(`/user/delete/${id}`, {
-    signal: thunkAPI.signal
-  })
-  return res.data.data
+  try {
+    const res = await http.put<ResponseSuccessful<User[]>>(`/user/delete/${id}`, {
+      signal: thunkAPI.signal
+    })
+    return res.data.data
+  } catch (error) {
+    thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const updateUser = createAsyncThunk('user/updateUser', async (body: updateUserValues, thunkAPI) => {
+  try {
+    const res = await http.put<ResponseSuccessful<User>>(`/user/update/${body.id}`, body, {
+      signal: thunkAPI.signal
+    })
+    return res.data.data
+  } catch (error) {
+    thunkAPI.rejectWithValue(error)
+  }
 })

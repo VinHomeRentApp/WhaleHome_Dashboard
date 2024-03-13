@@ -1,20 +1,32 @@
 import { EditOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
-import { Input, Switch, Table, Tag } from 'antd'
+import { DatePicker, Input, Modal, Select, Switch, Table, Tag, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { deactiveUser, getUsers } from '../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { User } from '../types/user.type'
+import { handleErrorMessage } from '../utils/HandleError'
+import ModalUpdateUser from './Dashboard/UserPage/UserModal'
+import { startEdituser } from '../redux/slices/user.slice'
 
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
-  const { userList, isLoading } = useSelector((state: RootState) => state.user)
+  const { userList, isLoading, error, editUser } = useSelector((state: RootState) => state.user)
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
+
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
   useEffect(() => {
     dispatch(getUsers())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'User' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   const columns: TableProps['columns'] = [
     {
@@ -102,11 +114,21 @@ const UserPage: React.FC = () => {
   }
 
   const handleOpenModalEdit = (e: number) => {
-    console.log(e)
+    setOpenModal(true)
+    dispatch(startEdituser(e))
+  }
+
+  const handleOk = () => {
+    setOpenModal(false)
+    console.log('a')
+  }
+  const handleCancel = () => {
+    setOpenModal(false)
   }
 
   return (
     <>
+      {contextHolder}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search
           style={{ width: '30%' }}
@@ -128,6 +150,7 @@ const UserPage: React.FC = () => {
         rowKey='id'
         bordered
       />
+      <ModalUpdateUser isOpenModal={openModal} userEdit={editUser} setOpenModal={setOpenModal} />
     </>
   )
 }
