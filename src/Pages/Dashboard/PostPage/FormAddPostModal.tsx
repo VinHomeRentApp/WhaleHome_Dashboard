@@ -2,48 +2,31 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Input, Modal, Select, Spin, Typography, message } from 'antd'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
-import { Controller, FieldErrors, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, FieldErrors, Resolver, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { createPost } from '../../../apis/post.apis'
 import { getApartmentList } from '../../../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../../../redux/actions/apartmentClass.action'
 import { getArea } from '../../../redux/actions/area.actions'
 import { getBuildingList } from '../../../redux/actions/building.actions'
-import { getPostList, updatePost } from '../../../redux/actions/post.actions'
+import { createPost, updatePost } from '../../../redux/actions/post.actions'
 import { getZoneList } from '../../../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { setIsLoading } from '../../../redux/slices/post.slice'
-import { createPostFormValues, createPostSchema } from '../../../schema/post.schema'
+import { createPostFormValues, createPostSchema, defaultFormValues } from '../../../schema/post.schema'
 import { apartment } from '../../../types/appartment.type'
 import { building } from '../../../types/building.type'
-import { post } from '../../../types/post.type'
+import { FormAddPostModalProps } from '../../../types/props.types'
 import { zone } from '../../../types/zone.type'
 import UploadImage from './UploadImage'
 
-const defaultFormValues: createPostFormValues = {
-  title: '',
-  description: '',
-  apartmentId: 1,
-  areaId: null,
-  buildingId: null,
-  zoneId: null
-}
-
-type Props = {
-  postEdit: post | null
-  isOpenModalAdd: boolean
-  isOpenModalEdit: boolean
-  setIsOpenModalAdd: React.Dispatch<React.SetStateAction<boolean>>
-  setIsOpenModalEdit: React.Dispatch<React.SetStateAction<boolean>>
-  setEditPost: React.Dispatch<React.SetStateAction<post | null>>
-}
-
-const FormAddPostModal = (props: Props) => {
+const FormAddPostModal = (props: FormAddPostModalProps) => {
   const { isOpenModalAdd, setIsOpenModalAdd, isOpenModalEdit, postEdit, setIsOpenModalEdit, setEditPost } = props
-  const { control, handleSubmit, setValue, formState, getValues, reset } = useForm<createPostFormValues>({
-    resolver: yupResolver(createPostSchema),
+  const methods = useForm<createPostFormValues>({
+    resolver: yupResolver(createPostSchema) as Resolver<createPostFormValues>,
+    mode: 'onBlur',
     defaultValues: defaultFormValues
   })
+  const { control, handleSubmit, setValue, formState, getValues, reset, register } = methods
   const { errors } = formState
   const { apartmentList } = useSelector((state: RootState) => state.apartment)
   const areaList = useSelector((state: RootState) => state.area.areaList)
@@ -81,11 +64,9 @@ const FormAddPostModal = (props: Props) => {
   }, [isOpenModalEdit])
 
   useEffect(() => {
-    // Logic để lọc danh sách Zone dựa trên giá trị của area
     const filteredZones = zoneList.filter((zone) => !getValues('areaId') || zone.area.id === getValues('areaId'))
     setFilteredZoneList(filteredZones)
 
-    // Logic để lọc danh sách Building dựa trên giá trị của area và zone
     const filteredBuildings = buildingList.filter(
       (building) =>
         (!getValues('areaId') || building.zone.area.id === getValues('areaId')) &&
@@ -93,7 +74,6 @@ const FormAddPostModal = (props: Props) => {
     )
     setFilteredBuildingList(filteredBuildings)
 
-    // Logic để lọc danh sách Apartment dựa trên giá trị của area, zone, và building
     const filteredApartments = apartmentList.filter(
       (apartment) =>
         (!getValues('areaId') || apartment.building.zone.area.id === getValues('areaId')) &&
@@ -101,7 +81,15 @@ const FormAddPostModal = (props: Props) => {
         (!getValues('buildingId') || apartment.building.id === getValues('buildingId'))
     )
     setFilteredApartmentList(filteredApartments)
-  }, [zoneList, buildingList, apartmentList, getValues])
+
+    if (getValues('areaId') !== null || getValues('zoneId') !== null) {
+      setValue('buildingId', null)
+      setValue('apartmentId', 0)
+    }
+    if (getValues('buildingId') !== null) {
+      setValue('apartmentId', 0)
+    }
+  }, [areaList, zoneList, buildingList, apartmentList, getValues, setValue])
 
   useEffect(() => {
     setValue('zoneId', null)
@@ -118,13 +106,12 @@ const FormAddPostModal = (props: Props) => {
         dispatch(setIsLoading(true))
         const { apartmentId, title, description } = data
         if (!apartmentId) {
-          message.error('Please Apartment')
+          message.error('Please Provide Apartment')
           return
         }
-        await createPost({ apartmentId, description, title })
+        await dispatch(createPost({ apartmentId, description, title }))
         message.success('Create Post Successfully!')
         setIsOpenModalAdd(false)
-        dispatch(getPostList())
       }
       if (isOpenModalEdit && !isEmpty(postEdit)) {
         const { title, description } = data
@@ -162,6 +149,7 @@ const FormAddPostModal = (props: Props) => {
 
   return (
     <Modal
+      {...methods}
       title={isOpenModalEdit ? 'Edit Post' : 'Add new post'}
       open={isOpenModalAdd || isOpenModalEdit}
       okText={isOpenModalEdit ? 'Update Post' : 'Add New Post'}
@@ -173,6 +161,7 @@ const FormAddPostModal = (props: Props) => {
         <Typography.Title level={5}>Title</Typography.Title>
         <Controller
           control={control}
+          defaultValue=''
           name='title'
           render={({ field }) => (
             <Input
@@ -187,6 +176,7 @@ const FormAddPostModal = (props: Props) => {
         <Controller
           control={control}
           name='description'
+          defaultValue=''
           render={({ field }) => (
             <Input
               status={errors.description && 'error'}
@@ -213,7 +203,7 @@ const FormAddPostModal = (props: Props) => {
                     setValue('areaId', value)
                     setValue('zoneId', null)
                     setValue('buildingId', null)
-                    setValue('apartmentId', null)
+                    setValue('apartmentId', 0)
                   }}
                   options={areaList.map((area) => ({ value: area.id, label: area.name }))}
                 />

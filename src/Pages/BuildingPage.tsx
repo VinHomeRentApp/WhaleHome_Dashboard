@@ -137,7 +137,6 @@ const BuildingPage: React.FC = () => {
       width: '8%',
       align: 'center'
     },
-
     {
       title: 'Action',
       key: 'id',

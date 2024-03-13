@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login } from '../actions/auth.actions'
+import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
+import { login, logoutAPI } from '../actions/auth.actions'
 import { initialAuthState } from '../types/auth.types'
 
 const authSlice = createSlice({
@@ -32,6 +33,29 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state) => {
         state.isLoading = false
       })
+      .addCase(logoutAPI.fulfilled, (state, action) => {
+        state.userInfo = null
+        state.userToken = null
+      })
+      .addMatcher<PendingAction>(
+        (action) => action.type.endsWith('/pending'),
+        (state) => {
+          state.isLoading = true
+        }
+      )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.isLoading = false
+          state.error = action.payload
+        }
+      )
+      .addMatcher<FulfilledAction>(
+        (action) => action.type.endsWith('/fulfilled'),
+        (state) => {
+          state.isLoading = false
+        }
+      )
   }
 })
 

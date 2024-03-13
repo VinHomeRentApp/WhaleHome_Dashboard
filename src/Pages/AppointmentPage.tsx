@@ -1,28 +1,18 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
-import { Button, DatePicker, Input, Modal, TimePicker, Typography } from 'antd'
-import type { Dayjs } from 'dayjs'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
+import { Button, Input } from 'antd'
 import React, { useState } from 'react'
+import { useAppDispatch } from '../redux/containers/store'
 import DataTableAppointment from './Dashboard/AppointmentPage/DataTableAppointment'
+import FormAddAppointment from './Dashboard/AppointmentPage/FormAddAppointment'
 import CalendarAppointment from './Dashboard/CalendarAppointment'
-
-dayjs.extend(customParseFormat)
 
 const AppointmentPage: React.FC = () => {
   const [isOpenAddAppointment, setIsOpenAddAppointment] = useState(false)
+  const dispatch = useAppDispatch()
   const [searchText, setSearchText] = useState('')
 
   const handleOpenAddAppointment = () => {
     setIsOpenAddAppointment(true)
-  }
-
-  const onChangeTime = (time: Dayjs | null, timeString: string) => {
-    console.log(time, timeString)
-  }
-
-  const onChangeDate = (date: Dayjs | null, dateString: string) => {
-    console.log(date, dateString)
   }
 
   return (
@@ -42,28 +32,10 @@ const AppointmentPage: React.FC = () => {
       </div>
       <DataTableAppointment searchText={searchText} />
       <hr />
-      <Modal title='Edit Area' open={isOpenAddAppointment} onCancel={() => setIsOpenAddAppointment(false)}>
-        <Typography.Title level={5}>UserID</Typography.Title>
-        <Input placeholder='UserID' />
-        <Typography.Title level={5}>ApartmentID</Typography.Title>
-        <Input placeholder='ApartmentID' />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ width: '45%' }}>
-            <Typography.Title style={{ width: '100%' }} level={5}>
-              Time
-            </Typography.Title>
-            <TimePicker
-              style={{ width: '100%' }}
-              onChange={onChangeTime}
-              defaultValue={dayjs('00:00:00', 'HH:mm:ss')}
-            />
-          </div>
-          <div style={{ width: '45%' }}>
-            <Typography.Title level={5}>Date</Typography.Title>
-            <DatePicker onChange={onChangeDate} style={{ width: '100%' }} />
-          </div>
-        </div>
-      </Modal>
+      <FormAddAppointment
+        isOpenAddAppointment={isOpenAddAppointment}
+        setIsOpenAddAppointment={setIsOpenAddAppointment}
+      />
       <div>
         <CalendarAppointment />
       </div>
