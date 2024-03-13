@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import { initialUserState } from '../types/user.type'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
 import { deactiveUser, getUser, searchUser } from '../actions/user.actions'
-import { act } from 'react-dom/test-utils'
 
 const userSlice = createSlice({
   name: 'user',
