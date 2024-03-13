@@ -35,7 +35,7 @@ const DashBoard: React.FC = () => {
                 }}
               />
             }
-            title={'Post'}
+            title={'Posts'}
             URL='/post/count-all'
           />
 
@@ -52,7 +52,7 @@ const DashBoard: React.FC = () => {
                 }}
               />
             }
-            title={'Customer'}
+            title={'Customers'}
             URL='/user/count-all'
           />
 
@@ -69,7 +69,7 @@ const DashBoard: React.FC = () => {
                 }}
               />
             }
-            title={'Appartment'}
+            title={'Apartments'}
             URL='/apartments/count-all'
           />
 
@@ -86,7 +86,7 @@ const DashBoard: React.FC = () => {
                 }}
               />
             }
-            title={'Contract'}
+            title={'Contracts'}
             URL='/contracts/count-all'
           />
         </Space>
