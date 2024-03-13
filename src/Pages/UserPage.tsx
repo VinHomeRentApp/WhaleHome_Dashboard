@@ -1,33 +1,21 @@
+import { EditOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
-import { Input, Table } from 'antd'
+import { Input, Switch, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
-import ButtonAction from '../Components/UI/ButtonAction'
-import { ResponseSuccessful } from '../types/response.type'
+import { useSelector } from 'react-redux'
+import { deactiveUser, getUser } from '../redux/actions/user.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
 import { User } from '../types/user.type'
-import { http } from '../utils/http'
 
 const UserPage: React.FC = () => {
-  const [dataSource, setDataSource] = useState<User[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [search, setSearch] = useState<string>('')
+  const dataSource = useSelector((state: RootState) => state.user.userList)
+  const loading = useSelector((state: RootState) => state.user.loading)
 
-  async function getUsers() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<User[]>>('/user', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setDataSource(response.data.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [search, setSearch] = useState<string>('')
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getUsers()
+    dispatch(getUser())
   }, [])
 
   const columns: TableProps['columns'] = [
@@ -35,7 +23,7 @@ const UserPage: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      width: '8%',
+      width: '4%',
       align: 'center',
       sorter: {
         compare: (a: User, b: User) => a.id - b.id
@@ -45,18 +33,22 @@ const UserPage: React.FC = () => {
     },
     {
       title: 'Full Name',
-      dataIndex: 'fullName',
       key: 'id',
+      align: 'center',
       filteredValue: [search],
       onFilter: (value, record) => {
-        return String(record.fullName).toLowerCase().includes(String(value).toLowerCase())
+        return (
+          String(record.fullName).toLowerCase().includes(String(value).toLowerCase()) ||
+          String(record.email).toLowerCase().includes(String(value).toLowerCase())
+        )
       },
-      render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto' }}>{text}</div>
+      render: (record: User) => String(record.fullName)
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'id',
+      align: 'center',
       render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
     },
 
@@ -64,35 +56,56 @@ const UserPage: React.FC = () => {
       title: 'Date of Birth',
       dataIndex: 'dateOfBirth',
       key: 'id',
-      width: '15%'
+      align: 'center'
     },
     {
       title: 'Address',
       dataIndex: 'address',
       key: 'id',
-      width: '10%'
-    },
-    {
-      title: 'Verified',
-      dataIndex: 'verified',
-      key: 'id',
-      width: '7%',
-      render: (text) => String(text)
+      align: 'center'
     },
     {
       title: 'Role',
       dataIndex: 'role',
+      width: '7%',
       key: 'id',
-      width: '8%'
+      align: 'center'
     },
     {
-      title: 'More',
-      dataIndex: 'user',
+      title: 'Verified',
       key: 'id',
       width: '7%',
-      render: (_, record) => <ButtonAction ID={record.id} />
+      align: 'center',
+      render: (record: User) => {
+        if (record.verified === true) {
+          return <Tag color={'blue'}>{String(record.verified).toUpperCase()}</Tag>
+        }
+        return <Tag color={'red'}>{String(record.verified).toUpperCase()}</Tag>
+      }
+    },
+    {
+      title: 'Action',
+      key: 'id',
+      align: 'center',
+      width: '10%',
+      render: (record: User) => {
+        return (
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
+            <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
+          </div>
+        )
+      }
     }
   ]
+
+  const handleDelete = (e: number) => {
+    dispatch(deactiveUser(e))
+  }
+
+  const handleOpenModalEdit = (e: number) => {
+    console.log(e)
+  }
 
   return (
     <>
