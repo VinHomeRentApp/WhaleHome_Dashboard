@@ -75,13 +75,16 @@ const ContractPage: React.FC = () => {
     },
     {
       title: 'Contract',
-      dataIndex: 'description',
       key: 'id',
       width: '10%',
       align: 'center',
+      render: (r: contract) => String(r.description),
       filteredValue: [search],
-      onFilter: (value, record) => {
-        return record.description.toLowerCase().includes(String(value).toLowerCase())
+      onFilter: (value, record: contract) => {
+        return (
+          record.description.toLowerCase().includes(String(value).toLowerCase()) ||
+          String(record.contractHistory.users.fullName).toLowerCase().includes(String(value).toLowerCase())
+        )
       }
     },
     {
