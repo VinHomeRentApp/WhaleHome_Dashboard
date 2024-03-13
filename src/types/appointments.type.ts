@@ -7,8 +7,10 @@ export interface appointments {
   status: boolean
   statusAppointment: string
   dateTime: string
+  time: string
   users: User
   apartment: apartment
+  note: string
 }
 
 export interface apartmentClass {

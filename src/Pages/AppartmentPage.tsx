@@ -1,5 +1,5 @@
 import { Button, Input, Modal, Select, Typography } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { createApartment, deleteApartment, getApartmentList, updateApartment } from '../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../redux/actions/apartmentClass.action'
@@ -49,7 +49,7 @@ const formData: apartment = {
   }
 }
 
-const ApartmentPage: React.FC = () => {
+const ApartmentPage = () => {
   const dispatch = useAppDispatch()
   const [search, setSearch] = useState<string>('')
   const [modalData, setModalData] = useState<apartment>(formData)
