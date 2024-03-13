@@ -1,33 +1,19 @@
 import type { TableProps } from 'antd'
 import { Input, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import ButtonAction from '../Components/UI/ButtonAction'
-import { ResponseSuccessful } from '../types/response.type'
+import { getUsers } from '../redux/actions/user.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
 import { User } from '../types/user.type'
-import { http } from '../utils/http'
 
 const UserPage: React.FC = () => {
-  const [dataSource, setDataSource] = useState<User[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
   const [search, setSearch] = useState<string>('')
-
-  async function getUsers() {
-    try {
-      setLoading(true)
-      const response = await http.get<ResponseSuccessful<User[]>>('/user', {
-        headers: {
-          Accept: 'application/json'
-        }
-      })
-      setDataSource(response.data.data)
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { userList, isLoading } = useSelector((state: RootState) => state.user)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    getUsers()
+    dispatch(getUsers())
   }, [])
 
   const columns: TableProps['columns'] = [
@@ -108,12 +94,12 @@ const UserPage: React.FC = () => {
 
       <Table
         columns={columns}
-        dataSource={dataSource}
+        dataSource={userList}
         pagination={{
           pageSize: 5
         }}
         scroll={{ y: 400 }}
-        loading={loading}
+        loading={isLoading}
         rowKey='id'
         bordered
       />

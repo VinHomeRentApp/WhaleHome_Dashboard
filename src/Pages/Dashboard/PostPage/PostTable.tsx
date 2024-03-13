@@ -44,6 +44,7 @@ const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleView
       render: (record: post) => String(record.description),
       onFilter: (value, record: post) => {
         return (
+          String(record.id).toLowerCase().includes(value.toString().toLowerCase()) ||
           String(record.description).toLowerCase().includes(value.toString().toLowerCase()) ||
           String(record.apartment.name).toLowerCase().includes(value.toString().toLowerCase()) ||
           String(record.apartment.building.name).toLowerCase().includes(value.toString().toLowerCase()) ||

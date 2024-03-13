@@ -252,7 +252,7 @@ const ContractPage: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search
           style={{ width: '30%' }}
-          placeholder='Tìm kiếm theo tên phòng'
+          placeholder='Search'
           onChange={(e) => {
             setSearch(e.target.value)
           }}

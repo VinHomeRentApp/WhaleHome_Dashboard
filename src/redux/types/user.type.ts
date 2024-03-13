@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { appointments } from '../../types/appointments.type'
 import { User } from '../../types/user.type'
 
 export interface userState {
   userList: User[]
   editUser: User | null
-  loading: boolean
+  isLoading: boolean
   currentRequestId: undefined | string
   searchUserIncludeAppointment: appointments[]
+  error: any
 }
 
 export const initialUserState: userState = {
   userList: [],
   editUser: null,
-  loading: false,
+  isLoading: false,
   currentRequestId: undefined,
-  searchUserIncludeAppointment: []
+  searchUserIncludeAppointment: [],
+  error: null
 }

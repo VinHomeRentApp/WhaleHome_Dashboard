@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { appointments } from '../../types/appointments.type'
 import { LoginResponse, ResponseSuccessful } from '../../types/response.type'
 import { User } from '../../types/user.type'
 import { http } from '../../utils/http'
-import { appointments } from '../../types/appointments.type'
 
 export const loginApi = async (email: string, password: string) => {
   return await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {
@@ -10,6 +10,15 @@ export const loginApi = async (email: string, password: string) => {
     password: password
   })
 }
+
+export const getUsers = createAsyncThunk('user/getAllUsers', async (_, thunkAPI) => {
+  try {
+    const response = await http.get<ResponseSuccessful<User[]>>('/user')
+    return response.data.data
+  } catch (error) {
+    thunkAPI.rejectWithValue(error)
+  }
+})
 
 export const getUserDataFromToken = async () => {
   const token = localStorage.getItem('token')

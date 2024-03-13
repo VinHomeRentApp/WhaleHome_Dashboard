@@ -26,7 +26,7 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
     mode: 'onBlur',
     defaultValues: defaultFormValues
   })
-  const { control, handleSubmit, setValue, formState, getValues, reset, register } = methods
+  const { control, handleSubmit, setValue, formState, getValues, reset } = methods
   const { errors } = formState
   const { apartmentList } = useSelector((state: RootState) => state.apartment)
   const areaList = useSelector((state: RootState) => state.area.areaList)
@@ -37,6 +37,9 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
   const [filteredApartmentList, setFilteredApartmentList] = useState<apartment[]>(apartmentList)
   const { isLoading: isPostLoading } = useSelector((state: RootState) => state.post)
   const [messageApi, contextHolder] = message.useMessage()
+  const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null)
+  const [selectedZoneId, setSelectedZoneId] = useState<number | null>(null)
+  const [selectedBuildingId, setSelectedBuildingId] = useState<number | null>(null)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -81,24 +84,7 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
         (!getValues('buildingId') || apartment.building.id === getValues('buildingId'))
     )
     setFilteredApartmentList(filteredApartments)
-
-    if (getValues('areaId') !== null || getValues('zoneId') !== null) {
-      setValue('buildingId', null)
-      setValue('apartmentId', 0)
-    }
-    if (getValues('buildingId') !== null) {
-      setValue('apartmentId', 0)
-    }
-  }, [areaList, zoneList, buildingList, apartmentList, getValues, setValue])
-
-  useEffect(() => {
-    setValue('zoneId', null)
-    setValue('buildingId', null)
-  }, [setValue, control])
-
-  useEffect(() => {
-    setValue('buildingId', null)
-  }, [setValue, control])
+  }, [areaList, zoneList, buildingList, apartmentList, selectedAreaId, selectedBuildingId, selectedZoneId])
 
   const onSubmit: SubmitHandler<createPostFormValues> = async (data) => {
     try {
@@ -148,134 +134,137 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
   }
 
   return (
-    <Modal
-      {...methods}
-      title={isOpenModalEdit ? 'Edit Post' : 'Add new post'}
-      open={isOpenModalAdd || isOpenModalEdit}
-      okText={isOpenModalEdit ? 'Update Post' : 'Add New Post'}
-      onOk={handleSubmit(onSubmit, onError)}
-      onCancel={handleCancel}
-    >
-      <Spin spinning={isPostLoading}>
-        {contextHolder}
-        <Typography.Title level={5}>Title</Typography.Title>
-        <Controller
-          control={control}
-          defaultValue=''
-          name='title'
-          render={({ field }) => (
-            <Input
-              status={errors.title && 'error'}
-              placeholder='Input Title'
-              value={field.value}
-              onChange={(e) => setValue('title', e.target.value)}
-            />
-          )}
-        />
-        <Typography.Title level={5}>Description</Typography.Title>
-        <Controller
-          control={control}
-          name='description'
-          defaultValue=''
-          render={({ field }) => (
-            <Input
-              status={errors.description && 'error'}
-              placeholder='Input Description'
-              value={field.value}
-              onChange={(e) => setValue('description', e.target.value)}
-            />
-          )}
-        />
-        <Typography.Title level={5}>Apartment</Typography.Title>
-        <div style={{ padding: 10, display: 'flex', justifyContent: 'center', width: '100%' }}>
-          <div style={{ width: '50%' }}>
-            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Area</Typography.Paragraph>
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Modal
+        title={isOpenModalEdit ? 'Edit Post' : 'Add new post'}
+        open={isOpenModalAdd || isOpenModalEdit}
+        okText={isOpenModalEdit ? 'Update Post' : 'Add New Post'}
+        onOk={handleSubmit(onSubmit, onError)}
+        onCancel={handleCancel}
+      >
+        <Spin spinning={isPostLoading}>
+          {contextHolder}
+          <Typography.Title level={5}>Title</Typography.Title>
+          <Controller
+            control={control}
+            defaultValue=''
+            name='title'
+            render={({ field: { value, onChange } }) => (
+              <Input status={errors.title && 'error'} placeholder='Input Title' value={value} onChange={onChange} />
+            )}
+          />
+          <Typography.Title level={5}>Description</Typography.Title>
+          <Controller
+            control={control}
+            name='description'
+            defaultValue=''
+            render={({ field: { value, onChange } }) => (
+              <Input
+                status={errors.description && 'error'}
+                placeholder='Input Description'
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
+          <Typography.Title level={5}>Apartment</Typography.Title>
+          <div style={{ padding: 10, display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <div style={{ width: '50%' }}>
+              <Typography.Paragraph style={{ fontWeight: 'bold' }}>Area</Typography.Paragraph>
+              <Controller
+                control={control}
+                name='areaId'
+                defaultValue={null}
+                render={({ field: { value, onChange } }) => (
+                  <Select
+                    disabled={isOpenModalEdit}
+                    value={value}
+                    style={{ width: '90%' }}
+                    onChange={(value) => {
+                      setSelectedAreaId(value)
+                      onChange(value)
+                      setValue('zoneId', null)
+                      setValue('buildingId', null)
+                      setValue('apartmentId', null)
+                    }}
+                    options={areaList.map((area) => ({ value: area.id, label: area.name }))}
+                  />
+                )}
+              />
+            </div>
+            <div style={{ width: '50%' }}>
+              <Typography.Paragraph style={{ fontWeight: 'bold' }}>Zone</Typography.Paragraph>
+              <Controller
+                control={control}
+                name='zoneId'
+                defaultValue={null}
+                render={({ field }) => (
+                  <Select
+                    disabled={isOpenModalEdit}
+                    value={field.value}
+                    style={{ width: '90%' }}
+                    onChange={(value) => {
+                      field.onChange(value)
+                      setSelectedZoneId(value)
+                      setValue('buildingId', null)
+                      setValue('apartmentId', null)
+                    }}
+                    options={filteredZoneList.map((zone) => ({
+                      value: zone.id,
+                      label: zone.name
+                    }))}
+                  />
+                )}
+              />
+            </div>
+          </div>
+          <div style={{ padding: 10 }}>
+            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Building</Typography.Paragraph>
             <Controller
               control={control}
-              name='areaId'
+              name='buildingId'
               defaultValue={null}
               render={({ field }) => (
                 <Select
                   disabled={isOpenModalEdit}
                   value={field.value}
-                  style={{ width: '90%' }}
+                  style={{ width: '100%' }}
                   onChange={(value) => {
-                    setValue('areaId', value)
-                    setValue('zoneId', null)
-                    setValue('buildingId', null)
-                    setValue('apartmentId', 0)
+                    field.onChange(value)
+                    setSelectedBuildingId(value)
+                    setValue('apartmentId', null)
                   }}
-                  options={areaList.map((area) => ({ value: area.id, label: area.name }))}
+                  options={filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))}
                 />
               )}
             />
           </div>
-          <div style={{ width: '50%' }}>
-            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Zone</Typography.Paragraph>
+          <div style={{ padding: 10 }}>
+            <Typography.Paragraph style={{ fontWeight: 'bold' }}>Apartment</Typography.Paragraph>
             <Controller
               control={control}
-              name='zoneId'
-              defaultValue={null}
+              name='apartmentId'
               render={({ field }) => (
                 <Select
                   disabled={isOpenModalEdit}
+                  status={errors.apartmentId && 'error'}
                   value={field.value}
-                  style={{ width: '90%' }}
-                  onChange={(value) => {
-                    setValue('zoneId', value)
-                    setValue('buildingId', null)
-                  }}
-                  options={filteredZoneList.map((zone) => ({
-                    value: zone.id,
-                    label: zone.name
-                  }))}
+                  style={{ width: '100%' }}
+                  onChange={field.onChange}
+                  options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
                 />
               )}
             />
           </div>
-        </div>
-        <div style={{ padding: 10 }}>
-          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Building</Typography.Paragraph>
-          <Controller
-            control={control}
-            name='buildingId'
-            defaultValue={null}
-            render={({ field }) => (
-              <Select
-                disabled={isOpenModalEdit}
-                value={field.value}
-                style={{ width: '100%' }}
-                onChange={(value) => setValue('buildingId', value)}
-                options={filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))}
-              />
-            )}
-          />
-        </div>
-        <div style={{ padding: 10 }}>
-          <Typography.Paragraph style={{ fontWeight: 'bold' }}>Apartment</Typography.Paragraph>
-          <Controller
-            control={control}
-            name='apartmentId'
-            render={({ field }) => (
-              <Select
-                disabled={isOpenModalEdit}
-                status={errors.apartmentId && 'error'}
-                value={field.value}
-                style={{ width: '100%' }}
-                onChange={(value) => setValue('apartmentId', value)}
-                options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
-              />
-            )}
-          />
-        </div>
 
-        {postEdit !== null && (
-          <div>
-            <UploadImage post={postEdit} />
-          </div>
-        )}
-      </Spin>
-    </Modal>
+          {postEdit !== null && (
+            <div>
+              <UploadImage post={postEdit} />
+            </div>
+          )}
+        </Spin>
+      </Modal>
+    </form>
   )
 }
 
