@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
 import { getUsers, searchUser } from '../actions/user.actions'
 import { initialUserState } from '../types/user.type'
+import { deactiveUser, getUser } from '../actions/user.actions'
 
 const userSlice = createSlice({
   name: 'user',
@@ -16,6 +17,18 @@ const userSlice = createSlice({
         if (action.payload) {
           state.userList = action.payload
         }
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.userList = action.payload
+      })
+      .addCase(deactiveUser.fulfilled, (state, action) => {
+        const id = action.meta.arg
+        state.userList.find((user, index) => {
+          if (user.id === id) {
+            state.userList[index] = { ...state.userList[index], status: Boolean(!state.userList[index]) }
+            return
+          }
+        })
       })
       .addMatcher<PendingAction>(
         (action) => action.type.endsWith('/pending'),

@@ -3,7 +3,6 @@ import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } f
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getArea } from '../redux/actions/area.actions'
-
 import { createBuilding, deleteBuilding, getBuildingList, updateBuilding } from '../redux/actions/building.actions'
 import { getZoneList } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
@@ -150,14 +149,14 @@ const BuildingPage: React.FC = () => {
         return (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleOpenModalEdit(record.id)} />
-            <Switch defaultChecked={record.status} onChange={() => handleDelte(record.id)} />
+            <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
           </div>
         )
       }
     }
   ]
 
-  const handleDelte = (id: number) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteBuilding({ id: id }))
   }
 

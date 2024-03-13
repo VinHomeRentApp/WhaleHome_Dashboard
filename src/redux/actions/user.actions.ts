@@ -44,3 +44,17 @@ export const searchUser = createAsyncThunk('user/searchUser', async (email: stri
   )
   return res.data.data
 })
+
+export const getUser = createAsyncThunk('user/getUser', async (_, thunkAPI) => {
+  const res = await http.get<ResponseSuccessful<User[]>>(`/user`, {
+    signal: thunkAPI.signal
+  })
+  return res.data.data
+})
+
+export const deactiveUser = createAsyncThunk('user/deactiveUser', async (id: number, thunkAPI) => {
+  const res = await http.put<ResponseSuccessful<User[]>>(`/user/delete/${id}`, {
+    signal: thunkAPI.signal
+  })
+  return res.data.data
+})
