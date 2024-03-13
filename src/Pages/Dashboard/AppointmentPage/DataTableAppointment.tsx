@@ -1,5 +1,13 @@
-import { EyeOutlined } from '@ant-design/icons'
-import { Avatar, Button, Drawer, Switch, Table, TableProps } from 'antd'
+import {
+  CalendarOutlined,
+  CarryOutOutlined,
+  ContainerOutlined,
+  EyeOutlined,
+  FieldTimeOutlined,
+  HomeOutlined
+} from '@ant-design/icons'
+import { Avatar, Button, Card, Drawer, Switch, Table, TableProps, Typography } from 'antd'
+import Meta from 'antd/es/card/Meta'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
@@ -7,6 +15,7 @@ import { RootState } from '../../../redux/containers/store'
 import { apartment } from '../../../types/appartment.type'
 import { appointments } from '../../../types/appointments.type'
 import { User } from '../../../types/user.type'
+import { convertToAMPM } from '../../../utils/formatDate'
 
 type DataTableAppointmentProps = {
   searchText: string
@@ -14,14 +23,14 @@ type DataTableAppointmentProps = {
 
 const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
   const { appointmentList, isLoadingAppointmentList } = useSelector((state: RootState) => state.appointment)
-  const [open, setOpen] = useState(false)
+  const [selectedRecord, setSelectedRecord] = useState<appointments | null>(null)
 
-  const showDrawer = () => {
-    setOpen(true)
+  const showDrawer = (appointment: appointments) => {
+    setSelectedRecord(appointment)
   }
 
   const onClose = () => {
-    setOpen(false)
+    setSelectedRecord(null)
   }
   const ColumnsAppointmentPage: TableProps['columns'] = [
     {
@@ -115,7 +124,7 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
       render: (_, record: appointments) => {
         return (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button onClick={showDrawer}>
+            <Button onClick={() => showDrawer(record)}>
               <EyeOutlined />
             </Button>
             <Switch defaultChecked={record.status} />
@@ -127,10 +136,39 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
 
   return (
     <div>
-      <Drawer title='Basic Drawer' onClose={onClose} open={open}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+      <Drawer
+        title={
+          <>
+            <CarryOutOutlined />
+            {' Detail Appointment'}
+          </>
+        }
+        onClose={onClose}
+        open={!!selectedRecord}
+      >
+        <Card hoverable style={{ width: '100%' }} cover={<img alt='example' src={selectedRecord?.users.image} />}>
+          <Meta title={selectedRecord?.users.fullName} />
+          <Typography.Title level={5}>
+            <HomeOutlined size={10} />
+            {'  '}
+            Place
+          </Typography.Title>
+          <Typography.Paragraph>
+            {`${selectedRecord?.apartment.name} - ${selectedRecord?.apartment.building.name} - ${selectedRecord?.apartment.building.zone.name} - ${selectedRecord?.apartment.building.zone.area.name}`}
+          </Typography.Paragraph>
+          <Typography.Title level={5}>
+            <CalendarOutlined /> Date
+          </Typography.Title>
+          <Typography.Paragraph>{`${selectedRecord?.dateTime}`}</Typography.Paragraph>
+          <Typography.Title level={5}>
+            <FieldTimeOutlined /> Time
+          </Typography.Title>
+          <Typography.Paragraph>{`${convertToAMPM(selectedRecord?.time)}`}</Typography.Paragraph>
+          <Typography.Title level={5}>
+            <ContainerOutlined /> Note
+          </Typography.Title>
+          <Typography.Paragraph>{selectedRecord?.note || 'Nothing'}</Typography.Paragraph>
+        </Card>
       </Drawer>
       <Table
         columns={ColumnsAppointmentPage}

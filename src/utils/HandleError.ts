@@ -10,8 +10,6 @@ type HandleErrorMessageTypes = {
 }
 
 export const handleErrorMessage = ({ error, messageApi, title }: HandleErrorMessageTypes) => {
-  console.log('error', error)
-
   if (!isEmpty(error)) {
     switch (error.response?.status) {
       case HttpStatusCode.NotFound:

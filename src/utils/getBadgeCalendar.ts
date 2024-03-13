@@ -8,7 +8,7 @@ export const getBadgeStatus = (status: string) => {
     case 'Cancel':
       return 'error'
     case 'Pending':
-      return 'warning'
+      return 'processing'
     case 'Complete':
       return 'success'
     default:
