@@ -33,7 +33,7 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state) => {
         state.isLoading = false
       })
-      .addCase(logoutAPI.fulfilled, (state, action) => {
+      .addCase(logoutAPI.fulfilled, (state, _action) => {
         state.userInfo = null
         state.userToken = null
       })
