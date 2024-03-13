@@ -75,13 +75,16 @@ const ZonePage: React.FC = () => {
     },
     {
       title: 'Name',
-      dataIndex: 'name',
       key: 'id',
       width: '8%',
       align: 'center',
+      render: (r) => String(r.name),
       filteredValue: [search],
-      onFilter: (value, record) => {
-        return String(record.name).toLowerCase().includes(String(value).toLowerCase())
+      onFilter: (value, record: zone) => {
+        return (
+          String(record.name).toLowerCase().includes(String(value).toLowerCase()) ||
+          String(record.area.name.toLowerCase()).includes(String(value))
+        )
       }
     },
     {
