@@ -2,6 +2,7 @@ import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design
 import { Avatar, Button, Layout, Modal, Typography, theme } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { RootState, useAppDispatch } from '../../redux/containers/store.ts'
 import { handleLogout } from '../../usecases/HandleLogout.ts'
 import MenuNav from './Menu.tsx'
@@ -16,6 +17,7 @@ const LayoutAdmin = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false)
   const { userInfo } = useSelector((state: RootState) => state.auth)
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const {
@@ -51,7 +53,7 @@ const LayoutAdmin = ({ children }: Props) => {
             <Modal
               title='Confirmation'
               open={isOpenModal}
-              onOk={() => handleLogout(dispatch)}
+              onOk={() => handleLogout(dispatch, navigate)}
               onCancel={() => setIsOpenModal(!isOpenModal)}
             >
               <Typography>Are you sure that you want to logout?</Typography>

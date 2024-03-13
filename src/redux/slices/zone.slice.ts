@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { createZone, deleteZone, getZoneList, updateZone } from '../actions/zone.actions'
+import { countBuildingByZone, createZone, deleteZone, getZoneList, updateZone } from '../actions/zone.actions'
 import { initialZoneState } from '../types/zone.types'
 
 const ZoneSlice = createSlice({
@@ -18,6 +18,9 @@ const ZoneSlice = createSlice({
       .addCase(getZoneList.fulfilled, (state, action) => {
         state.ZoneList = action.payload
         state.loading = false
+      })
+      .addCase(countBuildingByZone.fulfilled, (state, action) => {
+        state.countBuildingList = action.payload
       })
       .addCase(createZone.fulfilled, (state, action) => {
         state.ZoneList.push(action.payload)
