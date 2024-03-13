@@ -1,19 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Dispatch } from '@reduxjs/toolkit'
+import { ThunkDispatch } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
-import { logout } from '../apis/user.apis'
-import { setIsLoading, setUser } from '../redux/slices/auth.slice'
 import { NavigateFunction } from 'react-router'
+import { logoutAPI } from '../redux/actions/auth.actions'
+import { RootState } from '../redux/containers/store'
+import { setIsLoading } from '../redux/slices/auth.slice'
 
-export const handleLogout = async (dispatch: Dispatch, navigate: NavigateFunction) => {
+type AppDispatch = ThunkDispatch<RootState, undefined, any>
+
+export const handleLogout = async (dispatch: AppDispatch, navigate: NavigateFunction) => {
   try {
     dispatch(setIsLoading(true))
     const token = localStorage.getItem('token')
     if (token) {
-      await logout(token)
-      navigate('/login')
-      dispatch(setUser(null))
-      toast.success('Logout Successfully!')
+      const resultAction = await dispatch(logoutAPI(token))
+      if (logoutAPI.fulfilled.match(resultAction)) {
+        navigate('/login')
+        toast.success('Logout Successfully!')
+      } else {
+        toast.error('Logout Failed!')
+      }
     } else {
       toast.error('Invalid Token!')
     }

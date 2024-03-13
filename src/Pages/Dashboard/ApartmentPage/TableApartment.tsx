@@ -6,7 +6,9 @@ import { apartment } from '../../../types/appartment.type'
 
 type Props = {
   search: string
+  // eslint-disable-next-line no-unused-vars
   handleOpenModalEdit: (id: number) => void
+  // eslint-disable-next-line no-unused-vars
   handleDelete: (id: number) => void
 }
 

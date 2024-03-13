@@ -50,7 +50,7 @@ const PostPage: React.FC = () => {
     <>
       {contextHolder}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
-        <Input.Search style={{ width: '30%' }} placeholder='Find by Name' onChange={(e) => setSearch(e.target.value)} />
+        <Input.Search style={{ width: '30%' }} placeholder='Search' onChange={(e) => setSearch(e.target.value)} />
         <Button
           style={{ width: '5%', height: '5%' }}
           type='primary'

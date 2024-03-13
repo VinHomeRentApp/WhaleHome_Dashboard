@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { post } from '../../types/post.type'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { getPostList, updatePost } from '../actions/post.actions'
+import { createPost, getPostList, updatePost } from '../actions/post.actions'
 import { initialPostState } from '../types/post.types'
 
 const postSlice = createSlice({
@@ -19,6 +19,9 @@ const postSlice = createSlice({
     builder
       .addCase(getPostList.fulfilled, (state, action) => {
         state.postList = action.payload
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.postList.push(action.payload)
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         const id = action.meta.arg.id

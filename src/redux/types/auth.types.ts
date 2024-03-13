@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from '../../types/user.type'
 
 const userToken = localStorage.getItem('userToken') ?? null
@@ -6,7 +7,7 @@ type initialAuthStateTypes = {
   isLoading: boolean
   userInfo: User | null
   userToken: string | null
-  error: string | null
+  error: any
   isSuccess: boolean
 }
 

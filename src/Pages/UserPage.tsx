@@ -3,19 +3,17 @@ import type { TableProps } from 'antd'
 import { Input, Switch, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { deactiveUser, getUser } from '../redux/actions/user.actions'
+import { deactiveUser, getUsers } from '../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { User } from '../types/user.type'
 
 const UserPage: React.FC = () => {
-  const dataSource = useSelector((state: RootState) => state.user.userList)
-  const loading = useSelector((state: RootState) => state.user.loading)
-
   const [search, setSearch] = useState<string>('')
+  const { userList, isLoading } = useSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getUser())
+    dispatch(getUsers())
   }, [])
 
   const columns: TableProps['columns'] = [
@@ -121,12 +119,12 @@ const UserPage: React.FC = () => {
 
       <Table
         columns={columns}
-        dataSource={dataSource}
+        dataSource={userList}
         pagination={{
           pageSize: 5
         }}
         scroll={{ y: 400 }}
-        loading={loading}
+        loading={isLoading}
         rowKey='id'
         bordered
       />

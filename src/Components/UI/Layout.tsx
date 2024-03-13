@@ -1,10 +1,11 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Avatar, Button, Layout, Modal, Typography, theme } from 'antd'
-import React, { useState } from 'react'
+import { Avatar, Button, Layout, Modal, Typography, message, theme } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { RootState, useAppDispatch } from '../../redux/containers/store.ts'
 import { handleLogout } from '../../usecases/HandleLogout.ts'
+import { handleErrorMessage } from '../../utils/HandleError.ts'
 import MenuNav from './Menu.tsx'
 
 const { Header, Sider, Content } = Layout
@@ -15,10 +16,15 @@ type Props = {
 
 const LayoutAdmin = ({ children }: Props) => {
   const [collapsed, setCollapsed] = useState(false)
-  const { userInfo } = useSelector((state: RootState) => state.auth)
+  const { userInfo, error } = useSelector((state: RootState) => state.auth)
   const [isOpenModal, setIsOpenModal] = useState(false)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const [messageApi, contextHolder] = message.useMessage()
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Auth' })
+  }, [error])
 
   const {
     token: { colorBgContainer, borderRadiusLG }
@@ -26,6 +32,7 @@ const LayoutAdmin = ({ children }: Props) => {
 
   return (
     <Layout>
+      {contextHolder}
       <Sider theme='dark' trigger={null} collapsible collapsed={collapsed}>
         <MenuNav />
       </Sider>
