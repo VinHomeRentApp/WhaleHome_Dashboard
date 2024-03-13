@@ -19,6 +19,7 @@ const PostPage: React.FC = () => {
   const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false)
   const [postEdit, setPostEdit] = useState<post | null>(null)
   const [messageApi, contextHolder] = message.useMessage()
+  const [search, setSearch] = useState<string>('')
 
   useEffect(() => {
     const promise = dispatch(getPostList())
@@ -49,7 +50,7 @@ const PostPage: React.FC = () => {
     <>
       {contextHolder}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
-        <Input.Search style={{ width: '30%' }} placeholder='Find by Name' />
+        <Input.Search style={{ width: '30%' }} placeholder='Find by Name' onChange={(e) => setSearch(e.target.value)} />
         <Button
           style={{ width: '5%', height: '5%' }}
           type='primary'
@@ -70,6 +71,7 @@ const PostPage: React.FC = () => {
         setIsOpenModalEdit={setIsOpenModalEdit}
       />
       <PostTable
+        search={search}
         data={data}
         loading={isLoading}
         handleViewImage={handleViewImage}

@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { post } from '../../../types/post.type'
 
 interface PostTableProps {
+  search: string
   data: post[]
   loading: boolean
   handleViewImage: (record: post) => void
@@ -13,7 +14,7 @@ interface PostTableProps {
   handleDelete: (id: number) => void
 }
 
-const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, handleEdit, handleDelete }) => {
+const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleViewImage, handleEdit, handleDelete }) => {
   const columns: TableProps['columns'] = [
     {
       title: 'ID',
@@ -36,10 +37,20 @@ const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, h
     },
     {
       title: 'Description',
-      dataIndex: 'description',
       width: '13%',
       align: 'center',
-      key: 'id'
+      key: 'id',
+      filteredValue: [search],
+      render: (record: post) => String(record.description),
+      onFilter: (value, record: post) => {
+        return (
+          String(record.description).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.apartment.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.apartment.building.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.apartment.building.zone.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.apartment.building.zone.area.name).toLowerCase().includes(value.toString().toLowerCase())
+        )
+      }
     },
     {
       title: 'Apartment',
@@ -56,7 +67,6 @@ const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, h
           key: uuidv4(),
           width: '6%',
           align: 'center',
-
           render: (record: post) => String(record.apartment.building.zone.name)
         },
         {
@@ -64,7 +74,6 @@ const PostTable: React.FC<PostTableProps> = ({ data, loading, handleViewImage, h
           key: uuidv4(),
           width: '5%',
           align: 'center',
-
           render: (record: post) => String(record.apartment.building.name)
         },
         {

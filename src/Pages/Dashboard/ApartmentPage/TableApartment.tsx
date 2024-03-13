@@ -53,8 +53,13 @@ const TableApartment = ({ search, handleOpenModalEdit, handleDelete }: Props) =>
       key: 'id',
       width: '10%',
       filteredValue: [search],
-      onFilter: (value, record) => {
-        return String(record.name).toLowerCase().includes(String(value).toLowerCase())
+      onFilter: (value, record: apartment) => {
+        return (
+          String(record.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.building.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.building.zone.name).toLowerCase().includes(value.toString().toLowerCase()) ||
+          String(record.building.zone.area.name).toLowerCase().includes(value.toString().toLowerCase())
+        )
       },
       render: (record: apartment) => String(record.name)
     },
