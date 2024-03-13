@@ -1,14 +1,12 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import React, { useState } from 'react'
-import { useAppDispatch } from '../redux/containers/store'
 import DataTableAppointment from './Dashboard/AppointmentPage/DataTableAppointment'
 import FormAddAppointment from './Dashboard/AppointmentPage/FormAddAppointment'
 import CalendarAppointment from './Dashboard/CalendarAppointment'
 
 const AppointmentPage: React.FC = () => {
   const [isOpenAddAppointment, setIsOpenAddAppointment] = useState(false)
-  const dispatch = useAppDispatch()
   const [searchText, setSearchText] = useState('')
 
   const handleOpenAddAppointment = () => {
