@@ -21,6 +21,8 @@ import { RootState, useAppDispatch } from '../redux/containers/store'
 import { searchUser } from '../redux/actions/user.actions'
 import { appointments } from '../types/appointments.type'
 import dayjs from 'dayjs'
+import debounce from 'lodash/debounce'
+import { isEmpty } from 'lodash'
 
 const formData: contract = {
   id: NaN,
@@ -42,6 +44,7 @@ const formData: contract = {
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
   const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
+  const [appointmentFiltered, setAppointmentFiltered] = useState<appointments[]>([])
   const [searchUserState, setSearchUserState] = useState<appointments[]>([])
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<contract>(formData)
@@ -56,6 +59,11 @@ const ContractPage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
+
+  const filterAppointment = (e: number) =>
+    searchUserData.filter((ap) => {
+      return ap.users.id === Number(e)
+    })
 
   useEffect(() => {
     setSearchUserState(searchUserData)
@@ -203,6 +211,9 @@ const ContractPage: React.FC = () => {
   }
 
   const handleSearchUser = (e: string) => {
+    if (e.length === 0) {
+      return
+    }
     dispatch(searchUser(e))
   }
 
@@ -292,7 +303,12 @@ const ContractPage: React.FC = () => {
         <div style={{ display: 'flex', gap: '5%' }}>
           <div style={{ width: '50%' }}>
             <Typography.Title level={5}>Description</Typography.Title>
-            <Input.TextArea placeholder='input name' value={modalData.description} onChange={handleInputDescription} />
+            <Input.TextArea
+              placeholder='input name'
+              value={modalData.description}
+              onChange={handleInputDescription}
+              required={true}
+            />
           </div>
           <div style={{ width: '50%' }}>
             <Typography.Title level={5}>User</Typography.Title>
@@ -308,15 +324,16 @@ const ContractPage: React.FC = () => {
                 ),
                 value: Number(user.users.id)
               }))}
-              onSearch={(e) => {
-                handleSearchUser(e)
-              }}
-              onSelect={(e) =>
+              onSearch={debounce((e) => handleSearchUser(e), 500)}
+              onSelect={(e) => {
                 setModalData((data) => ({
                   ...data,
                   contractHistory: { ...data.contractHistory, users: { ...data.contractHistory.users, id: e } }
                 }))
-              }
+
+                const abc = filterAppointment(e)
+                setAppointmentFiltered(abc)
+              }}
             />
           </div>
         </div>
@@ -325,10 +342,9 @@ const ContractPage: React.FC = () => {
           <Select
             style={{ minWidth: 300 }}
             onChange={handleSelectAppointment}
-            options={searchUserState.map((appointments) => {
-              return { value: appointments.apartment.id, label: <div>{appointments.apartment.description}</div> }
+            options={appointmentFiltered.map((appointments) => {
+              return { value: appointments.apartment.id, label: <div>{appointments.apartment.name}</div> }
             })}
-            // value={modalData.zone.area.id}
           />
         </div>
         <div style={{ display: 'flex', gap: '5%' }}>
