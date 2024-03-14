@@ -12,18 +12,16 @@ import {
   Typography
 } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
-import React, { useEffect, useState } from 'react'
-import ButtonAction from '../Components/UI/ButtonAction'
-import { contract, contractHistory } from '../types/contract.type'
-import { useSelector } from 'react-redux'
-import { createContract, getContractList } from '../redux/actions/contract.action'
-import { RootState, useAppDispatch } from '../redux/containers/store'
-import { searchUser } from '../redux/actions/user.actions'
-import { appointments } from '../types/appointments.type'
 import dayjs from 'dayjs'
 import debounce from 'lodash/debounce'
-import { isEmpty } from 'lodash'
-
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import ButtonAction from '../Components/UI/ButtonAction'
+import { createContract, getContractList } from '../redux/actions/contract.action'
+import { searchUser } from '../redux/actions/user.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
+import { appointments } from '../types/appointments.type'
+import { contract, contractHistory } from '../types/contract.type'
 
 const formData: contract = {
   id: NaN,
