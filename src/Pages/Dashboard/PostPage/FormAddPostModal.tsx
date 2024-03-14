@@ -97,16 +97,16 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
         }
         await dispatch(createPost({ apartmentId, description, title }))
         message.success('Create Post Successfully!')
-        setIsOpenModalAdd(false)
+        setIsOpenModalAdd && setIsOpenModalAdd(false)
       }
       if (isOpenModalEdit && !isEmpty(postEdit)) {
         const { title, description } = data
         dispatch(updatePost({ id: postEdit?.id, body: { title, description } }))
         message.success('Update Post Successfully!')
-        setIsOpenModalEdit(false)
+        setIsOpenModalEdit && setIsOpenModalEdit(false)
       }
       reset(defaultFormValues)
-      setEditPost(null)
+      setEditPost && setEditPost(null)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       message.error(error.message)
@@ -125,12 +125,12 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
 
   const handleCancel = () => {
     if (isOpenModalAdd) {
-      setIsOpenModalAdd(false)
+      setIsOpenModalAdd && setIsOpenModalAdd(false)
     } else {
-      setIsOpenModalEdit(false)
+      setIsOpenModalEdit && setIsOpenModalEdit(false)
     }
     reset(defaultFormValues)
-    setEditPost(null)
+    setEditPost && setEditPost(null)
   }
 
   return (

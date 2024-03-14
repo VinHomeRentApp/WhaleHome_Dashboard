@@ -15,6 +15,26 @@ export const getAppointmentList = createAsyncThunk('appointment/getAppointmentLi
   }
 })
 
+type updateAppointmentParams = {
+  id: number
+  statusAppointment: string
+}
+export const updateAppointment = createAsyncThunk(
+  'appointment/update',
+  async ({ id, statusAppointment }: updateAppointmentParams, thunkAPI) => {
+    try {
+      const response = await http.put<ResponseSuccessful<appointments>>(
+        `/appointments/update/${id}`,
+        { statusAppointment },
+        { signal: thunkAPI.signal }
+      )
+      return response.data.data
+    } catch (error) {
+      thunkAPI.rejectWithValue(error)
+    }
+  }
+)
+
 export const createAppointment = createAsyncThunk(
   'appointment/createAppointment',
   async (body: createAppointmentFormDataTypes, thunkAPI) => {
