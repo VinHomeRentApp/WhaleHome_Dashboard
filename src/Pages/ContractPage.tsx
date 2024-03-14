@@ -20,6 +20,7 @@ import { createContract, getContractList } from '../redux/actions/contract.actio
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { searchUser } from '../redux/actions/user.actions'
 import { appointments } from '../types/appointments.type'
+import dayjs from 'dayjs'
 
 const formData: contract = {
   id: NaN,
@@ -41,7 +42,7 @@ const formData: contract = {
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
   const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
-  const [searchUserState, setSearchUserState] = useState<appointments[]>(searchUserData)
+  const [searchUserState, setSearchUserState] = useState<appointments[]>([])
   const [modalAdd, setModalAdd] = useState<boolean>(false)
   const [modalData, setModalData] = useState<contract>(formData)
   const [startDate, setStartDate] = useState(null)
@@ -244,6 +245,12 @@ const ContractPage: React.FC = () => {
     if (startDate) return current && current < startDate
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function disabledDate(current: any) {
+    // Trả về true nếu current (ngày hiện tại) nhỏ hơn ngày hiện tại
+    return current && current < dayjs().startOf('day')
+  }
+
   const handleSelectAppointment = (e: number) => {
     setModalData((data) => ({ ...data, appointmentId: e }))
   }
@@ -327,7 +334,12 @@ const ContractPage: React.FC = () => {
         <div style={{ display: 'flex', gap: '5%' }}>
           <div style={{ width: '45%' }}>
             <Typography.Title level={5}>Date Start Rent</Typography.Title>
-            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateStartChange} />
+            <DatePicker
+              style={{ width: '80%' }}
+              format={dateFormat}
+              onChange={handleDateStartChange}
+              disabledDate={disabledDate}
+            />
           </div>
           <div style={{ width: '50%' }}>
             <Typography.Title level={5}>Expired Time</Typography.Title>

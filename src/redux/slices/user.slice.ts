@@ -56,8 +56,15 @@ const userSlice = createSlice({
           if (state.isLoading && state.currentRequestId === action.meta.requestId) {
             state.isLoading = false
             state.currentRequestId = undefined
-            state.error = action.payload
+            state.error = null
           }
+        }
+      )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.isLoading = false
+          state.error = action.payload
         }
       )
   }
