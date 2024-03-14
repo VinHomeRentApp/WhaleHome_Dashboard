@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DatePicker, Modal, Select, Spin, TimePicker, Typography, message } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { isAfter } from 'date-fns'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useEffect, useState } from 'react'
@@ -24,8 +25,8 @@ import { building } from '../../../types/building.type'
 import { createAppointmentFormDataTypes } from '../../../types/form.types'
 import { zone } from '../../../types/zone.type'
 import { handleErrorMessage } from '../../../utils/HandleError'
-import { formatDate, formatTime } from '../../../utils/formatDate'
 import { filterOption } from '../../../utils/filterOptions'
+import { formatDate, formatTime } from '../../../utils/formatDate'
 
 type FormAddAppointmentProps = {
   isOpenAddAppointment: boolean
@@ -106,20 +107,53 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
   }
 
   const onSubmit = async (data: createAppointmentFormValuesTypes) => {
-    const formattedData: createAppointmentFormDataTypes = {
-      dateTime: formatDate(data.date),
-      usersId: parseInt(data.userId),
-      apartmentId: data.apartmentId,
-      time: formatTime(data.time),
-      note: data.note
-    }
+    // Parse date and time strings into the correct format
+    const parsedDate = new Date(data.date)
+    const parsedTime = new Date(data.time)
+    const year = parsedDate.getFullYear()
+    const month = parsedDate.getMonth()
+    const day = parsedDate.getDate()
+    const hours = parsedTime.getHours()
+    const minutes = parsedTime.getMinutes()
+    const seconds = parsedTime.getSeconds()
 
-    const resultAction = await dispatch(createAppointment(formattedData))
-    if (createAppointment.fulfilled.match(resultAction)) {
-      message.success('Create Appointment Successfully!')
-      reset(defaultFormAppointmentValue)
-      dispatch(getAppointmentList())
-      setIsOpenAddAppointment(false)
+    const selectedDateTime = new Date(year, month, day, hours, minutes, seconds)
+
+    if (!isNaN(selectedDateTime.getTime())) {
+      console.log(selectedDateTime)
+
+      // Check if selected time is between 8:30 PM and 6:00 AM
+      const selectedHour = selectedDateTime.getHours()
+      const selectedMinute = selectedDateTime.getMinutes()
+
+      const isInvalidTime = selectedHour >= 20 || selectedHour < 6 || (selectedHour === 6 && selectedMinute !== 0)
+
+      if (isInvalidTime) {
+        message.error('Please select a time between 6:00 AM and 8:30 PM.')
+        return
+      }
+
+      if (isAfter(selectedDateTime, new Date())) {
+        const formattedData: createAppointmentFormDataTypes = {
+          dateTime: formatDate(String(selectedDateTime)), // Assuming formatDate function handles Date objects
+          usersId: parseInt(data.userId),
+          apartmentId: data.apartmentId,
+          time: formatTime(String(selectedDateTime)), // Assuming formatTime function handles Date objects
+          note: data.note
+        }
+
+        const resultAction = await dispatch(createAppointment(formattedData))
+        if (createAppointment.fulfilled.match(resultAction)) {
+          message.success('Create Appointment Successfully!')
+          reset(defaultFormAppointmentValue)
+          dispatch(getAppointmentList())
+          setIsOpenAddAppointment(false)
+        }
+      } else {
+        messageApi.error('Please select a future date and time for the appointment.')
+      }
+    } else {
+      message.error('Invalid date or time format. Please check your input.')
     }
   }
 

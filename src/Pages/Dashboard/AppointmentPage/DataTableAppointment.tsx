@@ -1,29 +1,25 @@
-import {
-  CalendarOutlined,
-  CarryOutOutlined,
-  ContainerOutlined,
-  EyeOutlined,
-  FieldTimeOutlined,
-  HomeOutlined
-} from '@ant-design/icons'
-import { Avatar, Button, Card, Drawer, Switch, Table, TableProps, Typography } from 'antd'
-import Meta from 'antd/es/card/Meta'
-import { useState } from 'react'
+import { EyeOutlined } from '@ant-design/icons'
+import { Avatar, Button, Switch, Table, TableProps, Tag, message } from 'antd'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-import { RootState } from '../../../redux/containers/store'
+import { getAppointmentList, updateAppointment } from '../../../redux/actions/appointment.actions'
+import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { apartment } from '../../../types/appartment.type'
 import { appointments } from '../../../types/appointments.type'
 import { User } from '../../../types/user.type'
-import { convertToAMPM } from '../../../utils/formatDate'
+import { handleErrorMessage } from '../../../utils/HandleError'
+import DrawerAppointment from './DrawerAppointment'
 
 type DataTableAppointmentProps = {
   searchText: string
 }
 
 const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
-  const { appointmentList, isLoadingAppointmentList } = useSelector((state: RootState) => state.appointment)
+  const { appointmentList, isLoadingAppointmentList, error } = useSelector((state: RootState) => state.appointment)
   const [selectedRecord, setSelectedRecord] = useState<appointments | null>(null)
+  const dispatch = useAppDispatch()
+  const [messageApi, contextHolder] = message.useMessage()
 
   const showDrawer = (appointment: appointments) => {
     setSelectedRecord(appointment)
@@ -32,6 +28,21 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
   const onClose = () => {
     setSelectedRecord(null)
   }
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Appointment' })
+  }, [error])
+
+  const onChangeStatus = async (status: string) => {
+    if (selectedRecord?.id) {
+      await dispatch(updateAppointment({ id: selectedRecord?.id, statusAppointment: status }))
+      await dispatch(getAppointmentList())
+      messageApi.success('Update Status Appointment successfully!')
+    } else {
+      messageApi.error('Please Choose Appointment')
+    }
+  }
+
   const ColumnsAppointmentPage: TableProps['columns'] = [
     {
       title: 'ID',
@@ -102,7 +113,22 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
       dataIndex: 'dateTime',
       key: 'id',
       align: 'center',
-      width: '6%'
+      width: '6%',
+      sorter: {
+        compare: (a: appointments, b: appointments) => {
+          const dateA = new Date(a.dateTime)
+          const dateB = new Date(b.dateTime)
+          if (dateA < dateB) {
+            return -1
+          }
+          if (dateA > dateB) {
+            return 1
+          }
+          return 0
+        }
+      },
+      defaultSortOrder: 'ascend',
+      sortDirections: ['ascend', 'descend']
     },
     {
       title: 'User',
@@ -116,6 +142,24 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
           <span>{record.fullName}</span>
         </div>
       )
+    },
+    {
+      title: 'Status',
+      key: 'id',
+      align: 'center',
+      width: '6%',
+      render: (record: appointments) => {
+        switch (String(record.statusAppointment)) {
+          case 'Completed':
+            return <Tag color={'green'}>{String(record.statusAppointment).toUpperCase()}</Tag>
+          case 'Canceled':
+            return <Tag color={'red'}>{String(record.statusAppointment).toUpperCase()}</Tag>
+          case 'Pending':
+            return <Tag color={'blue'}>{String(record.statusAppointment).toUpperCase()}</Tag>
+          default:
+            return null
+        }
+      }
     },
     {
       title: 'More',
@@ -136,40 +180,13 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
 
   return (
     <div>
-      <Drawer
-        title={
-          <>
-            <CarryOutOutlined />
-            {' Detail Appointment'}
-          </>
-        }
+      {contextHolder}
+      <DrawerAppointment
+        isLoadingAppointmentList={isLoadingAppointmentList}
+        onChangeStatus={onChangeStatus}
         onClose={onClose}
-        open={!!selectedRecord}
-      >
-        <Card hoverable style={{ width: '100%' }} cover={<img alt='example' src={selectedRecord?.users.image} />}>
-          <Meta title={selectedRecord?.users.fullName} />
-          <Typography.Title level={5}>
-            <HomeOutlined size={10} />
-            {'  '}
-            Place
-          </Typography.Title>
-          <Typography.Paragraph>
-            {`${selectedRecord?.apartment.name} - ${selectedRecord?.apartment.building.name} - ${selectedRecord?.apartment.building.zone.name} - ${selectedRecord?.apartment.building.zone.area.name}`}
-          </Typography.Paragraph>
-          <Typography.Title level={5}>
-            <CalendarOutlined /> Date
-          </Typography.Title>
-          <Typography.Paragraph>{`${selectedRecord?.dateTime}`}</Typography.Paragraph>
-          <Typography.Title level={5}>
-            <FieldTimeOutlined /> Time
-          </Typography.Title>
-          <Typography.Paragraph>{`${convertToAMPM(selectedRecord?.time)}`}</Typography.Paragraph>
-          <Typography.Title level={5}>
-            <ContainerOutlined /> Note
-          </Typography.Title>
-          <Typography.Paragraph>{selectedRecord?.note || 'Nothing'}</Typography.Paragraph>
-        </Card>
-      </Drawer>
+        selectedRecord={selectedRecord}
+      />
       <Table
         columns={ColumnsAppointmentPage}
         dataSource={appointmentList}

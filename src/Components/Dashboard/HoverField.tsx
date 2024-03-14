@@ -102,6 +102,7 @@ const HoverField = () => {
 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any
   const handleChatRequest: ChatRequest = async (messages: any) => {
+    console.log(messages)
     const response = {
       ok: true,
       json: async () => 'Hello'
