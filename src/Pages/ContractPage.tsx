@@ -24,6 +24,7 @@ import dayjs from 'dayjs'
 import debounce from 'lodash/debounce'
 import { isEmpty } from 'lodash'
 
+
 const formData: contract = {
   id: NaN,
   contractHistory: {
