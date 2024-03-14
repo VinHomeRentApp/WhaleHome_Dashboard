@@ -15,9 +15,3 @@ export type FormUserModalProps = {
   isOpenModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
-
-export type FormUserModalProps = {
-  userEdit: User | null
-  isOpenModal: boolean
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
-}
