@@ -65,7 +65,6 @@ const userSlice = createSlice({
         (state, action) => {
           state.isLoading = false
           state.error = action.payload
-          state.error = state.currentRequestId = action.meta.requestId
         }
       )
   }
