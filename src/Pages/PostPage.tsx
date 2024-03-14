@@ -30,6 +30,7 @@ const PostPage: React.FC = () => {
 
   useEffect(() => {
     handleErrorMessage({ error, messageApi, title: 'post' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
   const handleViewImage = (record: post) => {
