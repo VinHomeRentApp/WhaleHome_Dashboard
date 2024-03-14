@@ -18,7 +18,7 @@ export interface contract {
 }
 
 export interface contractHistory {
-  id?: 1
+  id?: number
   createDate?: string
   status?: boolean
   price?: number
