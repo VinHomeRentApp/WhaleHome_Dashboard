@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
 import { deactiveUser, getUsers, searchUser, updateUser } from '../actions/user.actions'
 import { initialUserState } from '../types/user.type'
-import { update } from 'lodash'
 
 const userSlice = createSlice({
   name: 'user',
@@ -39,9 +38,8 @@ const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         const id = action.meta.arg.id
         state.userList.find((user, index) => {
-          if (user.id === id) {
-            state.userList[index] = { ...state.userList[index], status: Boolean(!state.userList[index]) }
-            return
+          if (user.id === id && action.payload) {
+            state.userList[index] = action.payload
           }
         })
       })

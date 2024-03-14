@@ -1,14 +1,14 @@
 import { EditOutlined } from '@ant-design/icons'
 import type { TableProps } from 'antd'
-import { DatePicker, Input, Modal, Select, Switch, Table, Tag, Typography, message } from 'antd'
+import { Input, Switch, Table, Tag, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { deactiveUser, getUsers } from '../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
+import { startEdituser } from '../redux/slices/user.slice'
 import { User } from '../types/user.type'
 import { handleErrorMessage } from '../utils/HandleError'
 import ModalUpdateUser from './Dashboard/UserPage/UserModal'
-import { startEdituser } from '../redux/slices/user.slice'
 
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
@@ -116,14 +116,6 @@ const UserPage: React.FC = () => {
   const handleOpenModalEdit = (e: number) => {
     setOpenModal(true)
     dispatch(startEdituser(e))
-  }
-
-  const handleOk = () => {
-    setOpenModal(false)
-    console.log('a')
-  }
-  const handleCancel = () => {
-    setOpenModal(false)
   }
 
   return (

@@ -18,7 +18,7 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
     defaultValues: defaultFormValues
   })
 
-  const { control, handleSubmit, setValue, formState, getValues, reset } = methods
+  const { control, handleSubmit, formState, reset } = methods
   const { errors } = formState
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
@@ -28,7 +28,6 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
       reset({
         id: userEdit.id,
         email: userEdit.email,
-        password: userEdit.password,
         phone: userEdit.phone,
         fullName: userEdit.fullName,
         dateOfBirth: userEdit.dateOfBirth,
@@ -38,6 +37,7 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
         address: userEdit.address
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userEdit])
 
   const onSubmit: SubmitHandler<updateUserValues> = async (data) => {
@@ -47,12 +47,11 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
   }
 
   const onError: SubmitErrorHandler<updateUserValues> = (errors: FieldErrors<updateUserValues>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     Object.entries(errors).forEach(([_field, error]) => {
       const errorMessage = error?.message
       errorMessage && messageApi.error(errorMessage)
     })
-
-    console.log('error')
   }
 
   const handleCancel = () => {
@@ -94,19 +93,6 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
             name='email'
             render={({ field: { value, onChange } }) => (
               <Input status={errors.email && 'error'} placeholder='input email' value={value} onChange={onChange} />
-            )}
-          />
-          <Typography.Title level={5}>Password</Typography.Title>
-          <Controller
-            control={control}
-            name='password'
-            render={({ field: { value, onChange } }) => (
-              <Input.Password
-                status={errors.password && 'error'}
-                placeholder='input email'
-                value={value}
-                onChange={onChange}
-              />
             )}
           />
 

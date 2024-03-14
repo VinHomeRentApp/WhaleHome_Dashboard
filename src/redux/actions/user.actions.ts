@@ -55,6 +55,7 @@ export const getUser = createAsyncThunk('user/getUser', async (_, thunkAPI) => {
   } catch (error) {
     thunkAPI.rejectWithValue(error)
   }
+  return null
 })
 
 export const deactiveUser = createAsyncThunk('user/deactiveUser', async (id: number, thunkAPI) => {
