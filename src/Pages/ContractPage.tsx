@@ -342,7 +342,7 @@ const ContractPage: React.FC = () => {
             style={{ minWidth: 300 }}
             onChange={handleSelectAppointment}
             options={appointmentFiltered.map((appointments) => {
-              return { value: appointments.apartment.id, label: <div>{appointments.apartment.name}</div> }
+              return { value: appointments.id, label: <div>{appointments.apartment.name}</div> }
             })}
           />
         </div>
