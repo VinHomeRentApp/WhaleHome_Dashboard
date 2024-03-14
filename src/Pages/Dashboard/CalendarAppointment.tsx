@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { getAppointmentList } from '../../redux/actions/appointment.actions'
 import { RootState, useAppDispatch } from '../../redux/containers/store'
 import { handleErrorMessage } from '../../utils/HandleError'
+import { convertToAMPM } from '../../utils/formatDate'
 import { getBadgeStatus } from '../../utils/getBadgeCalendar'
 
 const CalendarAppointment = () => {
@@ -41,7 +42,7 @@ const CalendarAppointment = () => {
             text={
               <span
                 style={{ fontSize: '10px' }}
-              >{`${appointment.users.fullName} - ${appointment.apartment.name}`}</span>
+              >{`${convertToAMPM(appointment.time)} - ${appointment.apartment.name}`}</span>
             }
           />
         ))}

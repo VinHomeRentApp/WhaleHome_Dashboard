@@ -1,22 +1,32 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DatePicker, Modal, Select, TimePicker, Typography, message } from 'antd'
-// import type { Dayjs } from 'dayjs'
+import { DatePicker, Modal, Select, Spin, TimePicker, Typography, message } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
+import { isAfter } from 'date-fns'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { useEffect, useState } from 'react'
-import { Controller, FieldErrors, SubmitErrorHandler, useForm } from 'react-hook-form'
+import { Controller, FieldErrors, Resolver, SubmitErrorHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import * as yup from 'yup'
 import { getApartmentList } from '../../../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../../../redux/actions/apartmentClass.action'
+import { createAppointment, getAppointmentList } from '../../../redux/actions/appointment.actions'
 import { getArea } from '../../../redux/actions/area.actions'
 import { getBuildingList } from '../../../redux/actions/building.actions'
 import { getUsers } from '../../../redux/actions/user.actions'
 import { getZoneList } from '../../../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
+import {
+  createAppointmentFormValuesTypes,
+  createAppointmentSchema,
+  defaultFormAppointmentValue
+} from '../../../schema/appointment.schema'
 import { apartment } from '../../../types/appartment.type'
 import { building } from '../../../types/building.type'
+import { createAppointmentFormDataTypes } from '../../../types/form.types'
 import { zone } from '../../../types/zone.type'
+import { handleErrorMessage } from '../../../utils/HandleError'
+import { filterOption } from '../../../utils/filterOptions'
+import { formatDate, formatTime } from '../../../utils/formatDate'
 
 type FormAddAppointmentProps = {
   isOpenAddAppointment: boolean
@@ -25,45 +35,19 @@ type FormAddAppointmentProps = {
 
 dayjs.extend(customParseFormat)
 
-type createAppointmentFormValuesTypes = {
-  userId?: string | null
-  apartmentId?: number | null
-  areaId?: number | null
-  zoneId?: number | null
-  buildingId?: number | null
-  time?: string | null
-  date?: string | null
-}
-
-const createAppointmentSchema = yup.object().shape({
-  userId: yup.string().nullable(),
-  areaId: yup.number().nullable(),
-  zoneId: yup.number().nullable(),
-  buildingId: yup.number().nullable(),
-  apartmentId: yup.number().nullable(),
-  time: yup.string().nullable(),
-  date: yup.string().nullable()
-})
-
-const defaultFormAppointmentValue: createAppointmentFormValuesTypes = {
-  userId: '',
-  areaId: null,
-  buildingId: null,
-  zoneId: null,
-  apartmentId: null,
-  time: '',
-  date: ''
-}
-
 const FormAddAppointment = (props: FormAddAppointmentProps) => {
   const { isOpenAddAppointment, setIsOpenAddAppointment } = props
-  const { control, handleSubmit, setValue, getValues } = useForm<createAppointmentFormValuesTypes>({
-    resolver: yupResolver(createAppointmentSchema),
+  const { control, handleSubmit, setValue, getValues, formState, reset } = useForm<createAppointmentFormValuesTypes>({
+    resolver: yupResolver(createAppointmentSchema) as Resolver<createAppointmentFormValuesTypes>,
+    mode: 'onBlur',
     defaultValues: defaultFormAppointmentValue
   })
 
+  const { errors } = formState
+
   const dispatch = useAppDispatch()
   const [messageApi, contextHolder] = message.useMessage()
+  const { error, isLoadingAppointmentList } = useSelector((state: RootState) => state.appointment)
   const { apartmentList } = useSelector((state: RootState) => state.apartment)
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
@@ -108,6 +92,10 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
     setFilteredApartmentList(filteredApartments)
   }, [zoneList, buildingList, apartmentList, getValues, selectedAreaId, selectedBuildingId, selectedZoneId])
 
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Appointment' })
+  }, [error])
+
   const onError: SubmitErrorHandler<createAppointmentFormValuesTypes> = (
     errors: FieldErrors<createAppointmentFormValuesTypes>
   ) => {
@@ -118,41 +106,96 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
     })
   }
 
-  const onSubmit = (data: createAppointmentFormValuesTypes) => {
-    console.log(data)
+  const onSubmit = async (data: createAppointmentFormValuesTypes) => {
+    // Parse date and time strings into the correct format
+    const parsedDate = new Date(data.date)
+    const parsedTime = new Date(data.time)
+    const year = parsedDate.getFullYear()
+    const month = parsedDate.getMonth()
+    const day = parsedDate.getDate()
+    const hours = parsedTime.getHours()
+    const minutes = parsedTime.getMinutes()
+    const seconds = parsedTime.getSeconds()
+
+    const selectedDateTime = new Date(year, month, day, hours, minutes, seconds)
+
+    if (!isNaN(selectedDateTime.getTime())) {
+      console.log(selectedDateTime)
+
+      // Check if selected time is between 8:30 PM and 6:00 AM
+      const selectedHour = selectedDateTime.getHours()
+      const selectedMinute = selectedDateTime.getMinutes()
+
+      const isInvalidTime = selectedHour >= 20 || selectedHour < 6 || (selectedHour === 6 && selectedMinute !== 0)
+
+      if (isInvalidTime) {
+        message.error('Please select a time between 6:00 AM and 8:30 PM.')
+        return
+      }
+
+      if (isAfter(selectedDateTime, new Date())) {
+        const formattedData: createAppointmentFormDataTypes = {
+          dateTime: formatDate(String(selectedDateTime)), // Assuming formatDate function handles Date objects
+          usersId: parseInt(data.userId),
+          apartmentId: data.apartmentId,
+          time: formatTime(String(selectedDateTime)), // Assuming formatTime function handles Date objects
+          note: data.note
+        }
+
+        const resultAction = await dispatch(createAppointment(formattedData))
+        if (createAppointment.fulfilled.match(resultAction)) {
+          message.success('Create Appointment Successfully!')
+          reset(defaultFormAppointmentValue)
+          dispatch(getAppointmentList())
+          setIsOpenAddAppointment(false)
+        }
+      } else {
+        messageApi.error('Please select a future date and time for the appointment.')
+      }
+    } else {
+      message.error('Invalid date or time format. Please check your input.')
+    }
   }
 
-  // const onChangeTime = (time: Dayjs | null, timeString: string) => {
-  //   console.log(time, timeString)
-  // }
-
-  // const onChangeDate = (date: Dayjs | null, dateString: string) => {
-  //   console.log(date, dateString)
-  // }
-
-  const filterOption = (input: string, option?: { label: string; value: number }) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-
   return (
-    <Modal title='Create new Appointment' open={isOpenAddAppointment} onCancel={() => setIsOpenAddAppointment(false)}>
-      {contextHolder}
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Typography.Title level={5}>User</Typography.Title>
-        <Controller
-          control={control}
-          name='userId'
-          render={({ field }) => (
-            <Select
-              style={{ width: '100%' }}
-              showSearch
-              filterOption={filterOption}
-              placeholder='Search to Select'
-              options={userList.map((user) => ({ value: user.id, label: user.fullName ?? '' }))}
-              onChange={(value) => field.onChange(value)}
-              value={field.value}
-            />
-          )}
-        />
+    <Spin spinning={isLoadingAppointmentList}>
+      <Modal
+        title='Create new Appointment'
+        open={isOpenAddAppointment}
+        onOk={handleSubmit(onSubmit, onError)}
+        onCancel={() => setIsOpenAddAppointment(false)}
+      >
+        {contextHolder}
+        <div style={{ margin: 10 }}>
+          <Typography.Title level={5}>User</Typography.Title>
+          <Controller
+            control={control}
+            name='userId'
+            render={({ field }) => (
+              <Select
+                style={{ width: '100%' }}
+                showSearch
+                status={errors.userId && 'error'}
+                filterOption={filterOption}
+                placeholder='Search to Select'
+                options={userList.map((user) => ({ value: user.id, label: user.fullName ?? '' }))}
+                onChange={(value) => field.onChange(value)}
+                value={field.value}
+              />
+            )}
+          />
+        </div>
+
+        <div style={{ margin: 10 }}>
+          <Typography.Title level={5}>Note</Typography.Title>
+          <Controller
+            name='note'
+            control={control}
+            render={({ field }) => (
+              <TextArea showCount value={field.value || ''} maxLength={100} onChange={field.onChange} />
+            )}
+          />
+        </div>
 
         <div style={{ display: 'flex', width: '100%', margin: 10 }}>
           <div style={{ width: '50%' }}>
@@ -226,6 +269,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
               render={({ field }) => (
                 <Select
                   value={field.value}
+                  status={errors.apartmentId && 'error'}
                   style={{ width: '90%' }}
                   onChange={(value) => field.onChange(value)}
                   options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
@@ -245,6 +289,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
               name='time'
               render={({ field }) => (
                 <TimePicker
+                  status={errors.time && 'error'}
                   style={{ width: '100%' }}
                   onChange={(value) => field.onChange(value)}
                   value={field.value ? dayjs(field.value) : null}
@@ -259,6 +304,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
               name='date'
               render={({ field }) => (
                 <DatePicker
+                  status={errors.date && 'error'}
                   style={{ width: '100%' }}
                   onChange={(value) => field.onChange(value)}
                   value={field.value ? dayjs(field.value) : null}
@@ -267,8 +313,8 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
             />
           </div>
         </div>
-      </form>
-    </Modal>
+      </Modal>
+    </Spin>
   )
 }
 
