@@ -1,13 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { getUsers, searchUser } from '../actions/user.actions'
+import { deactiveUser, getUsers, searchUser, updateUser } from '../actions/user.actions'
 import { initialUserState } from '../types/user.type'
-import { deactiveUser, getUser } from '../actions/user.actions'
 
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
-  reducers: {},
+  reducers: {
+    startEdituser: (state, action: PayloadAction<number>) => {
+      const idEdit = action.payload
+      const foundArea = state.userList.find((area) => area.id === idEdit) || null
+      state.editUser = foundArea
+    },
+    cancelEditingUser: (state) => {
+      state.editUser = null
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(searchUser.fulfilled, (state, action) => {
@@ -18,15 +26,20 @@ const userSlice = createSlice({
           state.userList = action.payload
         }
       })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.userList = action.payload
-      })
       .addCase(deactiveUser.fulfilled, (state, action) => {
         const id = action.meta.arg
         state.userList.find((user, index) => {
           if (user.id === id) {
             state.userList[index] = { ...state.userList[index], status: Boolean(!state.userList[index]) }
             return
+          }
+        })
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        const id = action.meta.arg.id
+        state.userList.find((user, index) => {
+          if (user.id === id && action.payload) {
+            state.userList[index] = action.payload
           }
         })
       })
@@ -49,4 +62,7 @@ const userSlice = createSlice({
       )
   }
 })
+
+export const { startEdituser, cancelEditingUser } = userSlice.actions
+
 export default userSlice.reducer
