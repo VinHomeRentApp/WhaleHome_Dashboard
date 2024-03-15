@@ -137,8 +137,8 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
       align: 'center',
       width: '10%',
       render: (record: User) => (
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Avatar size='default' src={record.image}></Avatar>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <Avatar size='default' src={record.image} />
           <span>{record.fullName}</span>
         </div>
       )

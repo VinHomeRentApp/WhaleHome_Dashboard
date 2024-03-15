@@ -19,8 +19,8 @@ const DashBoard: React.FC = () => {
   }, [])
 
   return (
-    <div>
-      <Spin spinning={isLoading}>
+    <Spin spinning={isLoading}>
+      <div>
         <Space direction='horizontal' style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           <DashboardCard
             icon={
@@ -92,11 +92,11 @@ const DashBoard: React.FC = () => {
         </Space>
 
         <DashboardChart />
-      </Spin>
-      <div>
-        <CalendarAppointment />
+        <div>
+          <CalendarAppointment />
+        </div>
       </div>
-    </div>
+    </Spin>
   )
 }
 

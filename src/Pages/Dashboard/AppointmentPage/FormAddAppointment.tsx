@@ -120,9 +120,6 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
     const selectedDateTime = new Date(year, month, day, hours, minutes, seconds)
 
     if (!isNaN(selectedDateTime.getTime())) {
-      console.log(selectedDateTime)
-
-      // Check if selected time is between 8:30 PM and 6:00 AM
       const selectedHour = selectedDateTime.getHours()
       const selectedMinute = selectedDateTime.getMinutes()
 
