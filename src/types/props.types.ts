@@ -15,3 +15,8 @@ export type FormUserModalProps = {
   isOpenModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+export type FormContractModalProps = {
+  isOpenModal: boolean
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
