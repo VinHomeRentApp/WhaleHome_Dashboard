@@ -14,6 +14,9 @@ const userSlice = createSlice({
     },
     cancelEditingUser: (state) => {
       state.editUser = null
+    },
+    removeSearchUser: (state) => {
+      state.searchUserIncludeAppointment = []
     }
   },
   extraReducers(builder) {
@@ -70,6 +73,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { startEdituser, cancelEditingUser } = userSlice.actions
+export const { startEdituser, cancelEditingUser, removeSearchUser } = userSlice.actions
 
 export default userSlice.reducer

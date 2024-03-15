@@ -1,3 +1,4 @@
+import { contract } from './contract.type'
 import { post } from './post.type'
 import { User } from './user.type'
 
@@ -12,6 +13,11 @@ export type FormAddPostModalProps = {
 
 export type FormUserModalProps = {
   userEdit: User | null
+  isOpenModal: boolean
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type FormContractModalProps = {
   isOpenModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -1,53 +1,16 @@
-import {
-  AutoComplete,
-  Button,
-  DatePicker,
-  Input,
-  InputNumber,
-  Modal,
-  Select,
-  Table,
-  TableProps,
-  Tag,
-  Typography
-} from 'antd'
+import { Button, Input, Table, TableProps, Tag } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
-import dayjs from 'dayjs'
-import debounce from 'lodash/debounce'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import ButtonAction from '../Components/UI/ButtonAction'
-import { createContract, getContractList } from '../redux/actions/contract.action'
-import { searchUser } from '../redux/actions/user.actions'
+import { getContractList } from '../redux/actions/contract.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
-import { appointments } from '../types/appointments.type'
 import { contract, contractHistory } from '../types/contract.type'
-
-const formData: contract = {
-  id: NaN,
-  contractHistory: {
-    price: NaN,
-    description: '',
-    expiredTime: '',
-    users: {
-      id: NaN,
-      image: ''
-    }
-  },
-  dateSign: '',
-  description: '',
-  dateStartRent: '',
-  appointmentId: NaN
-}
+import ModalContract from './Dashboard/ContractPage/ContractModal'
 
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
-  const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
-  const [appointmentFiltered, setAppointmentFiltered] = useState<appointments[]>([])
-  const [searchUserState, setSearchUserState] = useState<appointments[]>([])
   const [modalAdd, setModalAdd] = useState<boolean>(false)
-  const [modalData, setModalData] = useState<contract>(formData)
-  const [startDate, setStartDate] = useState(null)
   const dispatch = useAppDispatch()
   const data = useSelector((state: RootState) => state.contract.contractList)
   const loading = useSelector((state: RootState) => state.contract.loading)
@@ -58,15 +21,6 @@ const ContractPage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
-
-  const filterAppointment = (e: number) =>
-    searchUserData.filter((ap) => {
-      return ap.users.id === Number(e)
-    })
-
-  useEffect(() => {
-    setSearchUserState(searchUserData)
-  }, [searchUserData])
 
   const columns: TableProps['columns'] = [
     {
@@ -187,83 +141,6 @@ const ContractPage: React.FC = () => {
     }
   ]
 
-  const dateFormat = 'YYYY-MM-DD'
-
-  const handleCancelAdd = () => {
-    setModalAdd(false)
-  }
-  const handleOkAdd = () => {
-    setModalAdd(false)
-    dispatch(createContract(modalData))
-    setModalData(formData)
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleInputDescription = (e: any) => {
-    setModalData((prevData) => ({
-      ...prevData,
-      description: e.target.value,
-      contractHistory: {
-        ...prevData.contractHistory,
-        description: e.target.value
-      }
-    }))
-  }
-
-  const handleSearchUser = (e: string) => {
-    if (e.length === 0) {
-      return
-    }
-    dispatch(searchUser(e))
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateChangeExpired = (_: any, dateString: string) => {
-    setModalData((data) => ({
-      ...data,
-      contractHistory: { ...data.contractHistory, expiredTime: dateString }
-    }))
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateChangeSign = (_: any, dateString: string) => {
-    setModalData((data) => ({
-      ...data,
-      dateSign: dateString
-    }))
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateStartChange = (date: any, dateString: string) => {
-    setStartDate(date)
-    setModalData((data) => ({
-      ...data,
-      dateStartRent: dateString
-    }))
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleChangePrice = (e: any) => {
-    setModalData((data) => ({
-      ...data,
-      contractHistory: { ...data.contractHistory, price: e }
-    }))
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const disabledEndDate = (current: any) => {
-    // Disable dates after the selected start date
-    if (startDate) return current && current < startDate
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function disabledDate(current: any) {
-    // Trả về true nếu current (ngày hiện tại) nhỏ hơn ngày hiện tại
-    return current && current < dayjs().startOf('day')
-  }
-
-  const handleSelectAppointment = (e: number) => {
-    setModalData((data) => ({ ...data, appointmentId: e }))
-  }
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
@@ -298,86 +175,7 @@ const ContractPage: React.FC = () => {
         bordered
       />
 
-      <Modal title='Add Contract' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
-        <div style={{ display: 'flex', gap: '5%' }}>
-          <div style={{ width: '50%' }}>
-            <Typography.Title level={5}>Description</Typography.Title>
-            <Input.TextArea
-              placeholder='input name'
-              value={modalData.description}
-              onChange={handleInputDescription}
-              required={true}
-            />
-          </div>
-          <div style={{ width: '50%' }}>
-            <Typography.Title level={5}>User</Typography.Title>
-            <AutoComplete
-              style={{ width: '100%' }}
-              placeholder='input name'
-              options={searchUserState.map((user) => ({
-                label: (
-                  <div>
-                    <img style={{ width: 20, height: 20 }} src={user.users.image} alt={user.users.fullName} />
-                    {user.users.fullName}
-                  </div>
-                ),
-                value: Number(user.users.id)
-              }))}
-              onSearch={debounce((e) => handleSearchUser(e), 500)}
-              onSelect={(e) => {
-                setModalData((data) => ({
-                  ...data,
-                  contractHistory: { ...data.contractHistory, users: { ...data.contractHistory.users, id: e } }
-                }))
-
-                const abc = filterAppointment(e)
-                setAppointmentFiltered(abc)
-              }}
-            />
-          </div>
-        </div>
-        <div style={{ width: '100%' }}>
-          <Typography.Title level={5}>Appointment</Typography.Title>
-          <Select
-            style={{ minWidth: 300 }}
-            onChange={handleSelectAppointment}
-            options={appointmentFiltered.map((appointments) => {
-              return { value: appointments.apartment.id, label: <div>{appointments.apartment.name}</div> }
-            })}
-          />
-        </div>
-        <div style={{ display: 'flex', gap: '5%' }}>
-          <div style={{ width: '45%' }}>
-            <Typography.Title level={5}>Date Start Rent</Typography.Title>
-            <DatePicker
-              style={{ width: '80%' }}
-              format={dateFormat}
-              onChange={handleDateStartChange}
-              disabledDate={disabledDate}
-            />
-          </div>
-          <div style={{ width: '50%' }}>
-            <Typography.Title level={5}>Expired Time</Typography.Title>
-            <DatePicker
-              style={{ width: '80%' }}
-              format={dateFormat}
-              onChange={handleDateChangeExpired}
-              disabledDate={disabledEndDate}
-            />
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: '5%' }}>
-          <div style={{ width: '45%' }}>
-            <Typography.Title level={5}>Date Sign</Typography.Title>
-            <DatePicker style={{ width: '80%' }} format={dateFormat} onChange={handleDateChangeSign} />
-          </div>
-          <div style={{ width: '50%' }}>
-            <Typography.Title level={5}>Price</Typography.Title>
-            <InputNumber min={0} defaultValue={0} onChange={handleChangePrice} controls={false} required={true} />
-          </div>
-        </div>
-      </Modal>
+      <ModalContract isOpenModal={modalAdd} setOpenModal={setModalAdd} />
     </>
   )
 }

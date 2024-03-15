@@ -1,0 +1,259 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AutoComplete, DatePicker, Input, InputNumber, Modal, Select, Typography, message } from 'antd'
+import dayjs, { Dayjs } from 'dayjs'
+import { debounce } from 'lodash'
+import { useEffect, useState } from 'react'
+import { Controller, FieldErrors, Resolver, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
+import { createContract } from '../../../redux/actions/contract.action'
+import { searchUser } from '../../../redux/actions/user.actions'
+import { RootState, useAppDispatch } from '../../../redux/containers/store'
+import { removeSearchUser } from '../../../redux/slices/user.slice'
+import { contractSchema, contractValueType, defaultFormValues } from '../../../schema/contract.schema'
+import { appointments } from '../../../types/appointments.type'
+import { FormContractModalProps } from '../../../types/props.types'
+import { formatDate } from '../../../utils/formatDate'
+import { da } from 'date-fns/locale'
+
+const ModalContract = (props: FormContractModalProps) => {
+  const { isOpenModal, setOpenModal } = props
+  const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
+  const [searchUserState, setSearchUserState] = useState<appointments[]>([])
+  const [startDate, setStartDate] = useState<Dayjs | undefined>(undefined)
+
+  const [appointmentFiltered, setAppointmentFiltered] = useState<appointments[]>([])
+
+  useEffect(() => {
+    setSearchUserState(searchUserData)
+  }, [searchUserData])
+
+  const dateFormat = 'YYYY-MM-DD'
+
+  const filterAppointment = (e: number) =>
+    searchUserData.filter((ap) => {
+      return ap.users.id === Number(e)
+    })
+
+  const methods = useForm<contractValueType>({
+    resolver: yupResolver(contractSchema) as Resolver<contractValueType>,
+    mode: 'onBlur',
+    defaultValues: defaultFormValues
+  })
+
+  const { control, handleSubmit, formState, reset } = methods
+  const { errors } = formState
+  const [messageApi, contextHolder] = message.useMessage()
+  const dispatch = useAppDispatch()
+
+  // useEffect(() => {
+  //   if (isOpenModal) {
+  //     reset({
+  //       description: contract?.description,
+  //       user: contract?.contractHistory.users.id,
+  //       appointmentId: contract?.apartmentId,
+  //       expiredTime: contract?.contractHistory.expiredTime,
+  //       dateSign: contract?.dateSign,
+  //       dateStartRent: contract?.dateStartRent,
+  //       price: contract?.contractHistory.price
+  //     })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isOpenModal])
+
+  const onSubmit: SubmitHandler<contractValueType> = async (data) => {
+    const formattedData: contractValueType = {
+      appointmentId: data.appointmentId,
+      dateSign: formatDate(String(data.dateSign)),
+      dateStartRent: formatDate(String(data.dateStartRent)),
+      description: data.description,
+      expiredTime: formatDate(String(data.expiredTime)),
+      price: data.price,
+      user: data.user
+    }
+    dispatch(createContract(formattedData))
+    dispatch(removeSearchUser())
+    reset(defaultFormValues)
+    setOpenModal(false)
+  }
+
+  const onError: SubmitErrorHandler<contractValueType> = (errors: FieldErrors<contractValueType>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    Object.entries(errors).forEach(([_field, error]) => {
+      const errorMessage = error?.message
+      errorMessage && messageApi.error(errorMessage)
+    })
+  }
+
+  const handleCancel = () => {
+    setOpenModal(false)
+    reset(defaultFormValues)
+    dispatch(removeSearchUser())
+  }
+
+  const handleSearchUser = (e: string) => {
+    if (e.length === 0) {
+      return
+    }
+    dispatch(searchUser(e))
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const disabledEndDate = (current: any) => {
+    // Disable dates after the selected start date
+    if (startDate) return current && current < startDate
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function disabledDate(current: any) {
+    // Trả về true nếu current (ngày hiện tại) nhỏ hơn ngày hiện tại
+    return current && current < dayjs().startOf('day')
+  }
+
+  return (
+    <>
+      {contextHolder}
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Modal title='Add Contract' open={isOpenModal} onOk={handleSubmit(onSubmit, onError)} onCancel={handleCancel}>
+          <div style={{ display: 'flex', gap: '5%' }}>
+            <div style={{ width: '50%' }}>
+              <Typography.Title level={5}>Description</Typography.Title>
+              <Controller
+                control={control}
+                name='description'
+                render={({ field: { value, onChange } }) => (
+                  <Input.TextArea
+                    placeholder='input name'
+                    value={value}
+                    onChange={(value) => {
+                      onChange(value)
+                    }}
+                  />
+                )}
+              />
+            </div>
+            <div style={{ width: '50%' }}>
+              <Typography.Title level={5}>User</Typography.Title>
+              <Controller
+                control={control}
+                name='user'
+                render={({ field }) => (
+                  <AutoComplete
+                    style={{ width: '100%' }}
+                    placeholder='input name'
+                    options={searchUserState.map((user) => ({
+                      label: (
+                        <div>
+                          <img style={{ width: 20, height: 20 }} src={user.users.image} alt={user.users.fullName} />
+                          {user.users.fullName}
+                        </div>
+                      ),
+                      value: Number(user.users.id)
+                    }))}
+                    onSearch={debounce((e) => handleSearchUser(e), 500)}
+                    onChange={(value) => {
+                      field.onChange(value)
+                      const abc = filterAppointment(value)
+                      setAppointmentFiltered(abc)
+                    }}
+                  />
+                )}
+              />
+            </div>
+          </div>
+          <div style={{ width: '100%' }}>
+            <Typography.Title level={5}>Appointment</Typography.Title>
+            <Controller
+              control={control}
+              name='appointmentId'
+              render={({ field }) => (
+                <Select
+                  style={{ minWidth: 300 }}
+                  onChange={(value) => field.onChange(value)}
+                  options={appointmentFiltered.map((appointments) => {
+                    return { value: appointments.id, label: <div>{appointments.apartment.name}</div> }
+                  })}
+                />
+              )}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '5%' }}>
+            <div style={{ width: '45%' }}>
+              <Typography.Title level={5}>Date Start Rent</Typography.Title>
+              <Controller
+                control={control}
+                name='dateStartRent'
+                render={({ field }) => (
+                  <DatePicker
+                    style={{ width: '80%' }}
+                    format={dateFormat}
+                    onChange={(value) => {
+                      field.onChange(value)
+                      if (value != null) {
+                        setStartDate(value)
+                      }
+                    }}
+                    disabledDate={disabledDate}
+                  />
+                )}
+              />
+            </div>
+            <div style={{ width: '50%' }}>
+              <Typography.Title level={5}>Expired Time</Typography.Title>
+              <Controller
+                control={control}
+                name='expiredTime'
+                render={({ field }) => (
+                  <DatePicker
+                    style={{ width: '80%' }}
+                    format={dateFormat}
+                    onChange={(value) => {
+                      field.onChange(value)
+                    }}
+                    disabledDate={disabledEndDate}
+                  />
+                )}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '5%' }}>
+            <div style={{ width: '45%' }}>
+              <Typography.Title level={5}>Date Sign</Typography.Title>
+              <Controller
+                control={control}
+                name='dateSign'
+                render={({ field }) => (
+                  <DatePicker
+                    style={{ width: '80%' }}
+                    format={dateFormat}
+                    onChange={(value) => field.onChange(value)}
+                    disabledDate={disabledDate}
+                  />
+                )}
+              />
+            </div>
+            <div style={{ width: '50%' }}>
+              <Typography.Title level={5}>Price</Typography.Title>
+              <Controller
+                control={control}
+                name='price'
+                render={({ field }) => (
+                  <InputNumber
+                    min={0}
+                    defaultValue={0}
+                    onChange={(value) => {
+                      field.onChange(value)
+                    }}
+                    controls={false}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </Modal>
+      </form>
+    </>
+  )
+}
+
+export default ModalContract
