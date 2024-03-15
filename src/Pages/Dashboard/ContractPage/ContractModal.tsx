@@ -39,7 +39,7 @@ const ModalContract = (props: FormContractModalProps) => {
     defaultValues: defaultFormValues
   })
 
-  const { control, handleSubmit, formState, reset } = methods
+  const { control, handleSubmit, reset } = methods
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
