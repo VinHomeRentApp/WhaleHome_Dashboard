@@ -13,7 +13,6 @@ import { contractSchema, contractValueType, defaultFormValues } from '../../../s
 import { appointments } from '../../../types/appointments.type'
 import { FormContractModalProps } from '../../../types/props.types'
 import { formatDate } from '../../../utils/formatDate'
-import { da } from 'date-fns/locale'
 
 const ModalContract = (props: FormContractModalProps) => {
   const { isOpenModal, setOpenModal } = props
@@ -41,7 +40,6 @@ const ModalContract = (props: FormContractModalProps) => {
   })
 
   const { control, handleSubmit, formState, reset } = methods
-  const { errors } = formState
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
