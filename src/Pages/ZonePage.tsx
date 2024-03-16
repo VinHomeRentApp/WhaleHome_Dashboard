@@ -6,8 +6,9 @@ import { useSelector } from 'react-redux'
 import { getArea } from '../redux/actions/area.actions'
 import { createZone, deleteZone, getZoneList, updateZone } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
-import { startEditingZone } from '../redux/slices/zone.slice'
+import { cancelEditingZone, startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
+import { set } from 'lodash'
 
 const formData: zone = {
   id: NaN,
@@ -121,17 +122,23 @@ const ZonePage: React.FC = () => {
   const handleOkEdit = () => {
     setModal(false)
     dispatch(updateZone({ id: modalData.id, body: modalData }))
+    dispatch(cancelEditingZone())
+    setModalData(formData)
   }
   const handleCancel = () => {
     setModal(false)
+    dispatch(cancelEditingZone())
+    setModalData(formData)
   }
   const handleCancelAdd = () => {
     setModalAdd(false)
+    setModalData(formData)
   }
   const handleOkAdd = () => {
-    if (modalData.name.trim() !== '') {
+    if (modalData.name.trim() !== '' && !isNaN(modalData.area.id)) {
       setModalAdd(false)
       dispatch(createZone(modalData))
+      dispatch(cancelEditingZone())
     } else return
   }
 
@@ -187,12 +194,12 @@ const ZonePage: React.FC = () => {
 
         <Typography.Title level={5}>Area</Typography.Title>
         <Select
-          defaultValue={1}
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
           options={areaList?.map((area) => {
             return { value: area.id, label: area.name }
           })}
+          value={modalData.area.id}
         />
         <Typography.Title level={5}>Status</Typography.Title>
         <Checkbox
@@ -212,7 +219,6 @@ const ZonePage: React.FC = () => {
         <Typography.Title level={5}>Area</Typography.Title>
 
         <Select
-          defaultValue={1}
           style={{ minWidth: 150 }}
           onChange={handleSelectZone}
           options={areaList?.map((area) => {

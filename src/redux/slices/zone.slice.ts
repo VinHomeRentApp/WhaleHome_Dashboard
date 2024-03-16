@@ -11,6 +11,9 @@ const ZoneSlice = createSlice({
       const zoneID = action.payload
       const foundZone = state.ZoneList.find((area) => area.id === zoneID) || null
       state.editingZone = foundZone
+    },
+    cancelEditingZone: (state) => {
+      state.editingZone = null
     }
   },
   extraReducers(builder) {
@@ -65,6 +68,6 @@ const ZoneSlice = createSlice({
   }
 })
 
-export const { startEditingZone } = ZoneSlice.actions
+export const { startEditingZone, cancelEditingZone } = ZoneSlice.actions
 
 export default ZoneSlice.reducer
