@@ -15,7 +15,7 @@ export const createContract = createAsyncThunk('contract/createContract', async 
   const res = await http.post<ResponseSuccessful<contractHistory>>('/contracthistories', {
     signal: thunkAPI.signal,
     price: body.price,
-    description: body.description,
+    description: body.description.trim(),
     expiredTime: body.expiredTime,
     users: {
       id: body.user
@@ -25,7 +25,7 @@ export const createContract = createAsyncThunk('contract/createContract', async 
   const res2 = await http.post<ResponseSuccessful<contract>>('/contracts', {
     signal: thunkAPI.signal,
     dateSign: body.dateSign,
-    description: body.description,
+    description: body.description.trim(),
     dateStartRent: body.dateStartRent,
     contractHistory: {
       id: idcontracthistories

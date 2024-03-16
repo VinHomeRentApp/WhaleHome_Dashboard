@@ -180,7 +180,7 @@ const ZonePage: React.FC = () => {
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
           value={modalData.name}
         />
 

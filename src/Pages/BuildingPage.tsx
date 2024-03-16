@@ -69,8 +69,6 @@ const BuildingPage: React.FC = () => {
     }))
     setZoneListFilter(ZoneListFilterFunc(e))
     setEnable(false)
-
-    console.log(zoneListFilter)
   }
 
   const handleSelectZone = (e: number) => {
@@ -220,7 +218,7 @@ const BuildingPage: React.FC = () => {
         <Input
           placeholder='input name'
           value={modalData.name}
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
         />
         <Typography.Title level={5}>Area</Typography.Title>
         <Select
@@ -248,7 +246,7 @@ const BuildingPage: React.FC = () => {
         <Input
           placeholder='input name'
           value={modalData.name}
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
         />
         <Typography.Title level={5}>Area</Typography.Title>
         <Select
