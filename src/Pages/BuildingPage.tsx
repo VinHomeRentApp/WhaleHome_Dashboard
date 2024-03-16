@@ -175,11 +175,13 @@ const BuildingPage: React.FC = () => {
   }
 
   const handleOkAdd = () => {
-    setModalAdd(false)
-    setModalData(formData)
-    setEnable(true)
-    dispatch(createBuilding(modalData))
-    dispatch(cancelEditingBuilding())
+    if (modalData.name !== '') {
+      setModalAdd(false)
+      setModalData(formData)
+      setEnable(true)
+      dispatch(createBuilding(modalData))
+      dispatch(cancelEditingBuilding())
+    } else return
   }
 
   const handleCancelAdd = () => {
@@ -218,7 +220,7 @@ const BuildingPage: React.FC = () => {
         <Input
           placeholder='input name'
           value={modalData.name}
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
         />
         <Typography.Title level={5}>Area</Typography.Title>
         <Select

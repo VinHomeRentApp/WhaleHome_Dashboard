@@ -124,14 +124,15 @@ const ZonePage: React.FC = () => {
   }
   const handleCancel = () => {
     setModal(false)
-    // dispatch(cancelEditingArea())
   }
   const handleCancelAdd = () => {
     setModalAdd(false)
   }
   const handleOkAdd = () => {
-    setModalAdd(false)
-    dispatch(createZone(modalData))
+    if (modalData.name.trim() !== '') {
+      setModalAdd(false)
+      dispatch(createZone(modalData))
+    } else return
   }
 
   const handleSelectZone = (e: any) => {

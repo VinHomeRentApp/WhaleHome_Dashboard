@@ -45,7 +45,7 @@ export default function AreaPage() {
     if (modalData.name.trim() !== '') {
       setModalAdd(false)
       dispatch(createArea(modalData.name))
-      handleCancelAdd()
+      dispatch(cancelEditingArea())
     } else {
       return
     }
@@ -86,7 +86,7 @@ export default function AreaPage() {
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
           value={modalData.name}
         />
       </Modal>

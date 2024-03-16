@@ -108,9 +108,11 @@ const ApartmentPage = () => {
   }
 
   const handleOk = () => {
-    setIsModalEdit(false)
-    dispatch(updateApartment({ id: modalData.id, body: modalData }))
-    dispatch(cancelEditingApartment())
+    if (modalData.name !== '') {
+      setIsModalEdit(false)
+      dispatch(updateApartment({ id: modalData.id, body: modalData }))
+      dispatch(cancelEditingApartment())
+    } else return
   }
   const handleCancel = () => {
     setIsModalEdit(false)
