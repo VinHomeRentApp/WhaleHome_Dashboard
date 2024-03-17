@@ -175,7 +175,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
                 status={errors.userId && 'error'}
                 filterOption={filterOption}
                 placeholder='Search to Select'
-                options={userList.map((user) => ({ value: user.id, label: user.fullName ?? '' }))}
+                options={userList.map((user) => ({ value: user.id, label: user.email ?? '' }))}
                 onChange={(value) => field.onChange(value)}
                 value={field.value}
               />
