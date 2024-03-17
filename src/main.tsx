@@ -8,11 +8,13 @@ import './index.css'
 import { store } from './redux/containers/store.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <ProtectedRoutes>
-        <App />
-      </ProtectedRoutes>
-    </Provider>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <ProtectedRoutes>
+          <App />
+        </ProtectedRoutes>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
 )
