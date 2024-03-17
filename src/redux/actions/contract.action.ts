@@ -20,7 +20,7 @@ export const uploadFileContract = createAsyncThunk(
   '/contract/upload',
   async ({ id, file }: uploadFileContractTypes, thunkAPI) => {
     try {
-      const response = await http.put<ResponseSuccessful<string>>(`/contracts/upload/${id}`, { file })
+      const response = await http.put<ResponseSuccessful<contract>>(`/contracts/upload/${id}`, { file })
       return response.data.data
     } catch (error) {
       return thunkAPI.rejectWithValue(error)

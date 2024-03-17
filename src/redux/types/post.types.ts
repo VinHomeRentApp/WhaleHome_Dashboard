@@ -5,6 +5,7 @@ export type bodyUpdatePostTypes = {
   body: {
     title: string
     description: string
+    status?: boolean
   }
 }
 

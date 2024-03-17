@@ -39,7 +39,12 @@ const ModalContract = (props: FormContractModalProps) => {
     defaultValues: defaultFormValues
   })
 
-  const { control, handleSubmit, reset } = methods
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = methods
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
@@ -97,52 +102,47 @@ const ModalContract = (props: FormContractModalProps) => {
       {contextHolder}
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Modal title='Add Contract' open={isOpenModal} onOk={handleSubmit(onSubmit, onError)} onCancel={handleCancel}>
-          <div style={{ display: 'flex', gap: '5%' }}>
-            <div style={{ width: '50%' }}>
-              <Typography.Title level={5}>Description</Typography.Title>
-              <Controller
-                control={control}
-                name='description'
-                render={({ field: { value, onChange } }) => (
-                  <Input.TextArea
-                    placeholder='input name'
-                    value={value}
-                    onChange={(value) => {
-                      onChange(value)
-                    }}
-                  />
-                )}
-              />
-            </div>
-            <div style={{ width: '50%' }}>
-              <Typography.Title level={5}>User</Typography.Title>
-              <Controller
-                control={control}
-                name='user'
-                render={({ field }) => (
-                  <AutoComplete
-                    style={{ width: '100%' }}
-                    placeholder='input name'
-                    options={searchUserState.map((user) => ({
-                      label: (
-                        <div>
-                          <img style={{ width: 20, height: 20 }} src={user.users.image} alt={user.users.fullName} />
-                          {user.users.fullName}
-                        </div>
-                      ),
-                      value: Number(user.users.id)
-                    }))}
-                    onSearch={debounce((e) => handleSearchUser(e), 500)}
-                    onChange={(value) => {
-                      field.onChange(value)
-                      const abc = filterAppointment(value)
-                      setAppointmentFiltered(abc)
-                    }}
-                    value={field.value}
-                  />
-                )}
-              />
-            </div>
+          <div style={{ width: '100%' }}>
+            <Typography.Title level={5}>User</Typography.Title>
+            <Controller
+              control={control}
+              name='user'
+              render={({ field }) => (
+                <AutoComplete
+                  status={errors.user && 'error'}
+                  style={{ width: '100%' }}
+                  placeholder='Input email to find ID user'
+                  value={field.value}
+                  options={searchUserState.map((user) => ({
+                    label: user.users.fullName, // Sửa phần hiển thị label ở đây
+                    value: Number(user.users.id)
+                  }))}
+                  onSearch={debounce((e) => handleSearchUser(e), 500)}
+                  onChange={(value) => {
+                    field.onChange(value)
+                    const abc = filterAppointment(value)
+                    setAppointmentFiltered(abc)
+                  }}
+                />
+              )}
+            />
+          </div>
+          <div style={{ width: '100%' }}>
+            <Typography.Title level={5}>Description</Typography.Title>
+            <Controller
+              control={control}
+              name='description'
+              render={({ field: { value, onChange } }) => (
+                <Input.TextArea
+                  status={errors.description && 'error'}
+                  placeholder='Input description'
+                  value={value}
+                  onChange={(value) => {
+                    onChange(value)
+                  }}
+                />
+              )}
+            />
           </div>
           <div style={{ width: '100%' }}>
             <Typography.Title level={5}>Appointment</Typography.Title>
@@ -151,7 +151,8 @@ const ModalContract = (props: FormContractModalProps) => {
               name='appointmentId'
               render={({ field }) => (
                 <Select
-                  style={{ minWidth: 300 }}
+                  status={errors.appointmentId && 'error'}
+                  style={{ width: '100%' }}
                   onChange={(value) => field.onChange(value)}
                   options={appointmentFiltered.map((appointments) => {
                     return { value: appointments.id, label: <div>{appointments.apartment.name}</div> }
@@ -162,14 +163,15 @@ const ModalContract = (props: FormContractModalProps) => {
             />
           </div>
           <div style={{ display: 'flex', gap: '5%' }}>
-            <div style={{ width: '45%' }}>
+            <div style={{ width: '50%' }}>
               <Typography.Title level={5}>Date Start Rent</Typography.Title>
               <Controller
                 control={control}
                 name='dateStartRent'
                 render={({ field }) => (
                   <DatePicker
-                    style={{ width: '80%' }}
+                    status={errors.dateStartRent && 'error'}
+                    style={{ width: '100%' }}
                     format={dateFormat}
                     onChange={(value) => {
                       field.onChange(value)
@@ -190,7 +192,8 @@ const ModalContract = (props: FormContractModalProps) => {
                 name='expiredTime'
                 render={({ field }) => (
                   <DatePicker
-                    style={{ width: '80%' }}
+                    status={errors.expiredTime && 'error'}
+                    style={{ width: '100%' }}
                     format={dateFormat}
                     onChange={(value) => {
                       field.onChange(value)
@@ -204,14 +207,15 @@ const ModalContract = (props: FormContractModalProps) => {
           </div>
 
           <div style={{ display: 'flex', gap: '5%' }}>
-            <div style={{ width: '45%' }}>
+            <div style={{ width: '50%' }}>
               <Typography.Title level={5}>Date Sign</Typography.Title>
               <Controller
                 control={control}
                 name='dateSign'
                 render={({ field }) => (
                   <DatePicker
-                    style={{ width: '80%' }}
+                    status={errors.dateSign && 'error'}
+                    style={{ width: '100%' }}
                     format={dateFormat}
                     onChange={(value) => field.onChange(value)}
                     disabledDate={disabledDate}
@@ -228,6 +232,8 @@ const ModalContract = (props: FormContractModalProps) => {
                 render={({ field }) => (
                   <InputNumber
                     min={0}
+                    status={errors.price && 'error'}
+                    style={{ width: '100%' }}
                     defaultValue={0}
                     onChange={(value) => {
                       field.onChange(value)

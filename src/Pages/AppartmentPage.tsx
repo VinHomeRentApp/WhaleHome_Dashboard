@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Select, Typography } from 'antd'
+import { Button, Input, Modal, Select, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { createApartment, deleteApartment, getApartmentList, updateApartment } from '../redux/actions/apartment.actions'
@@ -103,8 +103,13 @@ const ApartmentPage = () => {
     dispatch(startEditingApartment(id))
     setIsModalEdit(true)
   }
-  const handleDelete = (id: number) => {
-    dispatch(deleteApartment(id))
+  const handleDelete = async (id: number) => {
+    const resultAction = await dispatch(deleteApartment(id))
+    if (deleteApartment.fulfilled.match(resultAction)) {
+      message.success('Update Apartment Status Successfully!')
+    } else if (deleteApartment.rejected.match(resultAction)) {
+      message.error('Update Apartment Status Fail!')
+    }
   }
 
   const handleOk = () => {

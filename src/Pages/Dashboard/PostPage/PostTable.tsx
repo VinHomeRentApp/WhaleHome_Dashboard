@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { EditOutlined, EyeOutlined } from '@ant-design/icons'
-import { Button, Switch, Table, TableProps } from 'antd'
+import { Button, Switch, Table, TableProps, message } from 'antd'
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { updatePost } from '../../../redux/actions/post.actions'
+import { useAppDispatch } from '../../../redux/containers/store'
 import { post } from '../../../types/post.type'
 
 interface PostTableProps {
@@ -11,10 +13,16 @@ interface PostTableProps {
   loading: boolean
   handleViewImage: (record: post) => void
   handleEdit: (post: post) => void
-  handleDelete: (id: number) => void
 }
 
-const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleViewImage, handleEdit, handleDelete }) => {
+const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleViewImage, handleEdit }) => {
+  const dispatch = useAppDispatch()
+
+  const handlePressSwitch = (post: post, checked: boolean) => {
+    dispatch(updatePost({ id: post.id, body: { title: post.title, description: post.description, status: checked } }))
+    message.success('Update Status Successfully!')
+  }
+
   const columns: TableProps['columns'] = [
     {
       title: 'ID',
@@ -104,7 +112,7 @@ const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleView
         return (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <EditOutlined onClick={() => handleEdit(record)} />
-            <Switch defaultChecked={record.status} onChange={() => handleDelete(record.id)} />
+            <Switch defaultChecked={record.status} onChange={(value) => handlePressSwitch(record, value)} />
           </div>
         )
       }

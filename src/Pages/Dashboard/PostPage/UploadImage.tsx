@@ -1,6 +1,9 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { GetProp, Modal, Upload, UploadFile, UploadProps } from 'antd'
+import { GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { deletePostImage, getPostList } from '../../../redux/actions/post.actions'
+import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { post } from '../../../types/post.type'
 
 type UploadImageProps = {
@@ -9,23 +12,16 @@ type UploadImageProps = {
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
-
 const UploadImage = ({ post }: UploadImageProps) => {
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewImage, setPreviewImage] = useState('')
-  const [previewTitle, setPreviewTitle] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const dispatch = useAppDispatch()
+  const [editPost, setEditPost] = useState(post)
+  const { postList } = useSelector((state: RootState) => state.post)
 
   useEffect(() => {
     const uploadFileList: UploadFile[] =
-      post?.postImages.map((e) => ({
+      editPost?.postImages.map((e) => ({
         uid: String(e.id),
         name: 'image.png',
         status: 'done',
@@ -33,21 +29,33 @@ const UploadImage = ({ post }: UploadImageProps) => {
       })) || []
 
     setFileList(uploadFileList)
-  }, [post?.postImages])
+  }, [editPost?.postImages])
 
   const handleCancel = () => setPreviewOpen(false)
 
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType)
+  const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!')
     }
-
-    setPreviewImage(file.url || (file.preview as string))
-    setPreviewOpen(true)
-    setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
+    return isJpgOrPng
   }
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList)
+  const handleRemove = (file: UploadFile) => {
+    dispatch(deletePostImage(file.uid))
+      .then((resultAction) => {
+        if (deletePostImage.fulfilled.match(resultAction)) {
+          setFileList((prevFileList) => prevFileList.filter((item) => item.uid !== file.uid))
+          dispatch(getPostList())
+          message.success('Delete Image Successfully!')
+        } else {
+          message.error('Delete Image Fail!')
+        }
+      })
+      .catch(() => {
+        message.error('Delete Image Fail!')
+      })
+  }
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type='button'>
@@ -55,19 +63,30 @@ const UploadImage = ({ post }: UploadImageProps) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </button>
   )
+
+  const props: UploadProps = {
+    name: 'file',
+    action: `https://whalehome.up.railway.app/api/v1/postimage/create/${post.id}`,
+    method: 'POST',
+    accept: 'image/*',
+    listType: 'picture-card',
+    fileList: fileList,
+    onRemove: handleRemove,
+    beforeUpload: beforeUpload,
+    onChange: () => {
+      dispatch(getPostList())
+      const findPost = postList.find((item) => item.id === editPost.id)
+      if (findPost) {
+        setEditPost(findPost)
+      }
+    }
+  }
+
   return (
     <>
-      <Upload
-        action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-        listType='picture-card'
-        fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
-      >
-        {fileList.length >= 8 ? null : uploadButton}
-      </Upload>
-      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-        <img alt='example' style={{ width: '100%' }} src={previewImage} />
+      <Upload {...props}>{fileList.length >= 8 ? null : uploadButton}</Upload>
+      <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
+        <img alt='example' style={{ width: '100%' }} />
       </Modal>
     </>
   )

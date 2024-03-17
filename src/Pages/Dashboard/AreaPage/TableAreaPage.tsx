@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Switch, Table, TableProps } from 'antd'
+import { Switch, Table, TableProps, message } from 'antd'
 import { Dispatch } from 'react'
 import { useSelector } from 'react-redux'
 import { deleteArea } from '../../../redux/actions/area.actions'
@@ -22,10 +22,13 @@ const TableAreaPage = ({ search, setIsOpenModal }: TableArePageProps) => {
     dispatch(startEditingArea(id))
   }
 
-  function handleDelte(id: number) {
-    console.log(id)
-
-    dispatch(deleteArea(id))
+  async function handleDelte(id: number) {
+    const resultAction = await dispatch(deleteArea(id))
+    if (deleteArea.fulfilled.match(resultAction)) {
+      message.success('Update Area Status Successful!')
+    } else if (deleteArea.rejected.match(resultAction)) {
+      message.error('Update Area Status Fail!')
+    }
   }
 
   const ColumnAreaPage: TableProps['columns'] = [

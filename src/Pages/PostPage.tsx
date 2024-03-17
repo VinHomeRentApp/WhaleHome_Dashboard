@@ -43,10 +43,6 @@ const PostPage: React.FC = () => {
     setIsOpenModalEdit(true)
   }
 
-  const handleDelete = (id: number) => {
-    console.log(id)
-  }
-
   return (
     <>
       {contextHolder}
@@ -77,7 +73,6 @@ const PostPage: React.FC = () => {
         loading={isLoading}
         handleViewImage={handleViewImage}
         handleEdit={handleEdit}
-        handleDelete={handleDelete}
       />
       <ImageViewerModal
         visible={isOpenModal}

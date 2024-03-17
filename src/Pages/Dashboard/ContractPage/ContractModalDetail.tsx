@@ -13,6 +13,7 @@ import {
   layoutStyle,
   titleContextStyle
 } from './Styles/StyleContractDetail'
+//
 
 const { Header, Content } = Layout
 
@@ -29,8 +30,12 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
 
   const handleDownloadFile = async () => {
     if (selectedContract?.id) {
-      await dispatch(downloadFileContract({ id: selectedContract?.id }))
-      message.success('Download File Successfully!')
+      const resultAction = await dispatch(downloadFileContract({ id: selectedContract?.id }))
+      if (downloadFileContract.fulfilled.match(resultAction)) {
+        message.success('Download File Contract Successfully!')
+      } else {
+        message.error('Download File Contract Fail!')
+      }
     }
   }
 
@@ -51,6 +56,7 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
     },
     onChange(info) {
       if (info.file.status === 'done') {
+        setSelectedContract(info.file.response.data)
         message.success(`upload ${selectedContract?.id} file uploaded successfully`)
         dispatch(getContractList())
       } else if (info.file.status === 'error') {

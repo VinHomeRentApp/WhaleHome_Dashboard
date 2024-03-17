@@ -109,8 +109,13 @@ const UserPage: React.FC = () => {
     }
   ]
 
-  const handleDelete = (e: number) => {
-    dispatch(deactiveUser(e))
+  const handleDelete = async (e: number) => {
+    const resultAction = await dispatch(deactiveUser(e))
+    if (deactiveUser.fulfilled.match(resultAction)) {
+      message.success('Update User Status Successfully!')
+    } else if (deactiveUser.rejected.match(resultAction)) {
+      message.error('Update User Status Fail!')
+    }
   }
 
   const handleOpenModalEdit = (e: number) => {
