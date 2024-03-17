@@ -121,6 +121,18 @@ const ContractPage: React.FC = () => {
       )
     },
     {
+      title: 'Status of Payment',
+      key: 'id',
+      align: 'center',
+      width: '10%',
+      render: (record: contract) => {
+        if (record.contractHistory.users.statusOfPayment) {
+          return <Tag color={'green'}>Đã thanh toán</Tag>
+        }
+        return <Tag color={'Gray'}>Chưa thanh toán</Tag>
+      }
+    },
+    {
       title: 'More',
       dataIndex: 'user',
       key: 'id',
