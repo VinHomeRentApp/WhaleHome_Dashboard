@@ -9,7 +9,7 @@ import { post } from '../../../types/post.type'
 
 interface PostTableProps {
   search: string
-  data: post[]
+  data: post[] | undefined
   loading: boolean
   handleViewImage: (record: post) => void
   handleEdit: (post: post) => void

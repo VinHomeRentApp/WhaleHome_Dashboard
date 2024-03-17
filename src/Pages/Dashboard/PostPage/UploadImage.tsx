@@ -1,9 +1,8 @@
-import { PlusOutlined } from '@ant-design/icons'
 import { GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd'
+import ImgCrop from 'antd-img-crop'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { deletePostImage, getPostList } from '../../../redux/actions/post.actions'
-import { RootState, useAppDispatch } from '../../../redux/containers/store'
+import { useAppDispatch } from '../../../redux/containers/store'
 import { post } from '../../../types/post.type'
 
 type UploadImageProps = {
@@ -16,12 +15,10 @@ const UploadImage = ({ post }: UploadImageProps) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const dispatch = useAppDispatch()
-  const [editPost, setEditPost] = useState(post)
-  const { postList } = useSelector((state: RootState) => state.post)
 
   useEffect(() => {
     const uploadFileList: UploadFile[] =
-      editPost?.postImages.map((e) => ({
+      post?.postImages.map((e) => ({
         uid: String(e.id),
         name: 'image.png',
         status: 'done',
@@ -29,7 +26,7 @@ const UploadImage = ({ post }: UploadImageProps) => {
       })) || []
 
     setFileList(uploadFileList)
-  }, [editPost?.postImages])
+  }, [post?.postImages])
 
   const handleCancel = () => setPreviewOpen(false)
 
@@ -41,7 +38,7 @@ const UploadImage = ({ post }: UploadImageProps) => {
     return isJpgOrPng
   }
 
-  const handleRemove = (file: UploadFile) => {
+  const handleRemove = async (file: UploadFile) => {
     dispatch(deletePostImage(file.uid))
       .then((resultAction) => {
         if (deletePostImage.fulfilled.match(resultAction)) {
@@ -57,34 +54,48 @@ const UploadImage = ({ post }: UploadImageProps) => {
       })
   }
 
-  const uploadButton = (
-    <button style={{ border: 0, background: 'none' }} type='button'>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  )
-
-  const props: UploadProps = {
-    name: 'file',
-    action: `https://whalehome.up.railway.app/api/v1/postimage/create/${post.id}`,
-    method: 'POST',
-    accept: 'image/*',
-    listType: 'picture-card',
-    fileList: fileList,
-    onRemove: handleRemove,
-    beforeUpload: beforeUpload,
-    onChange: () => {
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList, file }) => {
+    setFileList(newFileList)
+    if (file && file.status === 'done') {
       dispatch(getPostList())
-      const findPost = postList.find((item) => item.id === editPost.id)
-      if (findPost) {
-        setEditPost(findPost)
-      }
+      message.success('Upload Image Post Successfully!')
+    } else if (file && file.status === 'error') {
+      message.error(`${file.name} file upload failed.`)
     }
+  }
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj as FileType)
+        reader.onload = () => resolve(reader.result as string)
+      })
+    }
+    const image = new Image()
+    image.src = src
+    const imgWindow = window.open(src)
+    imgWindow?.document.write(image.outerHTML)
   }
 
   return (
     <>
-      <Upload {...props}>{fileList.length >= 8 ? null : uploadButton}</Upload>
+      <ImgCrop rotationSlider aspectSlider cropShape='rect' modalWidth={600}>
+        <Upload
+          name='file'
+          action={`https://whalehome.up.railway.app/api/v1/postimage/create/${post.id}`}
+          listType='picture-card'
+          beforeUpload={beforeUpload}
+          fileList={fileList}
+          onRemove={handleRemove}
+          onChange={onChange}
+          onPreview={onPreview}
+        >
+          {/*  */}
+          {fileList.length < 8 && '+ Upload'}
+        </Upload>
+      </ImgCrop>
       <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
         <img alt='example' style={{ width: '100%' }} />
       </Modal>
