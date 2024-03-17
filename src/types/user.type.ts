@@ -29,4 +29,5 @@ export interface User {
   address?: string
   role?: Role
   verified?: boolean
+  statusOfPayment?: boolean
 }

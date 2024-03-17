@@ -157,6 +157,7 @@ const ModalContract = (props: FormContractModalProps) => {
                   options={appointmentFiltered.map((appointments) => {
                     return { value: appointments.id, label: <div>{appointments.apartment.name}</div> }
                   })}
+                  value={field.value}
                 />
               )}
             />
@@ -178,6 +179,7 @@ const ModalContract = (props: FormContractModalProps) => {
                         setStartDate(value)
                       }
                     }}
+                    value={field.value ? dayjs(field.value) : null}
                     disabledDate={disabledDate}
                   />
                 )}
@@ -197,6 +199,7 @@ const ModalContract = (props: FormContractModalProps) => {
                       field.onChange(value)
                     }}
                     disabledDate={disabledEndDate}
+                    value={field.value ? dayjs(field.value) : null}
                   />
                 )}
               />
@@ -216,6 +219,7 @@ const ModalContract = (props: FormContractModalProps) => {
                     format={dateFormat}
                     onChange={(value) => field.onChange(value)}
                     disabledDate={disabledDate}
+                    value={field.value ? dayjs(field.value) : null}
                   />
                 )}
               />
@@ -235,6 +239,7 @@ const ModalContract = (props: FormContractModalProps) => {
                       field.onChange(value)
                     }}
                     controls={false}
+                    value={field.value}
                   />
                 )}
               />
