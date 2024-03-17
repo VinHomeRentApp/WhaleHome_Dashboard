@@ -1,5 +1,5 @@
-import { FileTextOutlined, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
-import { Space, Spin } from 'antd'
+import { FileTextOutlined, HomeOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
@@ -18,78 +18,68 @@ const DashBoard: React.FC = () => {
     dispatch(setUser(user))
   }, [])
 
+  const styleIcon: React.CSSProperties = {
+    color: '#ffffff',
+    fontSize: 30
+  }
+
+  const layoutIconStyle: React.CSSProperties = {
+    padding: 10,
+    boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#FFA02A',
+    borderRadius: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
   return (
     <Spin spinning={isLoading}>
       <div>
-        <Space direction='horizontal' style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           <DashboardCard
+            description='Active Posts'
             icon={
-              <FileTextOutlined
-                style={{
-                  color: 'green',
-                  backgroundColor: 'rgba(0,255,0,0.25)',
-                  borderRadius: 20,
-                  fontSize: 40,
-                  marginRight: 20,
-                  padding: 10
-                }}
-              />
+              <div style={layoutIconStyle}>
+                <FileTextOutlined style={styleIcon} />
+              </div>
             }
             title={'Posts'}
             URL='/post/count-all'
           />
 
           <DashboardCard
+            description='Active Customers'
             icon={
-              <UserOutlined
-                style={{
-                  color: 'purple',
-                  backgroundColor: 'rgba(0,255,255,0.25)',
-                  borderRadius: 20,
-                  fontSize: 40,
-                  marginRight: 20,
-                  padding: 10
-                }}
-              />
+              <div style={layoutIconStyle}>
+                <UserOutlined style={styleIcon} />
+              </div>
             }
             title={'Customers'}
             URL='/user/count-all'
           />
 
           <DashboardCard
+            description='Active Apartments'
             icon={
-              <HomeFilled
-                style={{
-                  color: 'black',
-                  backgroundColor: 'rgba(0,255,255,0.25)',
-                  borderRadius: 20,
-                  fontSize: 40,
-                  marginRight: 20,
-                  padding: 10
-                }}
-              />
+              <div style={layoutIconStyle}>
+                <HomeOutlined style={styleIcon} />
+              </div>
             }
             title={'Apartments'}
             URL='/apartments/count-all'
           />
 
           <DashboardCard
+            description='Active Contracts'
             icon={
-              <SolutionOutlined
-                style={{
-                  color: 'black',
-                  backgroundColor: 'rgba(0,255,255,0.25)',
-                  borderRadius: 20,
-                  fontSize: 40,
-                  marginRight: 20,
-                  padding: 10
-                }}
-              />
+              <div style={layoutIconStyle}>
+                <SolutionOutlined style={styleIcon} />
+              </div>
             }
             title={'Contracts'}
             URL='/contracts/count-all'
           />
-        </Space>
+        </div>
 
         <DashboardChart />
         <div>
