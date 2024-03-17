@@ -99,7 +99,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
   const onError: SubmitErrorHandler<createAppointmentFormValuesTypes> = (
     errors: FieldErrors<createAppointmentFormValuesTypes>
   ) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     Object.entries(errors).forEach(([_field, error]) => {
       const errorMessage = error?.message
       errorMessage && messageApi.error(errorMessage)
@@ -120,9 +120,6 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
     const selectedDateTime = new Date(year, month, day, hours, minutes, seconds)
 
     if (!isNaN(selectedDateTime.getTime())) {
-      console.log(selectedDateTime)
-
-      // Check if selected time is between 8:30 PM and 6:00 AM
       const selectedHour = selectedDateTime.getHours()
       const selectedMinute = selectedDateTime.getMinutes()
 

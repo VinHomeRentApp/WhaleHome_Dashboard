@@ -43,21 +43,6 @@ const ModalContract = (props: FormContractModalProps) => {
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
-  // useEffect(() => {
-  //   if (isOpenModal) {
-  //     reset({
-  //       description: contract?.description,
-  //       user: contract?.contractHistory.users.id,
-  //       appointmentId: contract?.apartmentId,
-  //       expiredTime: contract?.contractHistory.expiredTime,
-  //       dateSign: contract?.dateSign,
-  //       dateStartRent: contract?.dateStartRent,
-  //       price: contract?.contractHistory.price
-  //     })
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isOpenModal])
-
   const onSubmit: SubmitHandler<contractValueType> = async (data) => {
     const formattedData: contractValueType = {
       appointmentId: data.appointmentId,

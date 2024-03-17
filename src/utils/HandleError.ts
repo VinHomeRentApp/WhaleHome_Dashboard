@@ -15,8 +15,11 @@ export const handleErrorMessage = ({ error, messageApi, title }: HandleErrorMess
       case HttpStatusCode.NotFound:
         messageApi.error(`${title} Cannot Found or Request is not correct !`)
         break
-      default:
+      case HttpStatusCode.InternalServerError:
         messageApi.error(`Fetch ${title} Error, Please Try again!`)
+        break
+      default:
+        return
     }
   }
 }

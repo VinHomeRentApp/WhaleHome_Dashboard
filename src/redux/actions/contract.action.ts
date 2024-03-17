@@ -1,14 +1,40 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { http } from '../../utils/http'
-import { ResponseSuccessful } from '../../types/response.type'
-import { contract, contractHistory } from '../../types/contract.type'
 import { contractValueType } from '../../schema/contract.schema'
+import { contract, contractHistory } from '../../types/contract.type'
+import { ResponseSuccessful } from '../../types/response.type'
+import { http } from '../../utils/http'
 
 export const getContractList = createAsyncThunk('contract/getContract', async (_, thunkAPI) => {
   const res = await http.get<ResponseSuccessful<contract[]>>('/contracts', {
     signal: thunkAPI.signal
   })
   return res.data.data
+})
+
+type uploadFileContractTypes = {
+  id: string
+  file: File
+}
+
+export const uploadFileContract = createAsyncThunk(
+  '/contract/upload',
+  async ({ id, file }: uploadFileContractTypes, thunkAPI) => {
+    try {
+      const response = await http.put<ResponseSuccessful<string>>(`/contracts/upload/${id}`, { file })
+      return response.data.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+)
+
+export const downloadFileContract = createAsyncThunk('/contract/download', async ({ id }: { id: number }, thunkAPI) => {
+  try {
+    const response = await http.get<ResponseSuccessful<string>>(`/contracts/download/${id}`)
+    return response.data.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
 })
 
 export const createContract = createAsyncThunk('contract/createContract', async (body: contractValueType, thunkAPI) => {

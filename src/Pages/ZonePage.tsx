@@ -8,7 +8,6 @@ import { createZone, deleteZone, getZoneList, updateZone } from '../redux/action
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingZone, startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
-import { set } from 'lodash'
 
 const formData: zone = {
   id: NaN,

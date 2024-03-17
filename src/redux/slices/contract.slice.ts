@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { initialContractState } from '../types/contract.type'
 import { createContract, getContractList } from '../actions/contract.action'
+import { initialContractState } from '../types/contract.type'
 
 const contractSlice = createSlice({
   name: 'contract',
@@ -22,13 +22,20 @@ const contractSlice = createSlice({
           state.currentRequestId = action.meta.requestId
         }
       )
-      .addMatcher<RejectedAction | FulfilledAction>(
-        (action) => action.type.endsWith('/rejected') || action.type.endsWith('/fulfilled'),
+      .addMatcher<FulfilledAction>(
+        (action) => action.type.endsWith('/fulfilled'),
         (state, action) => {
           if (state.loading && state.currentRequestId === action.meta.requestId) {
             state.loading = false
             state.currentRequestId = undefined
           }
+        }
+      )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.loading = false
+          state.error = action.payload
         }
       )
   }

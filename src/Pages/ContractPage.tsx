@@ -1,16 +1,18 @@
+import { MoreOutlined } from '@ant-design/icons'
 import { Button, Input, Table, TableProps, Tag } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import ButtonAction from '../Components/UI/ButtonAction'
 import { getContractList } from '../redux/actions/contract.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { contract, contractHistory } from '../types/contract.type'
 import ModalContract from './Dashboard/ContractPage/ContractModal'
+import ContractModalDetail from './Dashboard/ContractPage/ContractModalDetail'
 
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
   const [modalAdd, setModalAdd] = useState<boolean>(false)
+  const [selectedContract, setSelectedContract] = useState<contract | null>()
   const dispatch = useAppDispatch()
   const data = useSelector((state: RootState) => state.contract.contractList)
   const loading = useSelector((state: RootState) => state.contract.loading)
@@ -57,20 +59,6 @@ const ContractPage: React.FC = () => {
       align: 'center'
     },
     {
-      title: 'Date Start Rent',
-      dataIndex: 'dateStartRent',
-      key: 'id',
-      width: '8%',
-      align: 'center'
-    },
-    {
-      title: 'Expired Time',
-      dataIndex: 'contractHistory',
-      width: '10%',
-      key: 'id',
-      render: (record: contractHistory) => String(record.expiredTime)
-    },
-    {
       title: 'Status Of Contract',
       dataIndex: 'contractHistory',
       key: 'id',
@@ -111,7 +99,7 @@ const ContractPage: React.FC = () => {
           render: (record: contract) => String(record.buildingName)
         },
         {
-          title: 'RoomName',
+          title: 'Room',
           key: 'id',
           width: '6%',
           align: 'center',
@@ -137,7 +125,11 @@ const ContractPage: React.FC = () => {
       dataIndex: 'user',
       key: 'id',
       width: '6%',
-      render: (_, record) => <ButtonAction ID={record.id} />
+      render: (_, record) => (
+        <>
+          <Button onClick={() => setSelectedContract(record)} type='default' shape='circle' icon={<MoreOutlined />} />
+        </>
+      )
     }
   ]
 
@@ -161,6 +153,10 @@ const ContractPage: React.FC = () => {
         >
           Add New
         </Button>
+      </div>
+
+      <div>
+        <ContractModalDetail selectedContract={selectedContract} setSelectedContract={setSelectedContract} />
       </div>
 
       <Table
