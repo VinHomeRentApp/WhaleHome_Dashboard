@@ -13,6 +13,7 @@ import {
   layoutStyle,
   titleContextStyle
 } from './Styles/StyleContractDetail'
+//
 
 const { Header, Content } = Layout
 
