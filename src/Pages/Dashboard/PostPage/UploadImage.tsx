@@ -1,6 +1,9 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { GetProp, Modal, Upload, UploadFile, UploadProps } from 'antd'
+import { GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd'
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { deletePostImage, getPostList } from '../../../redux/actions/post.actions'
+import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { post } from '../../../types/post.type'
 
 type UploadImageProps = {
@@ -22,6 +25,8 @@ const UploadImage = ({ post }: UploadImageProps) => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const dispatch = useAppDispatch()
+  const { isLoading } = useSelector((state: RootState) => state.post)
 
   useEffect(() => {
     const uploadFileList: UploadFile[] =
@@ -47,7 +52,28 @@ const UploadImage = ({ post }: UploadImageProps) => {
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1))
   }
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList)
+  const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!')
+    }
+    return isJpgOrPng
+  }
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList, file }) => {
+    if (file.status === 'done') {
+      setFileList(newFileList)
+      message.success('Upload Image Post Successfully!')
+    } else if (file.status === 'error') {
+      message.error(`${file.name} file upload failed.`)
+    }
+  }
+
+  const handleRemove = async (file: UploadFile) => {
+    await dispatch(deletePostImage(file.uid))
+    await dispatch(getPostList())
+    message.success('Delete Image Successfully!')
+  }
 
   const uploadButton = (
     <button style={{ border: 0, background: 'none' }} type='button'>
@@ -58,9 +84,12 @@ const UploadImage = ({ post }: UploadImageProps) => {
   return (
     <>
       <Upload
-        action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
+        action={`https://whalehome.up.railway.app/api/v1/postimage/create/${post.id}`}
+        method='POST'
         listType='picture-card'
+        onRemove={handleRemove}
         fileList={fileList}
+        beforeUpload={beforeUpload}
         onPreview={handlePreview}
         onChange={handleChange}
       >

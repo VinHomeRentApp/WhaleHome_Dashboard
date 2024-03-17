@@ -36,3 +36,12 @@ export const updatePost = createAsyncThunk('/post/update', async ({ id, body }: 
     return thunkAPI.rejectWithValue(error)
   }
 })
+
+export const deletePostImage = createAsyncThunk('/postImage/delete', async (id: string, thunkAPI) => {
+  try {
+    const response = await http.put<ResponseSuccessful<string>>(`/postimage/delete/${id}`)
+    return response.data.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})

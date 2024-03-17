@@ -7,7 +7,6 @@ import {
 } from '@ant-design/icons'
 import { Card, Drawer, Select, Spin, Typography } from 'antd'
 import Meta from 'antd/es/card/Meta'
-import { useState } from 'react'
 import { appointments } from '../../../types/appointments.type'
 import { convertToAMPM } from '../../../utils/formatDate'
 
@@ -21,11 +20,12 @@ type Props = {
 
 const DrawerAppointment = (props: Props) => {
   const { selectedRecord, onClose, isLoadingAppointmentList, onChangeStatus } = props
-  const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined)
 
   const handleStatusChange = async (value: string) => {
-    await onChangeStatus(value)
-    setSelectedStatus(value)
+    onChangeStatus(value)
+    if (selectedRecord) {
+      selectedRecord.statusAppointment = value
+    }
   }
 
   return (
@@ -68,7 +68,7 @@ const DrawerAppointment = (props: Props) => {
           </Typography.Title>
           <Select
             style={{ width: 120 }}
-            value={selectedStatus}
+            value={selectedRecord?.statusAppointment}
             onChange={(value) => handleStatusChange(value)}
             options={[
               { value: 'Pending', label: 'Pending' },
