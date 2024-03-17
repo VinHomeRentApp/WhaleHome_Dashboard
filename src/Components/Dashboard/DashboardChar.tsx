@@ -110,10 +110,10 @@ const DashboardChart: React.FC = () => {
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 
   return (
-    <div style={{ width: '100%', marginTop: 20, marginBottom: 20, display: 'flex' }}>
+    <div style={{ width: '100%', marginTop: 20, marginBottom: 20, display: 'flex', gap: 10 }}>
       {contextHolder}
 
-      <Card style={{ width: '65%' }}>
+      <Card style={{ width: '62%', marginLeft: 10, boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.1)' }}>
         <div>
           <Select
             showSearch
@@ -127,7 +127,7 @@ const DashboardChart: React.FC = () => {
         </div>
         <Bar options={options} data={barChartData} />
       </Card>
-      <Card style={{ width: '35%' }}>
+      <Card style={{ width: '35%', boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.05)' }}>
         <Pie data={pieChartData} />
       </Card>
     </div>
