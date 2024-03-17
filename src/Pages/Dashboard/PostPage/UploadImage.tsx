@@ -92,6 +92,7 @@ const UploadImage = ({ post }: UploadImageProps) => {
           onChange={onChange}
           onPreview={onPreview}
         >
+          {/*  */}
           {fileList.length < 8 && '+ Upload'}
         </Upload>
       </ImgCrop>
