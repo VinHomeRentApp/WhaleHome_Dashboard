@@ -27,8 +27,6 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
   } = useSelector((state: RootState) => state)
   const dispatch = useAppDispatch()
 
-  const [messageApi, contextHolder] = message.useMessage()
-
   const handleDownloadFile = async () => {
     if (selectedContract?.id) {
       await dispatch(downloadFileContract({ id: selectedContract?.id }))
@@ -73,7 +71,6 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
     >
       {' '}
       <Spin spinning={loading}>
-        {contextHolder}
         <div style={{ display: 'flex', margin: '10px', justifyContent: 'space-between' }}>
           <div>
             <Upload {...props}>
