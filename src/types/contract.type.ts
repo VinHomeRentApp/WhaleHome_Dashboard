@@ -15,6 +15,7 @@ export interface contract {
   zoneName?: string
   areaName?: string
   appointmentId?: number
+  urlFile?: string
 }
 
 export interface contractHistory {
