@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Checkbox, Input, Modal, Select, Switch, Table, TableProps, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getArea } from '../redux/actions/area.actions'
@@ -110,8 +110,13 @@ const ZonePage: React.FC = () => {
     }
   ]
 
-  function handleDelte(id: number) {
-    dispatch(deleteZone(id))
+  async function handleDelte(id: number) {
+    const resultAction = await dispatch(deleteZone(id))
+    if (deleteZone.fulfilled.match(resultAction)) {
+      message.success('Update Zone Status Successfully!')
+    } else if (deleteZone.rejected.match(resultAction)) {
+      message.error('Update Zone Status Fail!')
+    }
   }
 
   function handleOpenModal(id: number) {

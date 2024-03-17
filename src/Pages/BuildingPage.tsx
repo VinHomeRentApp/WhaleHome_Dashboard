@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography } from 'antd'
+import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getArea } from '../redux/actions/area.actions'
@@ -42,6 +42,7 @@ const BuildingPage: React.FC = () => {
   const [enable, setEnable] = useState<boolean>(true)
 
   const [zoneListFilter, setZoneListFilter] = useState<zone[]>(zoneList)
+  const [messageApi, contextHolder] = message.useMessage()
 
   // const [arealist] = useState<area[]>(useSelector((state: RootState) => state.area.areaList))
 
@@ -154,8 +155,13 @@ const BuildingPage: React.FC = () => {
     }
   ]
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteBuilding({ id: id }))
+  const handleDelete = async (id: number) => {
+    const resultAction = await dispatch(deleteBuilding({ id: id }))
+    if (deleteBuilding.fulfilled.match(resultAction)) {
+      messageApi.success('Update Building Status Successfully!')
+    } else if (deleteBuilding.rejected.match(resultAction)) {
+      messageApi.error('Update Building Status Fail!')
+    }
   }
 
   const handleOpenModalEdit = (id: number) => {
@@ -192,6 +198,7 @@ const BuildingPage: React.FC = () => {
   }
   return (
     <>
+      {contextHolder}
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search
           style={{ width: '30%' }}
