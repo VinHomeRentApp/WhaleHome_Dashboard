@@ -14,6 +14,9 @@ const userSlice = createSlice({
     },
     cancelEditingUser: (state) => {
       state.editUser = null
+    },
+    removeSearchUser: (state) => {
+      state.searchUserIncludeAppointment = []
     }
   },
   extraReducers(builder) {
@@ -56,13 +59,20 @@ const userSlice = createSlice({
           if (state.isLoading && state.currentRequestId === action.meta.requestId) {
             state.isLoading = false
             state.currentRequestId = undefined
-            state.error = action.payload
+            state.error = null
           }
+        }
+      )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.isLoading = false
+          state.error = action.payload
         }
       )
   }
 })
 
-export const { startEdituser, cancelEditingUser } = userSlice.actions
+export const { startEdituser, cancelEditingUser, removeSearchUser } = userSlice.actions
 
 export default userSlice.reducer

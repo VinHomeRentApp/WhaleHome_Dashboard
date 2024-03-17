@@ -13,7 +13,7 @@ export const getArea = createAsyncThunk('area/getAreaList', async (_, thunkAPI) 
 export const createArea = createAsyncThunk('area/createArea', async (name: string, thunkAPI) => {
   const response = await http.post<ResponseSuccessful<area>>('/areas', {
     signal: thunkAPI.signal,
-    name: name
+    name: name.trim()
   })
   return response.data.data
 })

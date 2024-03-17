@@ -104,7 +104,11 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
                 control={control}
                 name='dateOfBirth'
                 render={({ field: { value, onChange } }) => (
-                  <DatePicker style={{ minWidth: '150px' }} value={value ? dayjs(value) : null} onChange={onChange} />
+                  <DatePicker
+                    style={{ minWidth: '150px' }}
+                    value={value ? dayjs(value) : null}
+                    onChange={(_date, dateString) => onChange(dateString)}
+                  />
                 )}
               />
             </div>

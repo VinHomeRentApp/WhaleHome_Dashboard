@@ -42,8 +42,13 @@ export default function AreaPage() {
     setModalAdd(false)
   }
   const handleOkAdd = () => {
-    setModalAdd(false)
-    dispatch(createArea(modalData.name))
+    if (modalData.name.trim() !== '') {
+      setModalAdd(false)
+      dispatch(createArea(modalData.name))
+      dispatch(cancelEditingArea())
+    } else {
+      return
+    }
   }
 
   return (

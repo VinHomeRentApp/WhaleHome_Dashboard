@@ -43,6 +43,7 @@ export const searchUser = createAsyncThunk('user/searchUser', async (email: stri
       signal: thunkAPI.signal
     }
   )
+  console.log(res.data.data)
   return res.data.data
 })
 
