@@ -1,9 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { GetProp, Modal, Upload, UploadFile, UploadProps, message } from 'antd'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { deletePostImage, getPostList } from '../../../redux/actions/post.actions'
-import { RootState, useAppDispatch } from '../../../redux/containers/store'
+import { useAppDispatch } from '../../../redux/containers/store'
 import { post } from '../../../types/post.type'
 
 type UploadImageProps = {
@@ -26,7 +25,6 @@ const UploadImage = ({ post }: UploadImageProps) => {
   const [previewTitle, setPreviewTitle] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const dispatch = useAppDispatch()
-  const { isLoading } = useSelector((state: RootState) => state.post)
 
   useEffect(() => {
     const uploadFileList: UploadFile[] =
