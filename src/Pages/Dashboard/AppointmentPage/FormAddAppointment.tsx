@@ -99,7 +99,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
   const onError: SubmitErrorHandler<createAppointmentFormValuesTypes> = (
     errors: FieldErrors<createAppointmentFormValuesTypes>
   ) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     Object.entries(errors).forEach(([_field, error]) => {
       const errorMessage = error?.message
       errorMessage && messageApi.error(errorMessage)
