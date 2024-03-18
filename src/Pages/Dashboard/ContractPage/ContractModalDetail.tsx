@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, DownloadOutlined, SyncOutlined, UploadOutlined } from '@ant-design/icons'
+import { CheckCircleOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Flex, Layout, Modal, Spin, Timeline, TimelineItemProps, Upload, UploadProps, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
