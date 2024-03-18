@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { issue } from '../../types/issue.type'
+import { Payment } from '../../types/payment.type'
 
 export interface paymentState {
-  paymentList: issue[]
+  paymentList: Payment[]
+  allPaymentList: Payment[]
   isLoading: boolean
   error: any
 }
 
 export const initialPaymentState: paymentState = {
+  allPaymentList: [],
   paymentList: [],
   isLoading: false,
   error: null

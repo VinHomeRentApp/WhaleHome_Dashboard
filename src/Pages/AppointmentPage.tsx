@@ -37,7 +37,6 @@ const AppointmentPage: React.FC = () => {
       <div>
         <CalendarAppointment />
       </div>
-      {/*  */}
     </>
   )
 }

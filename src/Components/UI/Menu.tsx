@@ -4,6 +4,7 @@ import {
   ContactsOutlined,
   FileTextOutlined,
   HomeOutlined,
+  PayCircleOutlined,
   UserOutlined
 } from '@ant-design/icons'
 import { Menu } from 'antd'
@@ -63,6 +64,9 @@ const MenuNav: React.FC = () => {
         </Menu.Item>
         <Menu.Item key='contracts' icon={<ContactsOutlined />}>
           Contracts
+        </Menu.Item>
+        <Menu.Item key='payments' icon={<PayCircleOutlined />}>
+          Payment
         </Menu.Item>
         <Menu.Item key='posts' icon={<FileTextOutlined />}>
           Post
