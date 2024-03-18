@@ -45,11 +45,10 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
         const url = window.URL.createObjectURL(new Blob([response.data]))
         const link = document.createElement('a')
         link.href = url
-        link.setAttribute('download', `${selectedContract.id} - ${selectedContract.apartmentName}.pdf`)
+        link.setAttribute('download', `${selectedContract.id}-${selectedContract.apartmentName}.pdf`)
         document.body.appendChild(link)
 
         link.click()
-
         document.body.removeChild(link)
         window.URL.revokeObjectURL(url)
         message.success('Download File Successfully!')
@@ -60,7 +59,7 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
       dispatch(setIsLoading(false))
     }
   }
-
+  //
   const props: UploadProps = {
     name: 'file',
     action: `https://whalehome.up.railway.app/api/v1/contracts/upload/${selectedContract?.id}`,
