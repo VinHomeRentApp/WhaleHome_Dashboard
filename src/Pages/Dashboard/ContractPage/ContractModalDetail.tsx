@@ -59,7 +59,7 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
       dispatch(setIsLoading(false))
     }
   }
-
+  //
   const props: UploadProps = {
     name: 'file',
     action: `https://whalehome.up.railway.app/api/v1/contracts/upload/${selectedContract?.id}`,
