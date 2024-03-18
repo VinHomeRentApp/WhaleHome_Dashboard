@@ -1,12 +1,11 @@
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Flex, Layout, Modal, Spin, Upload, UploadProps, message } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { downloadFileContract, getContractList } from '../../../redux/actions/contract.action'
 import { getUserById } from '../../../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { contract } from '../../../types/contract.type'
-import { User } from '../../../types/user.type'
 import {
   contentStyle,
   contextStyles,
