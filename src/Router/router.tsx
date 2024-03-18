@@ -8,6 +8,7 @@ import BuildingPage from '../Pages/BuildingPage'
 import ContractPage from '../Pages/ContractPage'
 import DashBoard from '../Pages/Dashboard'
 import IssuePage from '../Pages/IssuePage'
+import PaymentPage from '../Pages/PaymentPage'
 import PostPage from '../Pages/PostPage'
 import ProblemPage from '../Pages/ProblemsPage'
 import ReviewPage from '../Pages/ReviewPage'
@@ -78,6 +79,14 @@ const ContentRoutes: React.FC = () => {
         element={
           <LayoutAdmin>
             <ReviewPage />
+          </LayoutAdmin>
+        }
+      />
+      <Route
+        path='/payments'
+        element={
+          <LayoutAdmin>
+            <PaymentPage />
           </LayoutAdmin>
         }
       />
