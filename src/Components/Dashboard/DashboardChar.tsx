@@ -56,12 +56,12 @@ const DashboardChart: React.FC = () => {
       {
         label: 'This Year',
         data: dataChart?.currentYear.map((item) => item.revenue),
-        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+        backgroundColor: 'rgb(255, 160, 42, 0.7)'
       },
       {
         label: `Compare Year (${compareYear})`,
         data: dataChart?.compareYear.map((item) => item.revenue),
-        backgroundColor: 'rgba(53, 162, 235, 0.5)'
+        backgroundColor: 'rgb(0, 21, 41,0.7)'
       }
     ]
   }
@@ -85,22 +85,8 @@ const DashboardChart: React.FC = () => {
       {
         label: 'Buildings of Zone',
         data: filteredData.map((zone) => zone.countBuilding),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
+        backgroundColor: ['#2485A5', '#1C657E', '#3FF3BD', '#11BDA2', '#1FA4CF', '#08A99A'],
+        borderColor: ['#2485A5', '#1C657E', '#3FF3BD', '#11BDA2', '#1FA4CF', '#08A99A'],
         borderWidth: 1
       }
     ]

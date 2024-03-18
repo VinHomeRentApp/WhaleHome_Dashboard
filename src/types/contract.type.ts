@@ -16,6 +16,7 @@ export interface contract {
   areaName?: string
   appointmentId?: number
   urlFile?: string
+  landLordId: number
 }
 
 export interface contractHistory {
