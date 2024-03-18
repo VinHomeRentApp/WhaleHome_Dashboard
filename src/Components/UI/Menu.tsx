@@ -7,31 +7,37 @@ import {
   UserOutlined
 } from '@ant-design/icons'
 import { Menu } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const { SubMenu } = Menu // Destructure SubMenu from Menu
+const { SubMenu } = Menu
 
 const MenuNav: React.FC = () => {
-  const [key, setKey] = useState('')
+  const [selectedKey, setSelectedKey] = useState<string>(() => {
+    return sessionStorage.getItem('selectedKey') || ''
+  })
   const navigate = useNavigate()
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    navigate(`/${key}`)
+    setSelectedKey(key)
+  }
+  useEffect(() => {
+    sessionStorage.setItem('selectedKey', selectedKey)
+  }, [selectedKey])
 
   return (
     <Menu
       theme='dark'
       mode='inline'
-      defaultSelectedKeys={[key]}
-      onClick={({ key }) => {
-        navigate(`/${key}`)
-        setKey(key)
-      }}
+      selectedKeys={[selectedKey]}
+      defaultOpenKeys={['management', 'reviews']}
+      onClick={handleMenuClick}
       style={{ border: '0', height: '100vh' }}
     >
       <div style={{ justifyContent: 'center', textAlign: 'center', margin: 10 }}>
         <img src='/main-logo.png' style={{ height: '50%', width: '50%' }} alt='' />
       </div>
-
-      {/* Your existing menu items */}
       <Menu.Item key='' icon={<BarChartOutlined />}>
         DashBoard
       </Menu.Item>
