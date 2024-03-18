@@ -8,6 +8,7 @@ import authSlice from '../slices/auth.slice'
 import buildingSlice from '../slices/building.slice'
 import contractSlice from '../slices/contract.slice'
 import issueSlice from '../slices/issue.slice'
+import paymentSlice from '../slices/payment.slice'
 import postSlice from '../slices/post.slice'
 import problemSlice from '../slices/problem.slice'
 import reviewSlice from '../slices/review.slice'
@@ -27,7 +28,8 @@ export const store = configureStore({
     apartmentClass: apartmentClassSlice,
     contract: contractSlice,
     user: userSlice,
-    appointment: appointmentSlice
+    appointment: appointmentSlice,
+    payment: paymentSlice
   }
 })
 

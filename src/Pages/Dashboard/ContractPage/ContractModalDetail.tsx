@@ -2,10 +2,12 @@ import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Flex, Layout, Modal, Spin, Upload, UploadProps, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { downloadFileContract, getContractList } from '../../../redux/actions/contract.action'
+import { getContractList } from '../../../redux/actions/contract.action'
 import { getUserById } from '../../../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
+import { setIsLoading } from '../../../redux/slices/contract.slice'
 import { contract } from '../../../types/contract.type'
+import { http } from '../../../utils/http'
 import {
   contentStyle,
   contextStyles,
@@ -14,7 +16,6 @@ import {
   layoutStyle,
   titleContextStyle
 } from './Styles/StyleContractDetail'
-//
 
 const { Header, Content } = Layout
 
@@ -34,16 +35,29 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
     if (selectedContract?.landLordId) dispatch(getUserById(selectedContract?.landLordId))
   }, [selectedContract?.landLordId])
 
-  console.log('selectedContract', selectedContract)
-
   const handleDownloadFile = async () => {
-    if (selectedContract?.id) {
-      const resultAction = await dispatch(downloadFileContract({ id: selectedContract?.id }))
-      if (downloadFileContract.fulfilled.match(resultAction)) {
-        message.success('Download File Contract Successfully!')
-      } else {
-        message.error('Download File Contract Fail!')
+    try {
+      dispatch(setIsLoading(true))
+      if (selectedContract?.id) {
+        const response = await http.get(`/contracts/download/${selectedContract.id}`, {
+          responseType: 'blob'
+        })
+        const url = window.URL.createObjectURL(new Blob([response.data]))
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', `${selectedContract.id} - ${selectedContract.apartmentName}.pdf`)
+        document.body.appendChild(link)
+
+        link.click()
+
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
+        message.success('Download File Successfully!')
       }
+    } catch (error) {
+      message.error('An error occurred while downloading the file. Please try again later.')
+    } finally {
+      dispatch(setIsLoading(false))
     }
   }
 

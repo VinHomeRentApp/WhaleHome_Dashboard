@@ -6,7 +6,11 @@ import { initialContractState } from '../types/contract.type'
 const contractSlice = createSlice({
   name: 'contract',
   initialState: initialContractState,
-  reducers: {},
+  reducers: {
+    setIsLoading: (state, action) => {
+      state.loading = action.payload
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(getContractList.fulfilled, (state, action) => {
@@ -41,4 +45,5 @@ const contractSlice = createSlice({
   }
 })
 
+export const { setIsLoading } = contractSlice.actions
 export default contractSlice.reducer

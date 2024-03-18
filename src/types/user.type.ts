@@ -30,4 +30,7 @@ export interface User {
   role?: Role
   verified?: boolean
   statusOfPayment?: boolean
+  accountNonExpired: boolean
+  accountNonLocked: boolean
+  credentialsNonExpired: boolean
 }
