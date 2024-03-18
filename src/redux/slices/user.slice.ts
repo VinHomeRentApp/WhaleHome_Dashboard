@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FulfilledAction, PendingAction, RejectedAction } from '../../types/redux.types'
-import { deactiveUser, getUsers, searchUser, updateUser } from '../actions/user.actions'
+import { deactiveUser, getUserById, getUsers, searchUser, updateUser } from '../actions/user.actions'
 import { initialUserState } from '../types/user.type'
 
 const userSlice = createSlice({
@@ -28,6 +28,9 @@ const userSlice = createSlice({
         if (action.payload) {
           state.userList = action.payload
         }
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.landLord = action.payload
       })
       .addCase(deactiveUser.fulfilled, (state, action) => {
         const id = action.meta.arg

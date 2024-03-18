@@ -127,9 +127,9 @@ const ContractPage: React.FC = () => {
       width: '10%',
       render: (record: contract) => {
         if (record.contractHistory.users.statusOfPayment) {
-          return <Tag color={'green'}>Đã thanh toán</Tag>
+          return <Tag color={'green'}>Paid</Tag>
         }
-        return <Tag color={'Gray'}>Chưa thanh toán</Tag>
+        return <Tag color={'gray'}>Unpaid</Tag>
       }
     },
     {

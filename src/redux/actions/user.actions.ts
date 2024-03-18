@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { updateUserValues } from '../../schema/user.schema'
 import { appointments } from '../../types/appointments.type'
 import { LoginResponse, ResponseSuccessful } from '../../types/response.type'
 import { User } from '../../types/user.type'
 import { http } from '../../utils/http'
-import { updateUserValues } from '../../schema/user.schema'
 
 export const loginApi = async (email: string, password: string) => {
   return await http.post<ResponseSuccessful<LoginResponse>>('/auth/authenticate', {
@@ -78,5 +78,14 @@ export const updateUser = createAsyncThunk('user/updateUser', async (body: updat
     return res.data.data
   } catch (error) {
     thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const getUserById = createAsyncThunk('user/getUserById', async (id: number, thunkAPI) => {
+  try {
+    const response = await http.get<ResponseSuccessful<User>>(`/user/${id}`)
+    return response.data.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
   }
 })

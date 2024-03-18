@@ -71,7 +71,7 @@ const LayoutAdmin = ({ children }: Props) => {
         <Content
           style={{
             margin: '24px 16px',
-
+            padding: 20,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG

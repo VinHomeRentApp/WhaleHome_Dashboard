@@ -5,6 +5,7 @@ import { User } from '../../types/user.type'
 export interface userState {
   userList: User[]
   editUser: User | null
+  landLord: User | null
   isLoading: boolean
   currentRequestId: undefined | string
   searchUserIncludeAppointment: appointments[]
@@ -14,6 +15,7 @@ export interface userState {
 export const initialUserState: userState = {
   userList: [],
   editUser: null,
+  landLord: null,
   isLoading: false,
   currentRequestId: undefined,
   searchUserIncludeAppointment: [],

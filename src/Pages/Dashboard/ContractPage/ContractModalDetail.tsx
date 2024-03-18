@@ -1,10 +1,12 @@
 import { DownloadOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Flex, Layout, Modal, Spin, Upload, UploadProps, message } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { downloadFileContract, getContractList } from '../../../redux/actions/contract.action'
+import { getUserById } from '../../../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { contract } from '../../../types/contract.type'
+import { User } from '../../../types/user.type'
 import {
   contentStyle,
   contextStyles,
@@ -24,9 +26,16 @@ type Props = {
 
 const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) => {
   const {
-    contract: { loading }
+    contract: { loading },
+    user: { landLord }
   } = useSelector((state: RootState) => state)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (selectedContract?.landLordId) dispatch(getUserById(selectedContract?.landLordId))
+  }, [selectedContract?.landLordId])
+
+  console.log('selectedContract', selectedContract)
 
   const handleDownloadFile = async () => {
     if (selectedContract?.id) {
@@ -117,6 +126,10 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
                   <span style={titleContextStyle}>Area:</span>
                   {selectedContract?.zoneName}
                 </div>
+                <div>
+                  <span style={titleContextStyle}>Price:</span>
+                  {selectedContract?.contractHistory.price} $
+                </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={contextStyles}>
@@ -140,9 +153,11 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
               <div style={detailContextStyles}>
                 <div>
                   <span style={titleContextStyle}>Name:</span>
+                  {landLord?.fullName}
                 </div>
                 <div>
                   <span style={titleContextStyle}>Phone Number:</span>
+                  {landLord?.phone}
                 </div>
               </div>
               <div style={detailContextStyles}>
@@ -158,12 +173,13 @@ const ContractModalDetail = ({ selectedContract, setSelectedContract }: Props) =
               </div>
               <div style={contextStyles}>
                 <span style={titleContextStyle}>Address:</span>
+                {landLord?.address}
               </div>
               <div style={contextStyles}>
-                <span style={titleContextStyle}>Bank Account:</span>
+                <span style={titleContextStyle}>Bank Account:</span> 060254910980
               </div>
               <div style={contextStyles}>
-                <span style={titleContextStyle}>Bank Name:</span>
+                <span style={titleContextStyle}>Bank Name:</span> Sacombank
               </div>
             </Content>
           </Layout>
