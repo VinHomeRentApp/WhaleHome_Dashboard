@@ -13,9 +13,16 @@ export const handleSubmit = async (email: string, password: string, dispatch: Di
     const token = response.data.data.access_token
     localStorage.setItem('token', token)
     const user = await getUserDataFromToken()
-    toast.success('Login Successfully!')
-    dispatch(setUser(user))
-    navigate('/')
+
+    if (user?.role === 'ADMIN') {
+      toast.success('Login Successfully!')
+      dispatch(setUser(user))
+      navigate('/')
+    } else {
+      toast.error('You are not ADMIN!')
+      localStorage.setItem('token', '')
+      localStorage.setItem('user', '')
+    }
   } catch (error: any) {
     if (error.response.status === HttpStatusCode.Forbidden) {
       toast.error('Wrong Email or Password!')
