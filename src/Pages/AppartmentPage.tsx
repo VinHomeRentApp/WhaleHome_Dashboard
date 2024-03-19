@@ -56,11 +56,10 @@ const ApartmentPage = () => {
   const [isModalAdd, setIsModalAdd] = useState<boolean>(false)
   const [isModalEdit, setIsModalEdit] = useState<boolean>(false)
   const editModalData = useSelector((state: RootState) => state.apartment.editApartment)
-
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
-
+  const accessToken = localStorage.getItem('token') || ''
   const [areaID, setAreaID] = useState<number>(1)
   const [zoneID, setZoneID] = useState<number>(2)
   const [buildingListFilter, setBuildingListFilter] = useState<building[]>(buildingList)
@@ -115,7 +114,7 @@ const ApartmentPage = () => {
   const handleOk = () => {
     if (modalData.name !== '') {
       setIsModalEdit(false)
-      dispatch(updateApartment({ id: modalData.id, body: modalData }))
+      dispatch(updateApartment({ id: modalData.id, body: modalData, accessToken }))
       dispatch(cancelEditingApartment())
     } else return
   }

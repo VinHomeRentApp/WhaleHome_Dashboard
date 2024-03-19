@@ -18,12 +18,14 @@ const UploadImage = ({ post }: UploadImageProps) => {
 
   useEffect(() => {
     const uploadFileList: UploadFile[] =
-      post?.postImages.map((e) => ({
-        uid: String(e.id),
-        name: 'image.png',
-        status: 'done',
-        url: e.image_url ?? e.image_alt
-      })) || []
+      (post.postImages &&
+        post?.postImages.map((e) => ({
+          uid: String(e.id),
+          name: 'image.png',
+          status: 'done',
+          url: e.image_url ?? e.image_alt
+        }))) ||
+      []
 
     setFileList(uploadFileList)
   }, [post?.postImages])
