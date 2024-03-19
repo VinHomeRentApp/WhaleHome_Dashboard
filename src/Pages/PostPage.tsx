@@ -13,7 +13,6 @@ import PostTable from './Dashboard/PostPage/PostTable'
 const PostPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const { postList, isLoading, error } = useSelector((state: RootState) => state.post)
-  const [data, setData] = useState<post[]>()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [imageList, setImageList] = useState<postImages[]>([])
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false)
@@ -28,10 +27,6 @@ const PostPage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
-
-  useEffect(() => {
-    setData(postList)
-  }, [postList])
 
   useEffect(() => {
     handleErrorMessage({ error, messageApi, title: 'post' })
@@ -74,7 +69,7 @@ const PostPage: React.FC = () => {
       />
       <PostTable
         search={search}
-        data={data}
+        data={postList}
         loading={isLoading}
         handleViewImage={handleViewImage}
         handleEdit={handleEdit}
