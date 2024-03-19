@@ -59,7 +59,6 @@ const ApartmentPage = () => {
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
-  const accessToken = localStorage.getItem('token') || ''
   const [areaID, setAreaID] = useState<number>(1)
   const [zoneID, setZoneID] = useState<number>(2)
   const [buildingListFilter, setBuildingListFilter] = useState<building[]>(buildingList)
