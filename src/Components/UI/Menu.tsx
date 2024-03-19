@@ -17,6 +17,27 @@ const MenuNav: React.FC = () => {
   const [selectedKey, setSelectedKey] = useState<string>(() => {
     return sessionStorage.getItem('selectedKey') || ''
   })
+  const [openKeys] = useState<string[]>(() => {
+    const managementSubItems = [
+      'areas',
+      'zones',
+      'buildings',
+      'appartments',
+      'appointments',
+      'contracts',
+      'payments',
+      'posts'
+    ]
+    const reviewsSubItems = ['review', 'issue', 'problem']
+    const storedKey = sessionStorage.getItem('selectedKey') || ''
+    if (managementSubItems.includes(storedKey)) {
+      return ['management']
+    } else if (reviewsSubItems.includes(storedKey)) {
+      return ['reviews']
+    } else {
+      return []
+    }
+  })
   const navigate = useNavigate()
 
   const handleMenuClick = ({ key }: { key: string }) => {
@@ -32,7 +53,7 @@ const MenuNav: React.FC = () => {
       theme='dark'
       mode='inline'
       selectedKeys={[selectedKey]}
-      defaultOpenKeys={['management', 'reviews']}
+      defaultOpenKeys={openKeys}
       onClick={handleMenuClick}
       style={{ border: '0', height: '100vh' }}
     >
