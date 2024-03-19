@@ -13,7 +13,7 @@ export const getApartmentList = createAsyncThunk('apartment/getApartmentList', a
 export const updateApartment = createAsyncThunk(
   'apartment/updateApartment',
   async ({ id, body }: { id: number; body: apartment }, thunkAPI) => {
-    const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/udpate/${id}`, body, {
+    const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/update/${id}`, body, {
       signal: thunkAPI.signal
     })
     return res.data.data
