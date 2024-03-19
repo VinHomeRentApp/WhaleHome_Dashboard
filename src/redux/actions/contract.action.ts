@@ -4,8 +4,11 @@ import { contract, contractHistory } from '../../types/contract.type'
 import { ResponseSuccessful } from '../../types/response.type'
 import { http } from '../../utils/http'
 
+const token = localStorage.getItem('token')?.trim() || ''
+
 export const getContractList = createAsyncThunk('contract/getContract', async (_, thunkAPI) => {
   const res = await http.get<ResponseSuccessful<contract[]>>('/contracts', {
+    headers: { Authorization: `Bearer ${token}` },
     signal: thunkAPI.signal
   })
   return res.data.data
@@ -48,15 +51,19 @@ export const createContract = createAsyncThunk('contract/createContract', async 
     }
   })
   const idcontracthistories = res.data.data.id
-  const res2 = await http.post<ResponseSuccessful<contract>>('/contracts', {
-    signal: thunkAPI.signal,
-    dateSign: body.dateSign,
-    description: body.description.trim(),
-    dateStartRent: body.dateStartRent,
-    contractHistory: {
-      id: idcontracthistories
+  const res2 = await http.post<ResponseSuccessful<contract>>(
+    '/contracts',
+    {
+      signal: thunkAPI.signal,
+      dateSign: body.dateSign,
+      description: body.description.trim(),
+      dateStartRent: body.dateStartRent,
+      contractHistory: {
+        id: idcontracthistories
+      },
+      appointmentId: body.appointmentId
     },
-    appointmentId: body.appointmentId
-  })
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
   return res2.data.data
 })
