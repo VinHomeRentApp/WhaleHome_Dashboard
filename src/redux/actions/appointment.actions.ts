@@ -4,6 +4,8 @@ import { createAppointmentFormDataTypes } from '../../types/form.types'
 import { ResponseSuccessful } from '../../types/response.type'
 import { http } from '../../utils/http'
 
+const token = localStorage.getItem('token')
+
 export const getAppointmentList = createAsyncThunk('appointment/getAppointmentList', async (_, thunkAPI) => {
   try {
     const response = await http.get<ResponseSuccessful<appointments[]>>('/appointments', {
@@ -40,6 +42,7 @@ export const createAppointment = createAsyncThunk(
   async (body: createAppointmentFormDataTypes, thunkAPI) => {
     try {
       const response = await http.post<ResponseSuccessful<appointments>>('/appointments/create', body, {
+        headers: { Authorization: `Bearer ${token}` },
         signal: thunkAPI.signal
       })
       return response.data.data

@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { HttpStatusCode } from 'axios'
 import { contractValueType } from '../../schema/contract.schema'
 import { contract, contractHistory } from '../../types/contract.type'
 import { ResponseSuccessful } from '../../types/response.type'
 import { http } from '../../utils/http'
+
+const token = localStorage.getItem('token')?.trim() || ''
 
 export const getContractList = createAsyncThunk('contract/getContract', async (_, thunkAPI) => {
   const res = await http.get<ResponseSuccessful<contract[]>>('/contracts', {
@@ -39,50 +40,29 @@ export const downloadFileContract = createAsyncThunk('/contract/download', async
 })
 
 export const createContract = createAsyncThunk('contract/createContract', async (body: contractValueType, thunkAPI) => {
-  const token = localStorage.getItem('token') || ''
-  try {
-    const res = await http.post<ResponseSuccessful<contractHistory>>(
-      '/contracthistories',
-      {
-        price: body.price,
-        description: body.description.trim(),
-        expiredTime: body.expiredTime,
-        users: {
-          id: body.user
-        }
-      },
-      {
-        signal: thunkAPI.signal,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
-    if (res.status === HttpStatusCode.Ok) {
-      const idcontracthistories = res.data.data.id
-      const res2 = await http.post<ResponseSuccessful<contract>>(
-        '/contracts',
-        {
-          dateSign: body.dateSign,
-          description: body.description.trim(),
-          dateStartRent: body.dateStartRent,
-          contractHistory: {
-            id: idcontracthistories
-          },
-          appointmentId: body.appointmentId
-        },
-        {
-          signal: thunkAPI.signal,
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
-      return res2.data.data
-    } else {
-      throw new Error('Fail to Create Contract')
+  const res = await http.post<ResponseSuccessful<contractHistory>>('/contracthistories', {
+    signal: thunkAPI.signal,
+    price: body.price,
+    description: body.description.trim(),
+    expiredTime: body.expiredTime,
+    users: {
+      id: body.user
     }
-  } catch (error) {
-    thunkAPI.rejectWithValue(error)
-  }
+  })
+  const idcontracthistories = res.data.data.id
+  const res2 = await http.post<ResponseSuccessful<contract>>(
+    '/contracts',
+    {
+      signal: thunkAPI.signal,
+      dateSign: body.dateSign,
+      description: body.description.trim(),
+      dateStartRent: body.dateStartRent,
+      contractHistory: {
+        id: idcontracthistories
+      },
+      appointmentId: body.appointmentId
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return res2.data.data
 })

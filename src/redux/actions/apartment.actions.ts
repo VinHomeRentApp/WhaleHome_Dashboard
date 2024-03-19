@@ -12,12 +12,9 @@ export const getApartmentList = createAsyncThunk('apartment/getApartmentList', a
 
 export const updateApartment = createAsyncThunk(
   'apartment/updateApartment',
-  async ({ id, body, accessToken }: { id: number; body: apartment; accessToken: string }, thunkAPI) => {
-    const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/udpate/${id}`, body, {
-      signal: thunkAPI.signal,
-      headers: {
-        jwt: accessToken
-      }
+  async ({ id, body }: { id: number; body: apartment }, thunkAPI) => {
+    const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/update/${id}`, body, {
+      signal: thunkAPI.signal
     })
     return res.data.data
   }
