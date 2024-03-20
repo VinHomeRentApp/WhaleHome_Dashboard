@@ -13,7 +13,17 @@ export default function App() {
               colorBgContainer: typoColor.subMainBackground,
               borderColor: typoColor.black2,
               colorText: typoColor.white1,
-              colorTextHeading: typoColor.white1
+              colorTextHeading: typoColor.white1,
+              footerBg: typoColor.white1
+            },
+            Pagination: {
+              colorText: typoColor.white1,
+              itemActiveBg: typoColor.yellow1,
+              itemInputBg: typoColor.white1,
+              itemLinkBg: typoColor.white1
+            },
+            Button: {
+              colorBgContainer: typoColor.yellow1
             }
           }
         }}

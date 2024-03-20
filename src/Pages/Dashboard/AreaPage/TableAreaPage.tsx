@@ -54,7 +54,7 @@ const TableAreaPage = ({ search, setIsOpenModal }: TableArePageProps) => {
       }
     },
     {
-      title: 'createDate',
+      title: 'Created Date',
       dataIndex: 'createDate',
       key: 'id',
       align: 'center'
