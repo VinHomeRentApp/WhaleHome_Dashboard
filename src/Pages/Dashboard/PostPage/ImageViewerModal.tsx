@@ -1,4 +1,5 @@
 import { Carousel, Modal } from 'antd'
+import { isEmpty } from 'lodash'
 import React from 'react'
 import { postImages } from '../../../types/post.type'
 
@@ -20,7 +21,7 @@ const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ visible, imageList,
         handleClose()
       }}
     >
-      {imageList.length === 0 ? (
+      {imageList.length === 0 && !isEmpty(imageList) ? (
         <img
           src='https://www.huber-online.com/daisy_website_files/_processed_/8/0/csm_no-image_d5c4ab1322.jpg'
           alt=''

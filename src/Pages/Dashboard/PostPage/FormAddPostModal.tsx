@@ -187,7 +187,7 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
                       setValue('buildingId', null)
                       setValue('apartmentId', null)
                     }}
-                    options={areaList.map((area) => ({ value: area.id, label: area.name }))}
+                    options={areaList && areaList.map((area) => ({ value: area.id, label: area.name }))}
                   />
                 )}
               />
@@ -209,10 +209,13 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
                       setValue('buildingId', null)
                       setValue('apartmentId', null)
                     }}
-                    options={filteredZoneList.map((zone) => ({
-                      value: zone.id,
-                      label: zone.name
-                    }))}
+                    options={
+                      filteredZoneList &&
+                      filteredZoneList.map((zone) => ({
+                        value: zone.id,
+                        label: zone.name
+                      }))
+                    }
                   />
                 )}
               />
@@ -234,7 +237,10 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
                     setSelectedBuildingId(value)
                     setValue('apartmentId', null)
                   }}
-                  options={filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))}
+                  options={
+                    filteredBuildingList &&
+                    filteredBuildingList.map((building) => ({ value: building.id, label: building.name }))
+                  }
                 />
               )}
             />
@@ -251,7 +257,10 @@ const FormAddPostModal = (props: FormAddPostModalProps) => {
                   value={field.value}
                   style={{ width: '100%' }}
                   onChange={field.onChange}
-                  options={filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))}
+                  options={
+                    filteredApartmentList &&
+                    filteredApartmentList.map((apartment) => ({ value: apartment.id, label: apartment.name }))
+                  }
                 />
               )}
             />
