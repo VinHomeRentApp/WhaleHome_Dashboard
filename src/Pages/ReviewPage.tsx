@@ -22,7 +22,6 @@ const ReviewPage: React.FC = () => {
         pagination={{
           pageSize: 7
         }}
-        scroll={{ y: 400 }}
         loading={loading}
         rowKey='reviewId'
         bordered

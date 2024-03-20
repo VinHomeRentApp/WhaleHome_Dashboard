@@ -234,7 +234,6 @@ const BuildingPage: React.FC = () => {
           pageSize: 7
         }}
         rowKey='id'
-        bordered
       />
 
       <Modal title='Edit Building' open={modal} onOk={handleOk} onCancel={handleCancel}>

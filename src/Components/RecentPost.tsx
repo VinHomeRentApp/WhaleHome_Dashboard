@@ -49,7 +49,6 @@ const RecentPost: React.FC = () => {
         columns={colums}
         loading={loading}
         dataSource={dataSource}
-        scroll={{ y: 200 }}
         pagination={{
           pageSize: 7,
           hideOnSinglePage: true

@@ -102,7 +102,6 @@ const PaymentPage: React.FC = () => {
         pagination={{
           pageSize: 7
         }}
-        scroll={{ y: 400 }}
         loading={isLoading}
         rowKey={'id'}
         bordered

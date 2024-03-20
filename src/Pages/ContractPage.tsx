@@ -177,7 +177,6 @@ const ContractPage: React.FC = () => {
         pagination={{
           pageSize: 7
         }}
-        scroll={{ y: 400 }}
         loading={loading}
         rowKey='id'
         bordered

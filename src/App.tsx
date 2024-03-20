@@ -40,6 +40,11 @@ export default function App() {
               fullBg: typoColor.subMainBackground,
               itemActiveBg: typoColor.mainBackground,
               colorText: typoColor.white1
+            },
+            Input: {
+              colorTextPlaceholder: typoColor.black1,
+              colorBgContainer: typoColor.white1,
+              colorBorder: typoColor.subMainBackground
             }
           }
         }}

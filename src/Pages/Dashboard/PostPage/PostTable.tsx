@@ -124,9 +124,8 @@ const PostTable: React.FC<PostTableProps> = ({ search, data, loading, handleView
       columns={columns}
       loading={loading}
       dataSource={data}
-      scroll={{ y: 500 }}
       pagination={{
-        pageSize: 5,
+        pageSize: 7,
         hideOnSinglePage: true
       }}
       rowKey={(data) => data.id}
