@@ -1,21 +1,23 @@
-import { Card, Statistic } from 'antd'
+import { MoreOutlined } from '@ant-design/icons'
+import { Button, Card, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { ResponseSuccessful } from '../../types/response.type'
-import { http } from '../../utils/http'
-
 import CountUp from 'react-countup'
 import { typoColor } from '../../constants/mainColor'
+import { ResponseSuccessful } from '../../types/response.type'
+import { http } from '../../utils/http'
 
 const formatter = (value: number) => <CountUp end={value} separator=',' />
 
 interface props {
+  styleCard: React.CSSProperties
   title: string
   icon: React.ReactNode
   URL: string
-  description: string
+  description?: string
+  colorButton: string
 }
 
-const DashboardCard: React.FC<props> = ({ title, icon, URL, description }) => {
+const DashboardCard: React.FC<props> = ({ title, icon, URL, styleCard, colorButton }) => {
   const [data, setData] = useState<number>()
 
   async function getData() {
@@ -36,39 +38,42 @@ const DashboardCard: React.FC<props> = ({ title, icon, URL, description }) => {
     getData()
   }, [])
 
-  const styleCard: React.CSSProperties = {
-    width: '100%',
-    boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.05)',
-    color: typoColor.white1,
-    backgroundColor: typoColor.subMainBackground,
-    border: '2px solid #1e1e1e',
-    borderRadius: '14px'
-  }
-
-  const styleTitleStatic: React.CSSProperties = { fontSize: 14, color: typoColor.gray1 }
   const styleLaytoutInCard: React.CSSProperties = {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    justifyContent: 'space-between'
   }
-  const styleLayoutTitle: React.CSSProperties = { fontWeight: 'bold', color: typoColor.white1 }
+  const styleLayoutTitle: React.CSSProperties = { fontWeight: 'bold', color: typoColor.gray1, fontSize: 16 }
 
   return (
     <Card style={styleCard}>
       <div style={styleLaytoutInCard}>
         <div>
-          <div style={styleLayoutTitle}>{title}</div>
+          <div>{icon}</div>
           <Statistic
-            title={<span style={styleTitleStatic}>{description}</span>}
             value={data}
             formatter={(value) => (
-              <span style={{ fontSize: 35, fontWeight: 'bold', color: typoColor.white1 }}>
-                {formatter(Number(value))}
-              </span>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                <div style={{ fontSize: 35, fontWeight: 'bold', color: typoColor.white1 }}>
+                  {formatter(Number(value))}
+                </div>
+                <div style={styleLayoutTitle}>{title}</div>
+              </div>
             )}
           />
         </div>
-        <div>{icon}</div>
+        <div>
+          <Button
+            style={{
+              backgroundColor: typoColor.subMainBackground,
+              border: `1px solid ${colorButton}`,
+              color: colorButton
+            }}
+            type='default'
+            shape='circle'
+            size='small'
+            icon={<MoreOutlined size={5} />}
+          />
+        </div>
       </div>
     </Card>
   )

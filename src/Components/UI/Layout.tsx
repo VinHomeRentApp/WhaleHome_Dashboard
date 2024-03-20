@@ -14,6 +14,7 @@ import {
   styleLayoutContext,
   styleSider
 } from './styles/layout.ts'
+import { typoColor } from '../../constants/mainColor.ts'
 
 const { Header, Sider, Content } = Layout
 
@@ -56,7 +57,9 @@ const LayoutAdmin = ({ children }: Props) => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                gap: 10,
+                alignItems: 'center',
+                marginRight: 20
               }}
             >
               {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}

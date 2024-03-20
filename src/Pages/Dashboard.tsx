@@ -1,9 +1,23 @@
-import { FileTextFilled, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
+import HoverField from '../Components/Dashboard/HoverField'
+import ApartmentIcon from '../Components/UI/icon/ApartmentIcon'
+import ContractIcon from '../Components/UI/icon/ContractIcon'
+import PostIcon from '../Components/UI/icon/PostIcon'
+import UserIcon from '../Components/UI/icon/UserIcon'
+import {
+  layoutIconApartmentStyle,
+  layoutIconContractStyle,
+  layoutIconPostsStyle,
+  layoutIconUsersStyle,
+  styleCardApartments,
+  styleCardContracts,
+  styleCardPosts,
+  styleCardUsers
+} from '../Components/UI/styles/colorCard'
 import { typoColor } from '../constants/mainColor'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { setUser } from '../redux/slices/auth.slice'
@@ -20,28 +34,22 @@ const DashBoard: React.FC = () => {
   }, [])
 
   const styleIcon: React.CSSProperties = {
-    color: typoColor.black1,
-    fontSize: 30
+    color: typoColor.subMainBackground,
+    height: 27,
+    width: 27
   }
 
-  const layoutIconStyle: React.CSSProperties = {
-    padding: 10,
-    boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#FFA02A',
-    borderRadius: 10,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
   return (
     <Spin spinning={isLoading}>
       <div>
         <div style={{ display: 'flex', gap: 10 }}>
           <DashboardCard
+            colorButton='rgba(255, 160, 42, 1)'
+            styleCard={styleCardPosts}
             description='Active Posts'
             icon={
-              <div style={layoutIconStyle}>
-                <FileTextFilled style={styleIcon} />
+              <div style={layoutIconPostsStyle}>
+                <PostIcon style={styleIcon} />
               </div>
             }
             title={'Posts'}
@@ -49,10 +57,12 @@ const DashBoard: React.FC = () => {
           />
 
           <DashboardCard
+            colorButton='rgba(45, 212, 191, 1)'
+            styleCard={styleCardUsers}
             description='Active Customers'
             icon={
-              <div style={layoutIconStyle}>
-                <UserOutlined style={styleIcon} />
+              <div style={layoutIconUsersStyle}>
+                <UserIcon style={styleIcon} />
               </div>
             }
             title={'Customers'}
@@ -60,10 +70,12 @@ const DashBoard: React.FC = () => {
           />
 
           <DashboardCard
+            colorButton='rgba(248, 113, 113, 1)'
+            styleCard={styleCardApartments}
             description='Active Apartments'
             icon={
-              <div style={layoutIconStyle}>
-                <HomeFilled style={styleIcon} />
+              <div style={layoutIconApartmentStyle}>
+                <ApartmentIcon style={styleIcon} />
               </div>
             }
             title={'Apartments'}
@@ -71,10 +83,12 @@ const DashBoard: React.FC = () => {
           />
 
           <DashboardCard
+            colorButton='rgba(161, 161, 170, 1)'
+            styleCard={styleCardContracts}
             description='Active Contracts'
             icon={
-              <div style={layoutIconStyle}>
-                <SolutionOutlined style={styleIcon} />
+              <div style={layoutIconContractStyle}>
+                <ContractIcon style={styleIcon} />
               </div>
             }
             title={'Contracts'}
@@ -95,6 +109,7 @@ const DashBoard: React.FC = () => {
           <div style={{ width: '30%' }}></div>
         </div>
       </div>
+      <HoverField />
     </Spin>
   )
 }

@@ -57,12 +57,12 @@ const DashboardChart: React.FC = () => {
       {
         label: 'This Year',
         data: dataChart?.currentYear.map((item) => item.revenue),
-        backgroundColor: 'rgb(255, 160, 42, 0.7)'
+        backgroundColor: typoColor.yellow1
       },
       {
         label: `Compare Year (${compareYear})`,
         data: dataChart?.compareYear.map((item) => item.revenue),
-        backgroundColor: 'rgb(0, 21, 41,0.7)'
+        backgroundColor: typoColor.blue1
       }
     ]
   }
