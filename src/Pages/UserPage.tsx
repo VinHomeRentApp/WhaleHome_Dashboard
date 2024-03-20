@@ -84,7 +84,7 @@ const UserPage: React.FC = () => {
     {
       title: 'Verified',
       key: 'id',
-      width: '7%',
+      width: '8%',
       align: 'center',
       render: (record: User) => {
         if (record.verified === true) {

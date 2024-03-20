@@ -5,3 +5,15 @@ html {
   height: 100%;
   line-height: 1.2;
 }
+
+.ant-menu-submenu-title {
+  color: #f8f8f8 !important;
+}
+
+.layout-transition {
+  transition: margin-left 0.1s ease-in;
+}
+
+.layout-transition-faster {
+  transition: margin-left 0.2s ease-in;
+}
