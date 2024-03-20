@@ -1,4 +1,5 @@
 import { apartment } from './appartment.type'
+import { building } from './building.type'
 import { post } from './post.type'
 import { User } from './user.type'
 
@@ -24,6 +25,12 @@ export type FormContractModalProps = {
 
 export type FormApartmentModalProps = {
   Apartment: apartment | null
+  isOpenModal: boolean
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type FormBuildingProps = {
+  building: building | null
   isOpenModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }

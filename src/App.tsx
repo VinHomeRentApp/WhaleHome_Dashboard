@@ -10,7 +10,7 @@ export default function App() {
         theme={{
           components: {
             Switch: {
-              handleBg: typoColor.subMainBackground,
+              handleBg: typoColor.mainBackground,
               colorPrimary: typoColor.yellow1,
               colorPrimaryHover: typoColor.yellow2
             },
@@ -42,9 +42,9 @@ export default function App() {
               colorText: typoColor.white1
             },
             Input: {
-              colorTextPlaceholder: typoColor.black1,
-              colorBgContainer: typoColor.white1,
-              colorBorder: typoColor.subMainBackground
+              colorTextPlaceholder: typoColor.gray2,
+              colorBgContainer: typoColor.white1
+              // colorBorder: typoColor.subMainBackground
             }
           }
         }}
