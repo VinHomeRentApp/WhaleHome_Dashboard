@@ -1,5 +1,5 @@
 import { MoreOutlined } from '@ant-design/icons'
-import { Button, Input, Table, TableProps, Tag } from 'antd'
+import { Button, ConfigProvider, Input, Table, TableProps, Tag } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -8,6 +8,7 @@ import { RootState, useAppDispatch } from '../redux/containers/store'
 import { contract, contractHistory } from '../types/contract.type'
 import ModalContract from './Dashboard/ContractPage/ContractModal'
 import ContractModalDetail from './Dashboard/ContractPage/ContractModalDetail'
+import { typoColor } from '../constants/mainColor'
 
 const ContractPage: React.FC = () => {
   const [search, setSearch] = useState<string>('')
@@ -148,15 +149,18 @@ const ContractPage: React.FC = () => {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
-        <Input.Search
-          style={{ width: '30%' }}
-          placeholder='Search'
-          onChange={(e) => {
-            setSearch(e.target.value)
-          }}
-        />
+        <ConfigProvider theme={{ components: { Input: { colorBgContainer: typoColor.gray2 } } }}>
+          <Input.Search
+            style={{ width: '30%', backgroundColor: typoColor.gray2, color: typoColor.gray3 }}
+            placeholder='Search'
+            onChange={(e) => {
+              setSearch(e.target.value)
+            }}
+          />
+        </ConfigProvider>
+
         <Button
-          style={{ width: '10%' }}
+          style={{ width: '10%', backgroundColor: typoColor.yellow1 }}
           type='primary'
           block
           onClick={() => {
@@ -170,7 +174,6 @@ const ContractPage: React.FC = () => {
       <div>
         <ContractModalDetail selectedContract={selectedContract} setSelectedContract={setSelectedContract} />
       </div>
-
       <Table
         columns={columns}
         dataSource={data}
