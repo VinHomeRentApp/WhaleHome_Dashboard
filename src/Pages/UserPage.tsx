@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { deactiveUser, getUsers } from '../redux/actions/user.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { startEdituser } from '../redux/slices/user.slice'
-import { User } from '../types/user.type'
+import { User, UserToken } from '../types/user.type'
 import { handleErrorMessage } from '../utils/HandleError'
 import ModalUpdateUser from './Dashboard/UserPage/UserModal'
 
@@ -57,11 +57,10 @@ const UserPage: React.FC = () => {
     {
       title: 'Email',
       dataIndex: 'email',
+      width: '25%',
       key: 'id',
-      align: 'center',
-      render: (text: string) => <div style={{ whiteSpace: 'nowrap', width: 'auto', overflow: 'auto' }}>{text}</div>
+      align: 'center'
     },
-
     {
       title: 'Date of Birth',
       dataIndex: 'dateOfBirth',
@@ -76,10 +75,16 @@ const UserPage: React.FC = () => {
     },
     {
       title: 'Role',
-      dataIndex: 'role',
-      width: '7%',
+      width: '8%',
       key: 'id',
-      align: 'center'
+      align: 'center',
+      render: (record: UserToken) => {
+        //user token la do role ban dau la obj bay gio la string k dam dung vao sau de sua so loi~~~
+        if (record.role === 'ADMIN') {
+          return <Tag color={'magenta'}>{String(record.role).toUpperCase()}</Tag>
+        }
+        return <Tag color={'blue'}>{String(record.role).toUpperCase()}</Tag>
+      }
     },
     {
       title: 'Verified',
