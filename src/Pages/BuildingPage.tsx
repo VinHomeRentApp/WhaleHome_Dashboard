@@ -255,7 +255,7 @@ const BuildingPage: React.FC = () => {
         <Input
           placeholder='input name'
           value={modalData.name}
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
         />
         <Typography.Title level={5}>Area</Typography.Title>
         <Select

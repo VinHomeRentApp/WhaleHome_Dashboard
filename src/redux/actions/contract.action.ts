@@ -8,6 +8,7 @@ const token = localStorage.getItem('token')?.trim() || ''
 
 export const getContractList = createAsyncThunk('contract/getContract', async (_, thunkAPI) => {
   const res = await http.get<ResponseSuccessful<contract[]>>('/contracts', {
+    headers: { Authorization: `Bearer ${token}` },
     signal: thunkAPI.signal
   })
   return res.data.data
