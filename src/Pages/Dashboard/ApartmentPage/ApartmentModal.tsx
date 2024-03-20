@@ -25,7 +25,6 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
   })
 
   const { control, handleSubmit, setValue, getValues, formState, reset } = methods
-  const { errors } = formState
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
