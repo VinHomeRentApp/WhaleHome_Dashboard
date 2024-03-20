@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DatePicker, Input, Modal, Select, Typography, message } from 'antd'
+import { DatePicker, Image, Input, Modal, Select, Typography, message } from 'antd'
 import dayjs from 'dayjs' // Import dayjs library
 import { useEffect } from 'react'
 import { Controller, FieldErrors, Resolver, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
@@ -65,6 +65,11 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
       {contextHolder}
       <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Modal title='Edit User' open={isOpenModal} onOk={handleSubmit(onSubmit, onError)} onCancel={handleCancel}>
+          <Image
+            style={{ width: '40%', height: '30%' }}
+            src={userEdit?.image ? userEdit?.image : '/public/default-user.png'}
+          />
+
           <Typography.Title level={5}>FullName</Typography.Title>
           <Controller
             control={control}
@@ -80,7 +85,7 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
             render={({ field: { value, onChange } }) => (
               <Input
                 status={errors.phone && 'error'}
-                placeholder='input phonenumber'
+                placeholder='input phone number'
                 value={value}
                 onChange={onChange}
               />

@@ -75,7 +75,7 @@ const CalendarAppointment = () => {
   return (
     <>
       {contextHolder}
-      <Calendar cellRender={cellRender} />
+      <Calendar style={{ borderRadius: 10 }} cellRender={cellRender} />
     </>
   )
 }

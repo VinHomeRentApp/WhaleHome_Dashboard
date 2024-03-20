@@ -1,5 +1,5 @@
 import { LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { Avatar, Button, Layout, Modal, Typography, message, theme } from 'antd'
+import { Avatar, Button, Layout, Modal, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
@@ -7,6 +7,13 @@ import { RootState, useAppDispatch } from '../../redux/containers/store.ts'
 import { handleLogout } from '../../usecases/HandleLogout.ts'
 import { handleErrorMessage } from '../../utils/HandleError.ts'
 import MenuNav from './Menu.tsx'
+import {
+  layoutHeaderStyle,
+  styleButtonLogout,
+  styleIconHeader,
+  styleLayoutContext,
+  styleSider
+} from './styles/layout.ts'
 
 const { Header, Sider, Content } = Layout
 
@@ -26,57 +33,49 @@ const LayoutAdmin = ({ children }: Props) => {
     handleErrorMessage({ error, messageApi, title: 'Auth' })
   }, [error])
 
-  const {
-    token: { colorBgContainer, borderRadiusLG }
-  } = theme.useToken()
-
   return (
     <Layout>
       {contextHolder}
-      <Sider theme='dark' trigger={null} collapsible collapsed={collapsed}>
+      <Sider trigger={null} collapsible collapsed={collapsed} style={styleSider}>
         <MenuNav />
       </Sider>
 
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            type='text'
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64
-            }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}
+      <Layout
+        className={collapsed ? 'layout-transition' : 'layout-transition-faster'}
+        style={{ marginLeft: collapsed ? 80 : 200 }}
+      >
+        <div style={{ position: 'sticky', top: 0, width: '100%', zIndex: 1 }}>
+          <Header style={layoutHeaderStyle}>
             <Button
-              onClick={() => setIsOpenModal(!isOpenModal)}
-              style={{ color: 'blue', border: '1px solid blue', marginTop: '1%', marginRight: '2%' }}
+              type='text'
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={styleIconHeader}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
             >
-              <LoginOutlined />
-            </Button>
-            <Modal
-              title='Confirmation'
-              open={isOpenModal}
-              onOk={() => handleLogout(dispatch, navigate)}
-              onCancel={() => setIsOpenModal(!isOpenModal)}
-            >
-              <Typography>Are you sure that you want to logout?</Typography>
-            </Modal>
-          </div>
-        </Header>
+              {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}
+              <Button onClick={() => setIsOpenModal(!isOpenModal)} style={styleButtonLogout}>
+                <LoginOutlined />
+              </Button>
+              <Modal
+                title='Confirmation'
+                open={isOpenModal}
+                onOk={() => handleLogout(dispatch, navigate)}
+                onCancel={() => setIsOpenModal(!isOpenModal)}
+              >
+                <Typography>Are you sure that you want to logout?</Typography>
+              </Modal>
+            </div>
+          </Header>
+        </div>
 
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 20,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG
-          }}
-        >
+        <Content className={collapsed ? 'layout-transition' : 'layout-transition-faster'} style={styleLayoutContext}>
           {children}
         </Content>
       </Layout>

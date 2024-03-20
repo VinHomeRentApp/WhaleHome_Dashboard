@@ -1,9 +1,10 @@
-import { FileTextOutlined, HomeOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons'
+import { FileTextFilled, HomeFilled, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import DashboardCard from '../Components/Dashboard/DashboardCard'
 import DashboardChart from '../Components/Dashboard/DashboardChar'
+import { typoColor } from '../constants/mainColor'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { setUser } from '../redux/slices/auth.slice'
 import { User } from '../types/user.type'
@@ -19,7 +20,7 @@ const DashBoard: React.FC = () => {
   }, [])
 
   const styleIcon: React.CSSProperties = {
-    color: '#ffffff',
+    color: typoColor.black1,
     fontSize: 30
   }
 
@@ -40,7 +41,7 @@ const DashBoard: React.FC = () => {
             description='Active Posts'
             icon={
               <div style={layoutIconStyle}>
-                <FileTextOutlined style={styleIcon} />
+                <FileTextFilled style={styleIcon} />
               </div>
             }
             title={'Posts'}
@@ -62,7 +63,7 @@ const DashBoard: React.FC = () => {
             description='Active Apartments'
             icon={
               <div style={layoutIconStyle}>
-                <HomeOutlined style={styleIcon} />
+                <HomeFilled style={styleIcon} />
               </div>
             }
             title={'Apartments'}
@@ -83,7 +84,10 @@ const DashBoard: React.FC = () => {
 
         <DashboardChart />
         <div>
-          <CalendarAppointment />
+          <div style={{ backgroundColor: typoColor.mainBackground, padding: 10, width: '70%', borderRadius: 10 }}>
+            <CalendarAppointment />
+          </div>
+          <div style={{ width: '30%' }}></div>
         </div>
       </div>
     </Spin>
