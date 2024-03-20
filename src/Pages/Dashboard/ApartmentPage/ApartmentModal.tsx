@@ -75,7 +75,9 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
 
   const onSubmit: SubmitHandler<updateApartmentValuesType> = async (data) => {
     if (Apartment) {
-      dispatch(updateApartment({ id: data.id, body: data }))
+      if (data.id) {
+        dispatch(updateApartment({ id: data.id, body: data }))
+      }
     } else {
       dispatch(createApartment(data))
     }
@@ -109,12 +111,13 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
         >
           {Apartment ? (
             <>
-              {' '}
               <Typography.Title level={5}>ID</Typography.Title>
               <Controller
                 control={control}
                 name='id'
-                render={({ field }) => <Input onChange={field.onChange} value={field.value} disabled />}
+                render={({ field }) => (
+                  <Input onChange={field.onChange} value={field.value ? field.value : ''} disabled />
+                )}
               />
             </>
           ) : (
@@ -150,8 +153,8 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
                 onChange={(value) => {
                   field.onChange(value)
                   setSelectedAreaId(value)
-                  setValue('zoneID', NaN)
-                  setValue('buildingID', NaN)
+                  setValue('zoneID', null)
+                  setValue('buildingID', null)
                 }}
                 options={areaList.map((area) => ({ value: area.id, label: area.name }))}
               />
@@ -169,7 +172,7 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
                 onChange={(value) => {
                   field.onChange(value)
                   setSelectedZoneId(value)
-                  setValue('buildingID', NaN)
+                  setValue('buildingID', null)
                 }}
                 options={filteredZoneList.map((zone) => ({ value: zone.id, label: zone.name }))}
               />

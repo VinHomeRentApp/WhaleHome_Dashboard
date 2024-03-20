@@ -1,6 +1,6 @@
 import { Button, Input, message } from 'antd'
-import { useState } from 'react'
-import { deleteApartment } from '../redux/actions/apartment.actions'
+import { useEffect, useState } from 'react'
+import { deleteApartment, getApartmentList } from '../redux/actions/apartment.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { startEditingApartment } from '../redux/slices/apartment.slice'
 import ApartmentModal from './Dashboard/ApartmentPage/ApartmentModal'
@@ -18,6 +18,13 @@ const ApartmentPage = () => {
     dispatch(startEditingApartment(id))
     setIsOpenModal(true)
   }
+
+  useEffect(() => {
+    const promise = dispatch(getApartmentList())
+    return () => {
+      promise.abort()
+    }
+  }, [dispatch])
   const handleDelete = async (id: number) => {
     const resultAction = await dispatch(deleteApartment(id))
     if (deleteApartment.fulfilled.match(resultAction)) {
