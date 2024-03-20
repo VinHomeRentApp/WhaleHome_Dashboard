@@ -26,6 +26,6 @@ export const styleSider: React.CSSProperties = { position: 'fixed', height: '100
 
 export const styleLayoutContext: React.CSSProperties = {
   padding: 20,
-  minHeight: 280,
+  minHeight: '100vh',
   backgroundColor: typoColor.mainBackground
 }
