@@ -1,9 +1,10 @@
-import { Card, Select, message } from 'antd'
+import { Select, message } from 'antd'
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import React, { useEffect, useState } from 'react'
 import { Bar, Pie } from 'react-chartjs-2'
 import { useSelector } from 'react-redux'
 import { getDataChartYearRevenue } from '../../apis/chart.apis'
+import { typoColor } from '../../constants/mainColor'
 import { countBuildingByZone } from '../../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../../redux/containers/store'
 import { ChartDataTypes } from '../../types/chart.types'
@@ -74,7 +75,9 @@ const DashboardChart: React.FC = () => {
       },
       title: {
         display: true,
-        text: `Chart Comparing Current Year Revenue to ${compareYear}.`
+        text: `Chart Comparing Current Year Revenue to ${compareYear}.`,
+        color: typoColor.white1,
+        padding: 10
       }
     }
   }
@@ -95,12 +98,34 @@ const DashboardChart: React.FC = () => {
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 
+  const styleLayoutChart: React.CSSProperties = {
+    width: '100%',
+    marginTop: 20,
+    marginBottom: 20,
+    display: 'flex'
+  }
+
+  const styleCardChart: React.CSSProperties = {
+    width: '65%',
+    marginRight: 10
+  }
+
   return (
-    <div style={{ width: '100%', marginTop: 20, marginBottom: 20, display: 'flex', gap: 10 }}>
+    <div style={styleLayoutChart}>
       {contextHolder}
 
-      <Card style={{ width: '62%', marginLeft: 10, boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.1)' }}>
-        <div>
+      <div style={styleCardChart}>
+        <div
+          style={{
+            backgroundColor: typoColor.subMainBackground,
+            padding: 20,
+            borderTopLeftRadius: '14px',
+            borderTopRightRadius: '14px',
+            borderTop: '2px solid #1e1e1e',
+            borderLeft: '2px solid #1e1e1e',
+            borderRight: '2px solid #1e1e1e'
+          }}
+        >
           <Select
             showSearch
             value={compareYear}
@@ -111,11 +136,33 @@ const DashboardChart: React.FC = () => {
             options={getYearList().map((item) => ({ value: String(item), label: String(item) }))}
           />
         </div>
-        <Bar options={options} data={barChartData} />
-      </Card>
-      <Card style={{ width: '35%', boxShadow: '5px 5px 10px rgba(0, 0, 0, 0.05)' }}>
+        <Bar
+          style={{
+            backgroundColor: typoColor.subMainBackground,
+            borderBottomLeftRadius: '14px',
+            borderBottomRightRadius: '14px',
+            paddingLeft: 20,
+            paddingRight: 20,
+            paddingBottom: 10,
+            borderBottom: '2px solid #1e1e1e',
+            borderLeft: '2px solid #1e1e1e',
+            borderRight: '2px solid #1e1e1e'
+          }}
+          options={options}
+          data={barChartData}
+        />
+      </div>
+      <div
+        style={{
+          width: '35%',
+          backgroundColor: typoColor.subMainBackground,
+          padding: 20,
+          borderRadius: '14px',
+          border: '2px solid #1e1e1e'
+        }}
+      >
         <Pie data={pieChartData} />
-      </Card>
+      </div>
     </div>
   )
 }
