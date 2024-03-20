@@ -84,7 +84,12 @@ const DashBoard: React.FC = () => {
 
         <DashboardChart />
         <div>
-          <div style={{ backgroundColor: typoColor.mainBackground, padding: 10, width: '70%', borderRadius: 10 }}>
+          <div
+            style={{
+              backgroundColor: typoColor.subMainBackground,
+              borderRadius: '14px'
+            }}
+          >
             <CalendarAppointment />
           </div>
           <div style={{ width: '30%' }}></div>
