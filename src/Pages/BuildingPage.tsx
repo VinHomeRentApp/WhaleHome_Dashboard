@@ -62,6 +62,7 @@ const BuildingPage: React.FC = () => {
       ...curr,
       zone: {
         ...curr.zone,
+        id: NaN,
         area: {
           ...curr.zone.area,
           id: e
@@ -77,7 +78,6 @@ const BuildingPage: React.FC = () => {
       ...curr,
       zone: {
         ...curr.zone,
-
         id: e
       }
     }))
@@ -170,9 +170,15 @@ const BuildingPage: React.FC = () => {
   }
 
   const handleOk = () => {
-    setModal(false)
+    if (modalData.name == '') {
+      return
+    }
+    if (isNaN(modalData.zone.id) || isNaN(modalData.zone.area.id)) {
+      return
+    }
     dispatch(cancelEditingBuilding())
     dispatch(updateBuilding({ id: modalData.id, body: modalData }))
+    setModal(false)
   }
   const handleCancel = () => {
     setModal(false)
@@ -181,6 +187,9 @@ const BuildingPage: React.FC = () => {
   }
 
   const handleOkAdd = () => {
+    if (isNaN(modalData.zone.id) || isNaN(modalData.zone.area.id)) {
+      return
+    }
     if (modalData.name !== '') {
       setModalAdd(false)
       setModalData(formData)
@@ -259,6 +268,7 @@ const BuildingPage: React.FC = () => {
         />
         <Typography.Title level={5}>Area</Typography.Title>
         <Select
+          value={modalData.zone.area.id}
           style={{ minWidth: 150 }}
           onChange={handleSelectArea}
           options={areaList.map((area) => {
@@ -269,6 +279,7 @@ const BuildingPage: React.FC = () => {
         <Typography.Title level={5}>Zone</Typography.Title>
         <Select
           style={{ minWidth: 150 }}
+          value={modalData.zone.id}
           onChange={handleSelectZone}
           disabled={enable}
           options={zoneListFilter.map((z) => {
