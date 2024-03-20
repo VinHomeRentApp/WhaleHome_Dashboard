@@ -23,6 +23,7 @@ import { Line } from 'react-chartjs-2'
 import FormAddAppointment from '../../Pages/Dashboard/AppointmentPage/FormAddAppointment'
 import FormAddPostModal from '../../Pages/Dashboard/PostPage/FormAddPostModal'
 import { getDataChartYearRevenue } from '../../apis/chart.apis'
+import { typoColor } from '../../constants/mainColor'
 import { ChartDataTypes } from '../../types/chart.types'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
@@ -116,11 +117,28 @@ const HoverField = () => {
   }
   return (
     <>
-      <FloatButton.Group trigger='hover' type='primary' style={{ right: 20 }} icon={<AppstoreOutlined />}>
-        <FloatButton onClick={() => setIsOpenChart(true)} icon={<LineChartOutlined />} />
-        <FloatButton onClick={() => setIsOpenAppointment(true)} icon={<CalendarOutlined />} />
-        <FloatButton onClick={() => setIsOpenPost(true)} icon={<FileTextOutlined />} />
-        <FloatButton onClick={() => setIsOpenChat(true)} icon={<CommentOutlined />} />
+      <FloatButton.Group
+        trigger='click'
+        type='default'
+        style={{ right: 20, color: typoColor.yellow1 }}
+        icon={<AppstoreOutlined style={{ color: typoColor.yellow1 }} />}
+      >
+        <FloatButton
+          onClick={() => setIsOpenChart(true)}
+          icon={<LineChartOutlined style={{ color: typoColor.yellow1 }} />}
+        />
+        <FloatButton
+          onClick={() => setIsOpenAppointment(true)}
+          icon={<CalendarOutlined style={{ color: typoColor.yellow1 }} />}
+        />
+        <FloatButton
+          onClick={() => setIsOpenPost(true)}
+          icon={<FileTextOutlined style={{ color: typoColor.yellow1 }} />}
+        />
+        <FloatButton
+          onClick={() => setIsOpenChat(true)}
+          icon={<CommentOutlined style={{ color: typoColor.yellow1 }} />}
+        />
       </FloatButton.Group>
       {contextHolder}
       {/* Chat Modal */}

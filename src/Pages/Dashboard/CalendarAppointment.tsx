@@ -1,5 +1,5 @@
 import type { CalendarProps } from 'antd'
-import { Badge, Calendar, message } from 'antd'
+import { Badge, Calendar, ConfigProvider, message } from 'antd'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
@@ -9,6 +9,7 @@ import { RootState, useAppDispatch } from '../../redux/containers/store'
 import { handleErrorMessage } from '../../utils/HandleError'
 import { convertToAMPM } from '../../utils/formatDate'
 import { getBadgeStatus } from '../../utils/getBadgeCalendar'
+import { typoColor } from '../../constants/mainColor'
 
 const CalendarAppointment = () => {
   const { appointmentList, error } = useSelector((state: RootState) => state.appointment)
@@ -37,11 +38,12 @@ const CalendarAppointment = () => {
       <ul className='events'>
         {appointmentsForDate.map((appointment) => (
           <Badge
+            style={{ marginTop: -20, marginLeft: -30 }}
             key={appointment.id}
             status={getBadgeStatus(appointment.statusAppointment)}
             text={
               <span
-                style={{ fontSize: '10px' }}
+                style={{ fontSize: '10px', color: typoColor.white1 }}
               >{`${convertToAMPM(appointment.time)} - ${appointment.apartment.name}`}</span>
             }
           />
@@ -75,7 +77,28 @@ const CalendarAppointment = () => {
   return (
     <>
       {contextHolder}
-      <Calendar style={{ borderRadius: 10 }} cellRender={cellRender} />
+      <ConfigProvider
+        theme={{
+          components: {
+            Calendar: {
+              fullBg: typoColor.subMainBackground,
+              itemActiveBg: typoColor.mainBackground,
+              colorText: typoColor.white1
+            }
+          }
+        }}
+      >
+        <Calendar
+          mode='month'
+          style={{
+            borderRadius: '14px',
+            border: '2px solid #1e1e1e',
+            backgroundColor: typoColor.subMainBackground,
+            padding: 10
+          }}
+          cellRender={cellRender}
+        />
+      </ConfigProvider>
     </>
   )
 }

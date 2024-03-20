@@ -147,11 +147,11 @@ const UserPage: React.FC = () => {
         pagination={{
           pageSize: 5
         }}
-        scroll={{ y: 400 }}
         loading={isLoading}
         rowKey='id'
         bordered
       />
+
       <ModalUpdateUser isOpenModal={openModal} userEdit={editUser} setOpenModal={setOpenModal} />
     </>
   )

@@ -44,7 +44,7 @@ const LayoutAdmin = ({ children }: Props) => {
         className={collapsed ? 'layout-transition' : 'layout-transition-faster'}
         style={{ marginLeft: collapsed ? 80 : 200 }}
       >
-        <div style={{ position: 'sticky', top: 0, width: '100%', zIndex: 1 }}>
+        <div style={{ position: 'sticky', top: 0, width: '100%', zIndex: 10000 }}>
           <Header style={layoutHeaderStyle}>
             <Button
               type='text'
@@ -56,7 +56,9 @@ const LayoutAdmin = ({ children }: Props) => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                gap: 10,
+                alignItems: 'center',
+                marginRight: 20
               }}
             >
               {userInfo != null && <Avatar style={{ margin: 10 }} size='large' src={userInfo.image}></Avatar>}
