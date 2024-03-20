@@ -8,6 +8,7 @@ import { createZone, deleteZone, getZoneList, updateZone } from '../redux/action
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingZone, startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
+import { typoColor } from '../constants/mainColor'
 
 const formData: zone = {
   id: NaN,
@@ -167,7 +168,7 @@ const ZonePage: React.FC = () => {
           }}
         />
         <Button
-          style={{ width: '10%' }}
+          style={{ width: '10%', color: typoColor.mainBackground }}
           type='primary'
           block
           onClick={() => {
@@ -182,7 +183,7 @@ const ZonePage: React.FC = () => {
         dataSource={zoneList}
         loading={loading}
         pagination={{
-          pageSize: 6
+          pageSize: 7
         }}
         rowKey='id'
         bordered

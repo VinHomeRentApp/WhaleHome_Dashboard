@@ -6,6 +6,7 @@ import { startEditingApartment } from '../redux/slices/apartment.slice'
 import ApartmentModal from './Dashboard/ApartmentPage/ApartmentModal'
 import TableApartment from './Dashboard/ApartmentPage/TableApartment'
 import { useSelector } from 'react-redux'
+import { typoColor } from '../constants/mainColor'
 
 const ApartmentPage = () => {
   const dispatch = useAppDispatch()
@@ -37,7 +38,7 @@ const ApartmentPage = () => {
           }}
         />
         <Button
-          style={{ width: '10%' }}
+          style={{ width: '10%', color: typoColor.mainBackground }}
           type='primary'
           block
           onClick={() => {

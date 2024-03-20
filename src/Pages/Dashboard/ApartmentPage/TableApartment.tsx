@@ -100,7 +100,6 @@ const TableApartment = ({ search, handleOpenModalEdit, handleDelete }: Props) =>
       pagination={{
         pageSize: 7
       }}
-      scroll={{ y: 400 }}
       loading={loading}
       rowKey='id'
       bordered

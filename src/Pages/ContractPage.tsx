@@ -17,7 +17,7 @@ const ContractPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const data = useSelector((state: RootState) => state.contract.contractList)
   const loading = useSelector((state: RootState) => state.contract.loading)
-
+  //
   useEffect(() => {
     const promise = dispatch(getContractList())
     return () => {
@@ -158,7 +158,7 @@ const ContractPage: React.FC = () => {
         />
 
         <Button
-          style={{ width: '10%', backgroundColor: typoColor.yellow1 }}
+          style={{ width: '10%' }}
           block
           onClick={() => {
             setModalAdd(true)
@@ -175,9 +175,8 @@ const ContractPage: React.FC = () => {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 4
+          pageSize: 7
         }}
-        scroll={{ y: 400 }}
         loading={loading}
         rowKey='id'
         bordered

@@ -7,6 +7,7 @@ import { cancelEditingArea } from '../redux/slices/area.slice'
 import { area } from '../types/area.type'
 import ModalFormAddArea from './Dashboard/AreaPage/ModalFormAddArea'
 import TableAreaPage from './Dashboard/AreaPage/TableAreaPage'
+import { typoColor } from '../constants/mainColor'
 
 const formData: area = {
   name: '',
@@ -62,7 +63,7 @@ export default function AreaPage() {
           }}
         />
         <Button
-          style={{ width: '10%' }}
+          style={{ width: '10%', color: typoColor.mainBackground }}
           type='primary'
           block
           onClick={() => {

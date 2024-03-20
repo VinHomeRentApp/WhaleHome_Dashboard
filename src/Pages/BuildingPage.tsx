@@ -9,6 +9,7 @@ import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingBuilding, startEditBuilding } from '../redux/slices/building.slice'
 import { building } from '../types/building.type'
 import { zone } from '../types/zone.type'
+import { typoColor } from '../constants/mainColor'
 
 const formData: building = {
   id: NaN,
@@ -216,7 +217,12 @@ const BuildingPage: React.FC = () => {
             setSearch(e.target.value)
           }}
         />
-        <Button style={{ width: '15%' }} type='primary' block onClick={() => setModalAdd(true)}>
+        <Button
+          style={{ width: '15%', color: typoColor.mainBackground }}
+          type='primary'
+          block
+          onClick={() => setModalAdd(true)}
+        >
           Add New Building
         </Button>
       </div>
@@ -225,10 +231,9 @@ const BuildingPage: React.FC = () => {
         dataSource={buildingList}
         loading={loading}
         pagination={{
-          pageSize: 5
+          pageSize: 7
         }}
         rowKey='id'
-        bordered
       />
 
       <Modal title='Edit Building' open={modal} onOk={handleOk} onCancel={handleCancel}>

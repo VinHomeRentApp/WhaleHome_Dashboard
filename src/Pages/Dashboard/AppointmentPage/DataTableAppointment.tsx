@@ -191,9 +191,8 @@ const DataTableAppointment = ({ searchText }: DataTableAppointmentProps) => {
         columns={ColumnsAppointmentPage}
         dataSource={appointmentList}
         pagination={{
-          pageSize: 5
+          pageSize: 7
         }}
-        scroll={{ y: 400 }}
         loading={isLoadingAppointmentList}
         rowKey='id'
         bordered

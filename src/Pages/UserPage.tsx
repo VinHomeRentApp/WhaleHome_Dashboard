@@ -145,7 +145,7 @@ const UserPage: React.FC = () => {
         columns={columns}
         dataSource={userList}
         pagination={{
-          pageSize: 5
+          pageSize: 7
         }}
         loading={isLoading}
         rowKey='id'

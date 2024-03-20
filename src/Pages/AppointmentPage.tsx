@@ -1,6 +1,7 @@
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Input } from 'antd'
 import React, { useState } from 'react'
+import { typoColor } from '../constants/mainColor'
 import DataTableAppointment from './Dashboard/AppointmentPage/DataTableAppointment'
 import FormAddAppointment from './Dashboard/AppointmentPage/FormAddAppointment'
 import CalendarAppointment from './Dashboard/CalendarAppointment'
@@ -23,7 +24,11 @@ const AppointmentPage: React.FC = () => {
             setSearchText(e.target.value)
           }}
         />
-        <Button onClick={handleOpenAddAppointment} style={{ width: '10%' }} type='primary' block>
+        <Button
+          onClick={handleOpenAddAppointment}
+          style={{ width: '10%', backgroundColor: typoColor.yellow1, color: typoColor.mainBackground }}
+          type='primary'
+        >
           <PlusCircleOutlined />
           Add New
         </Button>
