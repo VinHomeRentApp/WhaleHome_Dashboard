@@ -14,7 +14,6 @@ import {
   styleLayoutContext,
   styleSider
 } from './styles/layout.ts'
-import { typoColor } from '../../constants/mainColor.ts'
 
 const { Header, Sider, Content } = Layout
 

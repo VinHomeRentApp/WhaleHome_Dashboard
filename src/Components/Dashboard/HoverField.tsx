@@ -23,8 +23,8 @@ import { Line } from 'react-chartjs-2'
 import FormAddAppointment from '../../Pages/Dashboard/AppointmentPage/FormAddAppointment'
 import FormAddPostModal from '../../Pages/Dashboard/PostPage/FormAddPostModal'
 import { getDataChartYearRevenue } from '../../apis/chart.apis'
+import { typoColor } from '../../constants/mainColor'
 import { ChartDataTypes } from '../../types/chart.types'
-import { backgroundColor, typoColor } from '../../constants/mainColor'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
