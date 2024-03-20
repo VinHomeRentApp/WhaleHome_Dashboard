@@ -44,7 +44,7 @@ const LayoutAdmin = ({ children }: Props) => {
         className={collapsed ? 'layout-transition' : 'layout-transition-faster'}
         style={{ marginLeft: collapsed ? 80 : 200 }}
       >
-        <div style={{ position: 'sticky', top: 0, width: '100%', zIndex: 10000 }}>
+        <div style={{ position: 'sticky', top: 0, width: '100%', zIndex: 3 }}>
           <Header style={layoutHeaderStyle}>
             <Button
               type='text'

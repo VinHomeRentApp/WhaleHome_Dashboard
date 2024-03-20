@@ -1,15 +1,15 @@
 import type { CalendarProps } from 'antd'
-import { Badge, Calendar, ConfigProvider, message } from 'antd'
+import { Badge, Calendar, message } from 'antd'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { typoColor } from '../../constants/mainColor'
 import { getAppointmentList } from '../../redux/actions/appointment.actions'
 import { RootState, useAppDispatch } from '../../redux/containers/store'
 import { handleErrorMessage } from '../../utils/HandleError'
 import { convertToAMPM } from '../../utils/formatDate'
 import { getBadgeStatus } from '../../utils/getBadgeCalendar'
-import { typoColor } from '../../constants/mainColor'
 
 const CalendarAppointment = () => {
   const { appointmentList, error } = useSelector((state: RootState) => state.appointment)
@@ -77,28 +77,17 @@ const CalendarAppointment = () => {
   return (
     <>
       {contextHolder}
-      <ConfigProvider
-        theme={{
-          components: {
-            Calendar: {
-              fullBg: typoColor.subMainBackground,
-              itemActiveBg: typoColor.mainBackground,
-              colorText: typoColor.white1
-            }
-          }
+
+      <Calendar
+        mode='month'
+        style={{
+          borderRadius: '14px',
+          border: '2px solid #1e1e1e',
+          backgroundColor: typoColor.subMainBackground,
+          padding: 10
         }}
-      >
-        <Calendar
-          mode='month'
-          style={{
-            borderRadius: '14px',
-            border: '2px solid #1e1e1e',
-            backgroundColor: typoColor.subMainBackground,
-            padding: 10
-          }}
-          cellRender={cellRender}
-        />
-      </ConfigProvider>
+        cellRender={cellRender}
+      />
     </>
   )
 }

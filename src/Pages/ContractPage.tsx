@@ -158,7 +158,7 @@ const ContractPage: React.FC = () => {
         />
 
         <Button
-          style={{ width: '10%', backgroundColor: typoColor.yellow1 }}
+          style={{ width: '10%' }}
           block
           onClick={() => {
             setModalAdd(true)
@@ -175,7 +175,7 @@ const ContractPage: React.FC = () => {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 4
+          pageSize: 7
         }}
         scroll={{ y: 400 }}
         loading={loading}

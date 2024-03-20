@@ -5,26 +5,11 @@ import { getProblemList } from '../redux/actions/problem.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { problem } from '../types/problem.type'
 
-// const formData: problem = {
-//   id: NaN,
-//   createDate: '',
-//   status: false,
-//   title: '',
-//   description: '',
-//   issues: [],
-//   problemImages: []
-// }
-
 export default function AreaPage() {
   const dispatch = useAppDispatch()
   // const problemEditing = useSelector((state: RootState) => state.problem.editProblem)
   const data = useSelector((state: RootState) => state.problem.problemList)
   const loading = useSelector((state: RootState) => state.problem.loading)
-
-  // const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  // const [modalData, setModalData] = useState<problem>(formData)
-  // const [modalAdd, setModalAdd] = useState<boolean>(false)
-  // const [search, setSearch] = useState<string>('')
 
   useEffect(() => {
     const promise = dispatch(getProblemList())
@@ -32,20 +17,6 @@ export default function AreaPage() {
       promise.abort()
     }
   }, [dispatch])
-
-  // useEffect(() => {
-  //   setModalData(problemEditing || formData)
-  // }, [problemEditing])
-
-  // const handleCancel = () => {
-  //   setIsOpenModal(false)
-  // }
-  // const handleCancelAdd = () => {
-  //   setModalAdd(false)
-  // }
-  // const handleOkAdd = () => {
-  //   setModalAdd(false)
-  // }
 
   const columns: TableProps['columns'] = [
     {
@@ -101,13 +72,7 @@ export default function AreaPage() {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
-        <Input.Search
-          style={{ width: '30%' }}
-          placeholder='Tìm kiếm theo tên'
-          // onChange={(e) => {
-          //   setSearch(e.target.value)
-          // }}
-        />
+        <Input.Search style={{ width: '30%' }} placeholder='Tìm kiếm theo tên' />
       </div>
       <Table
         columns={columns}
@@ -120,23 +85,6 @@ export default function AreaPage() {
         rowKey='id'
         bordered
       />
-      {/* 
-      <ModalFormAddArea
-        isOpenModal={isOpenModal}
-        handleCancel={handleCancel}
-        modalData={modalData}
-        setIsOpenModal={setIsOpenModal}
-        setModalData={setModalData}
-      />
-
-      <Modal title='Add Area' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
-        <Typography.Title level={5}>Name</Typography.Title>
-        <Input
-          placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
-          value={modalData.name}
-        />
-      </Modal> */}
     </>
   )
 }

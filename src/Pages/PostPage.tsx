@@ -51,7 +51,6 @@ const PostPage: React.FC = () => {
         <Button
           style={{ width: '5%', height: '5%' }}
           type='primary'
-          block
           onClick={() => {
             setIsOpenModalAdd(!isOpenModalAdd)
           }}

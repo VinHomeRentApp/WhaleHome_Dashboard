@@ -51,7 +51,7 @@ const RecentPost: React.FC = () => {
         dataSource={dataSource}
         scroll={{ y: 200 }}
         pagination={{
-          pageSize: 4,
+          pageSize: 7,
           hideOnSinglePage: true
         }}
         rowKey='id'
