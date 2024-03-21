@@ -1,13 +1,13 @@
 import * as yup from 'yup'
 
 export type updateApartmentValuesType = {
-  id: number
+  id: number | null
   description: string
   name: string
-  apartmentClassId: number
-  buildingID: number
-  zoneID: number
-  areaID: number
+  apartmentClassId: number | null
+  buildingID: number | null
+  zoneID: number | null
+  areaID: number | null
 }
 
 export const apartmentSchema = yup.object().shape({
@@ -20,11 +20,11 @@ export const apartmentSchema = yup.object().shape({
 })
 
 export const defaultFormApartmentValue: updateApartmentValuesType = {
-  id: NaN,
+  id: null,
   description: '',
   name: '',
-  apartmentClassId: NaN,
-  buildingID: NaN,
-  zoneID: NaN,
-  areaID: NaN
+  apartmentClassId: null,
+  buildingID: null,
+  zoneID: null,
+  areaID: null
 }

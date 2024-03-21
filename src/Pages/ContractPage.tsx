@@ -3,7 +3,6 @@ import { Button, Input, Table, TableProps, Tag } from 'antd'
 import Avatar from 'antd/es/avatar/avatar'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { typoColor } from '../constants/mainColor'
 import { getContractList } from '../redux/actions/contract.action'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { contract, contractHistory } from '../types/contract.type'
@@ -150,7 +149,7 @@ const ContractPage: React.FC = () => {
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1%' }}>
         <Input.Search
-          style={{ width: '30%', backgroundColor: typoColor.gray2, color: typoColor.gray3 }}
+          style={{ width: '30%' }}
           placeholder='Search'
           onChange={(e) => {
             setSearch(e.target.value)
