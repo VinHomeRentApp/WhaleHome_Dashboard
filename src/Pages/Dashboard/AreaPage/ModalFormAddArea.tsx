@@ -22,12 +22,15 @@ const ModalFormAddArea = ({
   const dispatch = useAppDispatch()
 
   const handleOk = () => {
+    if (modalData.name === '') {
+      return
+    }
     setIsOpenModal(false)
     dispatch(updateArea({ areaId: modalData.id, body: modalData }))
   }
 
   return (
-    <Modal title='Edit Area' open={isOpenModal} onOk={handleOk} onCancel={handleCancel}>
+    <Modal title='Edit123 Area' open={isOpenModal} onOk={handleOk} onCancel={handleCancel}>
       <Typography.Title level={5}>ID</Typography.Title>
       <Input
         placeholder='input name'

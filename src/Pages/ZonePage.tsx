@@ -125,6 +125,9 @@ const ZonePage: React.FC = () => {
     dispatch(startEditingZone(id))
   }
   const handleOkEdit = () => {
+    if (modalData.name.trim() === '') {
+      return
+    }
     setModal(false)
     dispatch(updateZone({ id: modalData.id, body: modalData }))
     dispatch(cancelEditingZone())
@@ -193,7 +196,7 @@ const ZonePage: React.FC = () => {
         <Typography.Title level={5}>Name</Typography.Title>
         <Input
           placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value.trim() }))}
+          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
           value={modalData.name}
         />
 
