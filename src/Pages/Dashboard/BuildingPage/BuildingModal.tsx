@@ -26,7 +26,8 @@ const BuildingModal = (props: FormBuildingProps) => {
 
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
-  const [filteredZoneList, setFilteredZoneList] = useState<zone[]>(zoneList)
+  const [areaId, setAreaId] = useState<number | null>(null)
+  const [filteredZoneList, setFilteredZoneList] = useState<zone[]>([])
 
   useEffect(() => {
     dispatch(getArea())
@@ -48,7 +49,7 @@ const BuildingModal = (props: FormBuildingProps) => {
   useEffect(() => {
     const filteredZones = zoneList.filter((zone) => !getValues('areaId') || zone.area.id === getValues('areaId'))
     setFilteredZoneList(filteredZones)
-  }, [zoneList, getValues])
+  }, [zoneList, getValues, areaId])
 
   const onSubmit: SubmitHandler<BuildingTypeValue> = async (data) => {
     if (building) {
@@ -101,6 +102,7 @@ const BuildingModal = (props: FormBuildingProps) => {
                 onChange={(value) => {
                   field.onChange(value)
                   setValue('zoneId', null)
+                  setAreaId(value)
                 }}
                 options={areaList.map((area) => ({ value: area.id, label: area.name }))}
               />
