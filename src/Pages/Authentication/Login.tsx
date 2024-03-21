@@ -57,6 +57,7 @@ export default function Login() {
           <div style={{ textAlign: 'center' }}>
             <Image preview={false} style={{ width: '25%', height: '25%' }} src='./public/main-logo.png' />
           </div>
+          {/*  */}
           <Form
             name='normal_login'
             initialValues={{
