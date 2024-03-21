@@ -62,6 +62,20 @@ const areaSlice = createSlice({
           }
         }
       )
+      .addMatcher<RejectedAction>(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.loading = false
+          state.error = action.payload
+        }
+      )
+      .addMatcher<FulfilledAction>(
+        (action) => action.type.endsWith('/fulfilled'),
+        (state) => {
+          state.loading = false
+          state.error = null
+        }
+      )
   }
 })
 export const { startEditingArea, cancelEditingArea } = areaSlice.actions

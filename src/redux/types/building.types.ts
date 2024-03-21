@@ -5,13 +5,16 @@ interface BuildingState {
   editingBuilding: building | null
   loading: boolean
   currentRequestId: undefined | string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any
 }
 
 export const initialBuildingState: BuildingState = {
   buildingList: [],
   editingBuilding: null,
   loading: false,
-  currentRequestId: undefined
+  currentRequestId: undefined,
+  error: null
 }
 
 export interface updateBuilding {

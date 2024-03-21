@@ -3,6 +3,7 @@ import { Input, Modal, Select, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { Controller, FieldErrors, Resolver, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import { createApartment, updateApartment } from '../../../redux/actions/apartment.actions'
 import { getApartmentClassList } from '../../../redux/actions/apartmentClass.action'
 import { getArea } from '../../../redux/actions/area.actions'
 import { getBuildingList } from '../../../redux/actions/building.actions'
@@ -13,7 +14,7 @@ import { apartmentSchema, defaultFormApartmentValue, updateApartmentValuesType }
 import { building } from '../../../types/building.type'
 import { FormApartmentModalProps } from '../../../types/props.types'
 import { zone } from '../../../types/zone.type'
-import { createApartment, updateApartment } from '../../../redux/actions/apartment.actions'
+import { handleErrorMessage } from '../../../utils/HandleError'
 
 const ApartmentModal = (props: FormApartmentModalProps) => {
   const { Apartment, isOpenModal, setOpenModal } = props
@@ -28,7 +29,7 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
-  const { apartmentList } = useSelector((state: RootState) => state.apartment)
+  const { apartmentList, error } = useSelector((state: RootState) => state.apartment)
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
   const buildingList = useSelector((state: RootState) => state.building.buildingList)
@@ -76,14 +77,29 @@ const ApartmentModal = (props: FormApartmentModalProps) => {
   const onSubmit: SubmitHandler<updateApartmentValuesType> = async (data) => {
     if (Apartment) {
       if (data.id) {
-        dispatch(updateApartment({ id: data.id, body: data }))
+        const resultAction = await dispatch(updateApartment({ id: data.id, body: data }))
+        if (updateApartment.fulfilled.match(resultAction)) {
+          message.success('Update Apartment Successfully!')
+          reset(defaultFormApartmentValue)
+          setOpenModal(false)
+        }
       }
     } else {
-      dispatch(createApartment(data))
+      const resultAction = await dispatch(createApartment(data))
+      if (createApartment.fulfilled.match(resultAction)) {
+        message.success('Create Apartment Successfully!')
+        reset(defaultFormApartmentValue)
+        setOpenModal(false)
+      }
     }
     reset(defaultFormApartmentValue)
     setOpenModal(false)
   }
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Apartment' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   const onError: SubmitErrorHandler<updateApartmentValuesType> = (errors: FieldErrors<updateApartmentValuesType>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars

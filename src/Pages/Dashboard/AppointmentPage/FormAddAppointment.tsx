@@ -94,6 +94,7 @@ const FormAddAppointment = (props: FormAddAppointmentProps) => {
 
   useEffect(() => {
     handleErrorMessage({ error, messageApi, title: 'Appointment' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
   const onError: SubmitErrorHandler<createAppointmentFormValuesTypes> = (
