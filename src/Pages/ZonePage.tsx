@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Input, Modal, Select, Switch, Table, TableProps, Typography, message } from 'antd'
+import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { typoColor } from '../constants/mainColor'
 import { getArea } from '../redux/actions/area.actions'
 import { createZone, deleteZone, getZoneList, updateZone } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
 import { cancelEditingZone, startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
-import { typoColor } from '../constants/mainColor'
 
 const formData: zone = {
   id: NaN,
@@ -205,11 +205,6 @@ const ZonePage: React.FC = () => {
             return { value: area.id, label: area.name }
           })}
           value={modalData.area.id}
-        />
-        <Typography.Title level={5}>Status</Typography.Title>
-        <Checkbox
-          onChange={(e) => setModalData((data) => ({ ...data, status: e.target.value }))}
-          checked={modalData.status}
         />
       </Modal>
 
