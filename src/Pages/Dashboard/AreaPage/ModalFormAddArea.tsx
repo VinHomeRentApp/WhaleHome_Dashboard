@@ -41,11 +41,6 @@ const ModalFormAddArea = ({
         onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
         value={modalData.name}
       />
-      <Typography.Title level={5}>Status</Typography.Title>
-      <Checkbox
-        onChange={(e) => setModalData((data) => ({ ...data, status: e.target.value }))}
-        checked={modalData.status}
-      />
     </Modal>
   )
 }

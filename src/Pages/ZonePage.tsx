@@ -206,11 +206,6 @@ const ZonePage: React.FC = () => {
           })}
           value={modalData.area.id}
         />
-        <Typography.Title level={5}>Status</Typography.Title>
-        <Checkbox
-          onChange={(e) => setModalData((data) => ({ ...data, status: e.target.value }))}
-          checked={modalData.status}
-        />
       </Modal>
 
       <Modal title='Add Zone' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
