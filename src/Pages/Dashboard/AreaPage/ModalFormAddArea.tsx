@@ -22,6 +22,9 @@ const ModalFormAddArea = ({
   const dispatch = useAppDispatch()
 
   const handleOk = () => {
+    if (modalData.name === '') {
+      return
+    }
     setIsOpenModal(false)
     dispatch(updateArea({ areaId: modalData.id, body: modalData }))
   }
