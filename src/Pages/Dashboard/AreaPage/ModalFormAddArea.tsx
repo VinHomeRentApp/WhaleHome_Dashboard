@@ -1,4 +1,4 @@
-import { Checkbox, Input, Modal, Typography } from 'antd'
+import { Input, Modal, Typography } from 'antd'
 import React, { Dispatch } from 'react'
 import { updateArea } from '../../../redux/actions/area.actions'
 import { useAppDispatch } from '../../../redux/containers/store'
@@ -22,6 +22,9 @@ const ModalFormAddArea = ({
   const dispatch = useAppDispatch()
 
   const handleOk = () => {
+    if (modalData.name === '') {
+      return
+    }
     setIsOpenModal(false)
     dispatch(updateArea({ areaId: modalData.id, body: modalData }))
   }
@@ -40,11 +43,6 @@ const ModalFormAddArea = ({
         placeholder='input name'
         onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
         value={modalData.name}
-      />
-      <Typography.Title level={5}>Status</Typography.Title>
-      <Checkbox
-        onChange={(e) => setModalData((data) => ({ ...data, status: e.target.value }))}
-        checked={modalData.status}
       />
     </Modal>
   )

@@ -8,7 +8,7 @@ export type BuildingTypeValue = {
 }
 
 export const buildingSchema = yup.object().shape({
-  name: yup.string().required('Please input building name!'),
+  name: yup.string().required('Please input building name!').trim(),
   zoneId: yup.number().required('Please choose zoneID!').typeError(' must be a number'),
   areaId: yup.number().required('Please choose areaID!').typeError('must be a number')
 })
