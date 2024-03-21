@@ -14,7 +14,27 @@ export const getBuildingList = createAsyncThunk('building/getBuildingList', asyn
 export const updateBuilding = createAsyncThunk(
   'building/updateBuilding',
   async ({ id, body }: { id: number; body: BuildingTypeValue }, thunkAPI) => {
-    const res = await http.put<ResponseSuccessful<building>>(`/buildings/update/${id}`, {
+    try {
+      const res = await http.put<ResponseSuccessful<building>>(`/buildings/update/${id}`, {
+        signal: thunkAPI.signal,
+        name: body.name,
+        zone: {
+          id: body.zoneId,
+          area: {
+            id: body.areaId
+          }
+        }
+      })
+      return res.data.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+)
+
+export const createBuilding = createAsyncThunk('building/createBuilding', async (body: BuildingTypeValue, thunkAPI) => {
+  try {
+    const res = await http.post<ResponseSuccessful<building>>(`/buildings`, {
       signal: thunkAPI.signal,
       name: body.name,
       zone: {
@@ -25,21 +45,9 @@ export const updateBuilding = createAsyncThunk(
       }
     })
     return res.data.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
   }
-)
-
-export const createBuilding = createAsyncThunk('building/createBuilding', async (body: BuildingTypeValue, thunkAPI) => {
-  const res = await http.post<ResponseSuccessful<building>>(`/buildings`, {
-    signal: thunkAPI.signal,
-    name: body.name,
-    zone: {
-      id: body.zoneId,
-      area: {
-        id: body.areaId
-      }
-    }
-  })
-  return res.data.data
 })
 
 export const deleteBuilding = createAsyncThunk('building/deleteBuilding', async ({ id }: { id: number }, thunkAPI) => {

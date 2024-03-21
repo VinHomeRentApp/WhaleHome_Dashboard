@@ -1,27 +1,17 @@
-import { Button, Input, Modal, Typography } from 'antd'
+import { Button, Input } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { createArea, getArea } from '../redux/actions/area.actions'
-import { RootState, useAppDispatch } from '../redux/containers/store'
-import { cancelEditingArea } from '../redux/slices/area.slice'
-import { area } from '../types/area.type'
-import ModalFormAddArea from './Dashboard/AreaPage/ModalFormAddArea'
-import TableAreaPage from './Dashboard/AreaPage/TableAreaPage'
 import { typoColor } from '../constants/mainColor'
-
-const formData: area = {
-  name: '',
-  createDate: '',
-  status: true,
-  id: NaN
-}
+import { getArea } from '../redux/actions/area.actions'
+import { RootState, useAppDispatch } from '../redux/containers/store'
+import AreaModal from './Dashboard/AreaPage/ModalFormAddArea'
+import TableAreaPage from './Dashboard/AreaPage/TableAreaPage'
 
 export default function AreaPage() {
   const dispatch = useAppDispatch()
   const areaEditing = useSelector((state: RootState) => state.area.editArea)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  const [modalData, setModalData] = useState<area>(formData)
-  const [modalAdd, setModalAdd] = useState<boolean>(false)
+
   const [search, setSearch] = useState<string>('')
 
   useEffect(() => {
@@ -30,27 +20,6 @@ export default function AreaPage() {
       promise.abort()
     }
   }, [dispatch])
-
-  useEffect(() => {
-    setModalData(areaEditing || formData)
-  }, [areaEditing])
-
-  const handleCancel = () => {
-    setIsOpenModal(false)
-    dispatch(cancelEditingArea())
-  }
-  const handleCancelAdd = () => {
-    setModalAdd(false)
-  }
-  const handleOkAdd = () => {
-    if (modalData.name.trim() !== '') {
-      setModalAdd(false)
-      dispatch(createArea(modalData.name))
-      dispatch(cancelEditingArea())
-    } else {
-      return
-    }
-  }
 
   return (
     <>
@@ -67,7 +36,7 @@ export default function AreaPage() {
           type='primary'
           block
           onClick={() => {
-            setModalAdd(true)
+            setIsOpenModal(true)
           }}
         >
           Add New Area
@@ -75,22 +44,7 @@ export default function AreaPage() {
       </div>
       <TableAreaPage search={search} setIsOpenModal={setIsOpenModal} />
 
-      <ModalFormAddArea
-        isOpenModal={isOpenModal}
-        handleCancel={handleCancel}
-        modalData={modalData}
-        setIsOpenModal={setIsOpenModal}
-        setModalData={setModalData}
-      />
-
-      <Modal title='Add Area' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
-        <Typography.Title level={5}>Name</Typography.Title>
-        <Input
-          placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
-          value={modalData.name}
-        />
-      </Modal>
+      <AreaModal area={areaEditing} isOpenModal={isOpenModal} setOpenModal={setIsOpenModal} />
     </>
   )
 }

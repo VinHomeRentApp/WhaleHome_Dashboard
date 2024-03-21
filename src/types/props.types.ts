@@ -1,7 +1,9 @@
 import { apartment } from './appartment.type'
+import { area } from './area.type'
 import { building } from './building.type'
 import { post } from './post.type'
 import { User } from './user.type'
+import { zone } from './zone.type'
 
 export type FormAddPostModalProps = {
   postEdit: post | null
@@ -31,6 +33,18 @@ export type FormApartmentModalProps = {
 
 export type FormBuildingProps = {
   building: building | null
+  isOpenModal: boolean
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type FormAreaProps = {
+  area: area | null
+  isOpenModal: boolean
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type FormZoneProps = {
+  zone: zone | null
   isOpenModal: boolean
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { zone } from '../../types/zone.type'
 
 export interface ZoneState {
@@ -6,6 +7,7 @@ export interface ZoneState {
   loading: boolean
   currentRequestId: undefined | string
   countBuildingList: countBuildingTypes[]
+  error: any
 }
 
 export type countBuildingTypes = {
@@ -18,5 +20,6 @@ export const initialZoneState: ZoneState = {
   editingZone: null,
   loading: false,
   currentRequestId: undefined,
-  countBuildingList: []
+  countBuildingList: [],
+  error: null
 }

@@ -14,24 +14,28 @@ export const getApartmentList = createAsyncThunk('apartment/getApartmentList', a
 export const updateApartment = createAsyncThunk(
   'apartment/updateApartment',
   async ({ id, body }: { id: number; body: updateApartmentValuesType }, thunkAPI) => {
-    const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/update/${id}`, {
-      signal: thunkAPI.signal,
-      name: body.name,
-      description: body.description,
-      apartmentClass: {
-        id: body.apartmentClassId
-      },
-      building: {
-        id: body.buildingID,
-        zone: {
-          id: body.zoneID,
-          area: {
-            id: body.areaID
+    try {
+      const res = await http.put<ResponseSuccessful<apartment>>(`/apartments/update/${id}`, {
+        signal: thunkAPI.signal,
+        name: body.name,
+        description: body.description,
+        apartmentClass: {
+          id: body.apartmentClassId
+        },
+        building: {
+          id: body.buildingID,
+          zone: {
+            id: body.zoneID,
+            area: {
+              id: body.areaID
+            }
           }
         }
-      }
-    })
-    return res.data.data
+      })
+      return res.data.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
   }
 )
 
@@ -45,23 +49,27 @@ export const deleteApartment = createAsyncThunk('apartment/deleteApartment', asy
 export const createApartment = createAsyncThunk(
   'apartment/createApartment',
   async (body: updateApartmentValuesType, thunkAPI) => {
-    const res = await http.post<ResponseSuccessful<apartment>>(`/apartments`, {
-      signal: thunkAPI.signal,
-      name: body.name,
-      description: body.description,
-      apartmentClass: {
-        id: body.apartmentClassId
-      },
-      building: {
-        id: body.buildingID,
-        zone: {
-          id: body.zoneID,
-          area: {
-            id: body.areaID
+    try {
+      const res = await http.post<ResponseSuccessful<apartment>>(`/apartments`, {
+        signal: thunkAPI.signal,
+        name: body.name,
+        description: body.description,
+        apartmentClass: {
+          id: body.apartmentClassId
+        },
+        building: {
+          id: body.buildingID,
+          zone: {
+            id: body.zoneID,
+            area: {
+              id: body.areaID
+            }
           }
         }
-      }
-    })
-    return res.data.data
+      })
+      return res.data.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
   }
 )

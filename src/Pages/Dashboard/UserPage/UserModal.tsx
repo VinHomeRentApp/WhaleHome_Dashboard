@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { DatePicker, Image, Input, Modal, Select, Typography, message } from 'antd'
-import dayjs from 'dayjs' // Import dayjs library
+import dayjs from 'dayjs'
 import { useEffect } from 'react'
 import { Controller, FieldErrors, Resolver, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { updateUser } from '../../../redux/actions/user.actions'
-import { useAppDispatch } from '../../../redux/containers/store'
+import { RootState, useAppDispatch } from '../../../redux/containers/store'
 import { cancelEditingUser } from '../../../redux/slices/user.slice'
 import { defaultFormValues, updateUserSchema, updateUserValues } from '../../../schema/user.schema'
 import { FormUserModalProps } from '../../../types/props.types'
+import { handleErrorMessage } from '../../../utils/HandleError'
 
 const ModalUpdateUser = (props: FormUserModalProps) => {
   const { userEdit, isOpenModal, setOpenModal } = props
@@ -21,6 +23,7 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
   const { control, handleSubmit, formState, reset } = methods
   const { errors } = formState
   const [messageApi, contextHolder] = message.useMessage()
+  const { error } = useSelector((state: RootState) => state.user)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -41,10 +44,18 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
   }, [userEdit])
 
   const onSubmit: SubmitHandler<updateUserValues> = async (data) => {
+    const resultAction = await dispatch(updateUser(data))
+    if (updateUser.fulfilled.match(resultAction)) {
+      message.success('Update Building Successfully!')
+    }
     reset(defaultFormValues)
     setOpenModal(false)
-    dispatch(updateUser(data))
   }
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'User' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   const onError: SubmitErrorHandler<updateUserValues> = (errors: FieldErrors<updateUserValues>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
