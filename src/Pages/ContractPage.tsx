@@ -16,7 +16,7 @@ const ContractPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const data = useSelector((state: RootState) => state.contract.contractList)
   const loading = useSelector((state: RootState) => state.contract.loading)
-
+  //
   useEffect(() => {
     const promise = dispatch(getContractList())
     return () => {

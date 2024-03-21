@@ -79,7 +79,6 @@ const CalendarAppointment = () => {
       {contextHolder}
 
       <Calendar
-        mode='month'
         style={{
           borderRadius: '14px',
           border: '2px solid #1e1e1e',
