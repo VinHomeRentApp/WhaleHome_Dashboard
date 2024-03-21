@@ -30,7 +30,7 @@ const ModalFormAddArea = ({
   }
 
   return (
-    <Modal title='Edit123 Area' open={isOpenModal} onOk={handleOk} onCancel={handleCancel}>
+    <Modal title='Edit Area' open={isOpenModal} onOk={handleOk} onCancel={handleCancel}>
       <Typography.Title level={5}>ID</Typography.Title>
       <Input
         placeholder='input name'
