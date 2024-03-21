@@ -1,4 +1,4 @@
-import { Checkbox, Input, Modal, Typography } from 'antd'
+import { Input, Modal, Typography } from 'antd'
 import React, { Dispatch } from 'react'
 import { updateArea } from '../../../redux/actions/area.actions'
 import { useAppDispatch } from '../../../redux/containers/store'
