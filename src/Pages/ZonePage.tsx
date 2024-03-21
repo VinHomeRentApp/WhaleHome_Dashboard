@@ -11,19 +11,6 @@ import { startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
 import ZoneModal from './Dashboard/ZonePage/ModalFormZone'
 
-const formData: zone = {
-  id: NaN,
-  createDate: '',
-  status: true,
-  name: '',
-  area: {
-    id: NaN,
-    createDate: '',
-    status: false,
-    name: ''
-  }
-}
-
 const ZonePage: React.FC = () => {
   const dispatch = useAppDispatch()
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
