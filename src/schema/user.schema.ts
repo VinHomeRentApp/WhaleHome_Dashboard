@@ -28,7 +28,7 @@ export const updateUserSchema = yup.object().shape({
   email: yup.string().email('pls enter email').required('Email is required'),
   phone: yup.number().required('PhoneNumber is required!!'),
   fullName: yup.string().min(5, 'at least 5 words').required('Name is required'),
-  dateOfBirth: yup.string().required('pls fill thiss'),
-  gender: yup.string().required('pls fill this'),
-  address: yup.string().required('pls fill this')
+  dateOfBirth: yup.string().required('pls fill dateOfBirth'),
+  gender: yup.string().required('pls fill gender'),
+  address: yup.string().required('pls fill address')
 })
