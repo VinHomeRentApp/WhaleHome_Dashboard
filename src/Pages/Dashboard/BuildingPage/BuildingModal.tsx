@@ -11,6 +11,7 @@ import { cancelEditingBuilding } from '../../../redux/slices/building.slice'
 import { BuildingTypeValue, buildingSchema, defaultFormBuildingValue } from '../../../schema/building.schema'
 import { FormBuildingProps } from '../../../types/props.types'
 import { zone } from '../../../types/zone.type'
+import { handleErrorMessage } from '../../../utils/HandleError'
 
 const BuildingModal = (props: FormBuildingProps) => {
   const { building, isOpenModal, setOpenModal } = props
@@ -24,6 +25,7 @@ const BuildingModal = (props: FormBuildingProps) => {
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
 
+  const { error } = useSelector((state: RootState) => state.building)
   const areaList = useSelector((state: RootState) => state.area.areaList)
   const zoneList = useSelector((state: RootState) => state.zone.ZoneList)
   const [areaId, setAreaId] = useState<number | null>(null)
@@ -54,14 +56,29 @@ const BuildingModal = (props: FormBuildingProps) => {
   const onSubmit: SubmitHandler<BuildingTypeValue> = async (data) => {
     if (building) {
       if (data.id) {
-        dispatch(updateBuilding({ id: data.id, body: data }))
+        const resultAction = await dispatch(updateBuilding({ id: data.id, body: data }))
+        if (updateBuilding.fulfilled.match(resultAction)) {
+          message.success('Update Building Successfully!')
+          reset(defaultFormBuildingValue)
+          setOpenModal(false)
+        }
       }
     } else {
-      dispatch(createBuilding(data))
+      const resultAction = await dispatch(createBuilding(data))
+      if (createBuilding.fulfilled.match(resultAction)) {
+        message.success('Create Building Successfully!')
+        reset(defaultFormBuildingValue)
+        setOpenModal(false)
+      }
     }
     reset(defaultFormBuildingValue)
     setOpenModal(false)
   }
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Building' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   const onError: SubmitErrorHandler<BuildingTypeValue> = (errors: FieldErrors<BuildingTypeValue>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
@@ -101,8 +118,8 @@ const BuildingModal = (props: FormBuildingProps) => {
                 style={{ minWidth: 150 }}
                 onChange={(value) => {
                   field.onChange(value)
-                  setValue('zoneId', null)
                   setAreaId(value)
+                  setValue('zoneId', null)
                 }}
                 options={areaList.map((area) => ({ value: area.id, label: area.name }))}
               />

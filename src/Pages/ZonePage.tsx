@@ -1,27 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EditOutlined } from '@ant-design/icons'
-import { Button, Input, Modal, Select, Switch, Table, TableProps, Typography, message } from 'antd'
+import { Button, Input, Switch, Table, TableProps, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { typoColor } from '../constants/mainColor'
 import { getArea } from '../redux/actions/area.actions'
-import { createZone, deleteZone, getZoneList, updateZone } from '../redux/actions/zone.actions'
+import { deleteZone, getZoneList } from '../redux/actions/zone.actions'
 import { RootState, useAppDispatch } from '../redux/containers/store'
-import { cancelEditingZone, startEditingZone } from '../redux/slices/zone.slice'
+import { startEditingZone } from '../redux/slices/zone.slice'
 import { zone } from '../types/zone.type'
-
-const formData: zone = {
-  id: NaN,
-  createDate: '',
-  status: true,
-  name: '',
-  area: {
-    id: NaN,
-    createDate: '',
-    status: false,
-    name: ''
-  }
-}
+import ZoneModal from './Dashboard/ZonePage/ModalFormZone'
 
 const ZonePage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -30,10 +18,6 @@ const ZonePage: React.FC = () => {
   const loading = useSelector((state: RootState) => state.zone.loading)
   const [search, setSearch] = useState<string>('')
   const [modal, setModal] = useState<boolean>(false)
-  const [modalData, setModalData] = useState<zone>(formData)
-  const [modalAdd, setModalAdd] = useState<boolean>(false)
-
-  const areaList = useSelector((state: RootState) => state.area.areaList)
 
   useEffect(() => {
     const promise = dispatch(getZoneList())
@@ -48,10 +32,6 @@ const ZonePage: React.FC = () => {
       promise.abort()
     }
   }, [dispatch])
-
-  useEffect(() => {
-    setModalData(editingZone || formData)
-  }, [editingZone])
 
   const columns: TableProps['columns'] = [
     {
@@ -124,41 +104,6 @@ const ZonePage: React.FC = () => {
     setModal(true)
     dispatch(startEditingZone(id))
   }
-  const handleOkEdit = () => {
-    if (modalData.name.trim() === '') {
-      return
-    }
-    setModal(false)
-    dispatch(updateZone({ id: modalData.id, body: modalData }))
-    dispatch(cancelEditingZone())
-    setModalData(formData)
-  }
-  const handleCancel = () => {
-    setModal(false)
-    dispatch(cancelEditingZone())
-    setModalData(formData)
-  }
-  const handleCancelAdd = () => {
-    setModalAdd(false)
-    setModalData(formData)
-  }
-  const handleOkAdd = () => {
-    if (modalData.name.trim() !== '' && !isNaN(modalData.area.id)) {
-      setModalAdd(false)
-      dispatch(createZone(modalData))
-      dispatch(cancelEditingZone())
-    } else return
-  }
-
-  const handleSelectZone = (e: any) => {
-    setModalData((curr) => ({
-      ...curr,
-      area: {
-        ...curr.area,
-        id: Number(e)
-      }
-    }))
-  }
 
   return (
     <>
@@ -175,7 +120,7 @@ const ZonePage: React.FC = () => {
           type='primary'
           block
           onClick={() => {
-            setModalAdd(true)
+            setModal(true)
           }}
         >
           Add New Zone
@@ -191,44 +136,7 @@ const ZonePage: React.FC = () => {
         rowKey='id'
         bordered
       />
-      <Modal title='Edit Zone' open={modal} onOk={handleOkEdit} onCancel={handleCancel}>
-        <Input placeholder='input name' value={modalData.id} disabled />
-        <Typography.Title level={5}>Name</Typography.Title>
-        <Input
-          placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
-          value={modalData.name}
-        />
-
-        <Typography.Title level={5}>Area</Typography.Title>
-        <Select
-          style={{ minWidth: 150 }}
-          onChange={handleSelectZone}
-          options={areaList?.map((area) => {
-            return { value: area.id, label: area.name }
-          })}
-          value={modalData.area.id}
-        />
-      </Modal>
-
-      <Modal title='Add Zone' open={modalAdd} onOk={handleOkAdd} onCancel={handleCancelAdd}>
-        <Typography.Title level={5}>Name</Typography.Title>
-        <Input
-          placeholder='input name'
-          onChange={(e) => setModalData((data) => ({ ...data, name: e.target.value }))}
-          value={modalData.name}
-        />
-
-        <Typography.Title level={5}>Area</Typography.Title>
-
-        <Select
-          style={{ minWidth: 150 }}
-          onChange={handleSelectZone}
-          options={areaList?.map((area) => {
-            return { value: area.id, label: area.name }
-          })}
-        />
-      </Modal>
+      <ZoneModal isOpenModal={modal} setOpenModal={setModal} zone={editingZone} />
     </>
   )
 }

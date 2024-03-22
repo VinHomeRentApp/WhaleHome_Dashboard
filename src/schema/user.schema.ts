@@ -25,10 +25,10 @@ export const defaultFormValues: updateUserValues = {
 }
 
 export const updateUserSchema = yup.object().shape({
-  email: yup.string().email('pls enter email').required('Email is required'),
+  email: yup.string().email('Please enter correct email').required('Email is required'),
   phone: yup.number().required('PhoneNumber is required!!'),
-  fullName: yup.string().min(5, 'at least 5 words').required('Name is required'),
-  dateOfBirth: yup.string().required('pls fill dateOfBirth'),
-  gender: yup.string().required('pls fill gender'),
-  address: yup.string().required('pls fill address')
+  fullName: yup.string().min(5, 'FullName at least 5 words').required('Name is required'),
+  dateOfBirth: yup.string().required('Please fill dateOfBirth'),
+  gender: yup.string().required('Please fill gender'),
+  address: yup.string().required('Please fill address')
 })
