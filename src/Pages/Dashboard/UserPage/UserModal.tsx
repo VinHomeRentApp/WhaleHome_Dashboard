@@ -46,7 +46,7 @@ const ModalUpdateUser = (props: FormUserModalProps) => {
   const onSubmit: SubmitHandler<updateUserValues> = async (data) => {
     const resultAction = await dispatch(updateUser(data))
     if (updateUser.fulfilled.match(resultAction)) {
-      message.success('Update Building Successfully!')
+      message.success('Update User Successfully!')
     }
     reset(defaultFormValues)
     setOpenModal(false)
