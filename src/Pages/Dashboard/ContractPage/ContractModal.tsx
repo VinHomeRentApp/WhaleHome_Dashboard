@@ -12,8 +12,9 @@ import { removeSearchUser } from '../../../redux/slices/user.slice'
 import { contractSchema, contractValueType, defaultFormValues } from '../../../schema/contract.schema'
 import { appointments } from '../../../types/appointments.type'
 import { FormContractModalProps } from '../../../types/props.types'
+import { ResponseSuccessful } from '../../../types/response.type'
 import { formatDate } from '../../../utils/formatDate'
-
+import { http } from '../../../utils/http'
 const ModalContract = (props: FormContractModalProps) => {
   const { isOpenModal, setOpenModal } = props
   const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
@@ -43,7 +44,8 @@ const ModalContract = (props: FormContractModalProps) => {
     control,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
+    setValue
   } = methods
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
@@ -58,7 +60,10 @@ const ModalContract = (props: FormContractModalProps) => {
       price: data.price,
       user: data.user
     }
-    dispatch(createContract(formattedData))
+    const resultAction = await dispatch(createContract(formattedData))
+    if (createContract.fulfilled.match(resultAction)) {
+      message.success('Create Contract Successfully!')
+    }
     dispatch(removeSearchUser())
     reset(defaultFormValues)
     setOpenModal(false)
@@ -153,7 +158,16 @@ const ModalContract = (props: FormContractModalProps) => {
                 <Select
                   status={errors.appointmentId && 'error'}
                   style={{ width: '100%' }}
-                  onChange={(value) => field.onChange(value)}
+                  onChange={async (value) => {
+                    field.onChange(value)
+                    const response = await http.get<ResponseSuccessful<appointments>>(`appointments/${value}`)
+                    setValue(
+                      'price',
+                      response.data.data.apartment.apartmentClass.rent_price ||
+                        response.data.data.apartment.apartmentClass.buy_price ||
+                        0
+                    )
+                  }}
                   options={appointmentFiltered.map((appointments) => {
                     return { value: appointments.id, label: <div>{appointments.apartment.name}</div> }
                   })}
@@ -232,12 +246,9 @@ const ModalContract = (props: FormContractModalProps) => {
                 render={({ field }) => (
                   <InputNumber
                     min={0}
+                    disabled={true}
                     status={errors.price && 'error'}
                     style={{ width: '100%' }}
-                    defaultValue={0}
-                    onChange={(value) => {
-                      field.onChange(value)
-                    }}
                     controls={false}
                     value={field.value}
                   />
