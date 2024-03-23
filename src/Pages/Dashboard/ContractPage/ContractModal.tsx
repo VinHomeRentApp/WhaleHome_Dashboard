@@ -12,14 +12,17 @@ import { removeSearchUser } from '../../../redux/slices/user.slice'
 import { contractSchema, contractValueType, defaultFormValues } from '../../../schema/contract.schema'
 import { appointments } from '../../../types/appointments.type'
 import { FormContractModalProps } from '../../../types/props.types'
-import { ResponseSuccessful } from '../../../types/response.type'
+import { handleErrorMessage } from '../../../utils/HandleError'
 import { formatDate } from '../../../utils/formatDate'
 import { http } from '../../../utils/http'
+import { ResponseSuccessful } from '../../../types/response.type'
 const ModalContract = (props: FormContractModalProps) => {
   const { isOpenModal, setOpenModal } = props
   const searchUserData = useSelector((state: RootState) => state.user.searchUserIncludeAppointment)
   const [searchUserState, setSearchUserState] = useState<appointments[]>([])
   const [startDate, setStartDate] = useState<Dayjs | undefined>(undefined)
+
+  const { error } = useSelector((state: RootState) => state.contract)
 
   const [appointmentFiltered, setAppointmentFiltered] = useState<appointments[]>([])
 
@@ -63,11 +66,18 @@ const ModalContract = (props: FormContractModalProps) => {
     const resultAction = await dispatch(createContract(formattedData))
     if (createContract.fulfilled.match(resultAction)) {
       message.success('Create Contract Successfully!')
+      setOpenModal(false)
+      reset(defaultFormValues)
     }
     dispatch(removeSearchUser())
     reset(defaultFormValues)
     setOpenModal(false)
   }
+
+  useEffect(() => {
+    handleErrorMessage({ error, messageApi, title: 'Contract' })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   const onError: SubmitErrorHandler<contractValueType> = (errors: FieldErrors<contractValueType>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
