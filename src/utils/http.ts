@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 
-const url = 'https://whalehome.up.railway.app/api/v1'
+const url = 'https://whalehome-production.up.railway.app/api/v1'
 
 class Http {
   instance: AxiosInstance
